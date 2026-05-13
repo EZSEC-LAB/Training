@@ -1,0 +1,1903 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CrowdStrike Falcon 红蓝对抗安全培训</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cs-red: #E4002B;
+  --cs-red-hover: #FF1A3C;
+  --cs-red-dim: rgba(228,0,43,0.12);
+  --cs-red-border: rgba(228,0,43,0.3);
+  --bg-primary: #0A0B0D;
+  --bg-secondary: #111318;
+  --bg-card: #161B22;
+  --bg-card-hover: #1C2230;
+  --border: rgba(255,255,255,0.08);
+  --border-light: rgba(255,255,255,0.04);
+  --text-primary: #F0F4F8;
+  --text-secondary: #8B9BB4;
+  --text-muted: #4A5568;
+  --accent-blue: #3B82F6;
+  --accent-green: #10B981;
+  --font-main: 'Inter', 'Noto Sans SC', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  height: 72px;
+  display: flex; align-items: center;
+  background: rgba(10,11,13,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-inner {
+  width: 100%; max-width: 1440px; margin: 0 auto; box-sizing: border-box;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 clamp(32px, 6vw, 120px);
+}
+
+.nav-logo {
+  display: flex; align-items: center; gap: 10px;
+  text-decoration: none;
+}
+
+.nav-logo-icon {
+  width: 32px; height: 32px;
+  background: var(--cs-red);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.nav-logo-text {
+  font-size: 0.875rem; font-weight: 700;
+  letter-spacing: 0.05em; color: var(--text-primary);
+  text-transform: uppercase;
+}
+
+.nav-cta {
+  display: flex; align-items: center; gap: 4px;
+}
+
+.nav-link {
+  font-size: 0.78rem; color: var(--text-secondary);
+  text-decoration: none; letter-spacing: 0.02em;
+  padding: 6px 10px; border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+}
+.nav-link:hover { color: var(--text-primary); background: rgba(255,255,255,0.05); }
+
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px;
+  font-family: var(--font-main); font-size: 0.85rem; font-weight: 600;
+  letter-spacing: 0.02em; text-decoration: none; cursor: pointer;
+  border: none; border-radius: 4px; transition: all 0.2s; white-space: nowrap; }
+
+.btn-red { background: var(--cs-red); color: #fff; }
+.btn-red:hover { background: var(--cs-red-hover); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(228,0,43,0.35); }
+
+.btn-ghost { background: transparent; color: var(--text-secondary);
+  border: 1px solid var(--border); }
+.btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--text-primary); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh; padding: 120px clamp(32px, 6vw, 120px) 80px;
+  display: flex; flex-direction: column; justify-content: center;
+  position: relative; overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 60% 40%, rgba(228,0,43,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 20% 80%, rgba(59,130,246,0.05) 0%, transparent 50%);
+}
+
+/* Geometric line art */
+.hero-geo {
+  position: absolute; right: -100px; top: 50%; transform: translateY(-50%);
+  width: 700px; height: 700px; opacity: 0.06; z-index: 0;
+}
+
+.hero-content { position: relative; z-index: 1; width: 100%; max-width: 1440px; margin: 0 auto; }
+
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--cs-red);
+  margin-bottom: 24px;
+}
+
+.hero-eyebrow::before {
+  content: ''; width: 24px; height: 2px; background: var(--cs-red);
+}
+
+.hero h1 {
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-weight: 800; line-height: 1.1; letter-spacing: -0.02em;
+  color: var(--text-primary); margin-bottom: 8px;
+}
+
+.hero h1 em {
+  font-style: normal; color: var(--cs-red);
+}
+
+.hero-subtitle {
+  font-size: clamp(1rem, 2vw, 1.25rem); font-weight: 400;
+  color: var(--text-secondary); margin-bottom: 32px; line-height: 1.7;
+  max-width: 70ch;
+}
+
+.hero-pills {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 40px;
+}
+
+.pill {
+  font-size: 0.72rem; font-weight: 500; letter-spacing: 0.06em;
+  padding: 5px 14px; border-radius: 100px;
+  border: 1px solid var(--border); color: var(--text-secondary);
+}
+
+.pill.red { border-color: var(--cs-red-border); color: #FF6680; background: var(--cs-red-dim); }
+
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+.hero-metrics {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 1px; background: var(--border);
+  margin-top: 64px;
+  border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+}
+
+.metric-card {
+  background: var(--bg-card); padding: 24px 28px;
+  transition: background 0.2s;
+}
+.metric-card:hover { background: var(--bg-card-hover); }
+
+.metric-num {
+  font-size: 2.4rem; font-weight: 800; color: var(--cs-red);
+  line-height: 1; margin-bottom: 6px; letter-spacing: -0.02em;
+  display: flex; align-items: baseline; gap: 4px;
+}
+
+.metric-unit {
+  font-size: 1rem; font-weight: 700; color: var(--cs-red);
+}
+
+.metric-title {
+  font-size: 0.9rem; font-weight: 600; color: var(--text-primary);
+  margin-bottom: 4px;
+}
+.metric-label { font-size: 0.75rem; color: var(--text-muted); line-height: 1.5; }
+
+.section { padding: 96px 0; }
+.section-inner { width: 100%; max-width: 1440px; margin: 0 auto; padding: 0 clamp(32px, 6vw, 120px); box-sizing: border-box; }
+
+.eyebrow {
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--cs-red);
+  display: flex; align-items: center; gap: 8px; margin-bottom: 16px;
+}
+.eyebrow::before { content: ''; width: 20px; height: 2px; background: var(--cs-red); }
+
+.section-title {
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 800; letter-spacing: -0.02em;
+  color: var(--text-primary); margin-bottom: 16px; line-height: 1.2;
+}
+
+.section-desc {
+  font-size: 1rem; color: var(--text-secondary); max-width: 560px; line-height: 1.75;
+  margin-bottom: 56px;
+}
+
+/* ── DIVIDER ── */
+.divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+/* ── AUDIENCE SECTION ── */
+.audience-section { background: var(--bg-secondary); }
+
+.audience-list {
+  display: flex; flex-direction: column;
+  border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+}
+
+.audience-item {
+  display: flex; align-items: center;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-light);
+  padding: 0;
+  transition: background 0.2s;
+}
+.audience-item:last-child { border-bottom: none; }
+.audience-item:hover { background: var(--bg-card-hover); }
+
+.audience-num {
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em;
+  color: var(--cs-red); width: 64px; flex-shrink: 0;
+  padding: 20px 0 20px 28px;
+}
+
+.audience-divider {
+  width: 1px; height: 40px; background: var(--border); flex-shrink: 0; margin-right: 28px;
+}
+
+.audience-role {
+  font-size: 1rem; font-weight: 600; color: var(--text-primary);
+  min-width: 180px; flex-shrink: 0;
+}
+
+.audience-en {
+  font-size: 0.78rem; color: var(--text-muted);
+  letter-spacing: 0.04em; margin-left: 16px;
+}
+
+.audience-tags {
+  margin-left: auto; padding-right: 28px;
+  display: flex; gap: 6px;
+}
+
+.audience-tag {
+  font-size: 0.62rem; font-weight: 600; letter-spacing: 0.08em;
+  padding: 3px 10px; border-radius: 3px; border: 1px solid var(--border);
+  color: var(--text-muted);
+}
+.audience-tag.ops { border-color: rgba(59,130,246,0.3); color: #60A5FA; background: rgba(59,130,246,0.06); }
+.audience-tag.sec { border-color: var(--cs-red-border); color: #FF6680; background: var(--cs-red-dim); }
+.audience-tag.mgmt { border-color: rgba(245,158,11,0.3); color: #F59E0B; background: rgba(245,158,11,0.06); }
+
+/* ── THREE PILLARS ── */
+.pillars-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+  background: var(--border); border-radius: 8px; overflow: hidden;
+}
+
+.pillar {
+  background: var(--bg-card); padding: 40px 32px;
+  position: relative; overflow: hidden;
+}
+
+.pillar::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; background: var(--cs-red); opacity: 0.35;
+  transition: opacity 0.3s;
+}
+.pillar:hover::before { opacity: 1; }
+.pillar:hover { background: var(--bg-card-hover); }
+
+.pillar-en {
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--cs-red); margin-bottom: 8px;
+}
+
+.pillar-number {
+  font-size: 2.5rem; font-weight: 800; color: var(--cs-red);
+  line-height: 1; margin-bottom: 20px; letter-spacing: -0.04em;
+}
+
+.pillar-name {
+  font-size: 1.1rem; font-weight: 700; color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.pillar-desc { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.7; }
+
+/* ── OUTCOMES ── */
+.outcomes-section { background: var(--bg-secondary); }
+
+.outcomes-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px;
+  background: var(--border); border-radius: 8px; overflow: hidden;
+}
+
+.outcome-item {
+  background: var(--bg-card); padding: 28px 32px;
+  display: flex; gap: 16px; align-items: flex-start;
+  transition: background 0.2s;
+}
+.outcome-item:hover { background: var(--bg-card-hover); }
+
+.outcome-check {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--cs-red-dim); border: 1px solid var(--cs-red-border);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 2px;
+}
+.outcome-check svg { width: 10px; height: 10px; }
+
+.outcome-text { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; }
+
+/* ── CURRICULUM ── */
+.days-tabs {
+  display: flex; gap: 2px; margin-bottom: 2px;
+  background: var(--border); border-radius: 8px 8px 0 0; overflow: hidden;
+}
+
+.day-tab {
+  flex: 1; padding: 20px 24px; background: var(--bg-card);
+  cursor: pointer; transition: all 0.2s; border: none;
+  font-family: var(--font-main); text-align: left;
+}
+.day-tab.active { background: var(--cs-red); }
+.day-tab:not(.active):hover { background: var(--bg-card-hover); }
+
+.day-tab-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; margin-bottom: 4px;
+  color: rgba(255,255,255,0.5); }
+.day-tab.active .day-tab-label { color: rgba(255,255,255,0.7); }
+
+.day-tab-title { font-size: 0.88rem; font-weight: 600; color: var(--text-secondary); line-height: 1.3; }
+.day-tab.active .day-tab-title { color: #fff; }
+
+.day-panel {
+  display: none; background: var(--bg-card);
+  border-radius: 0 0 8px 8px; overflow: hidden;
+}
+.day-panel.active {
+  display: block;
+}
+
+.modules-list { display: grid; grid-template-columns: repeat(2, 1fr); }
+
+.module-row {
+  display: flex; align-items: flex-start; gap: 16px; padding: 20px 28px;
+  border-bottom: 1px solid var(--border-light);
+  border-right: 1px solid var(--border-light);
+  transition: background 0.15s;
+}
+.module-row:hover { background: var(--bg-card-hover); }
+.module-row:nth-child(even) { border-right: none; }
+
+.module-id {
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em;
+  color: var(--cs-red); padding-top: 3px; flex-shrink: 0; min-width: 28px;
+}
+.module-text { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5; }
+
+/* ── SCENARIOS ── */
+.scenarios-section { background: var(--bg-secondary); }
+
+.scenarios-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+  background: var(--border); border-radius: 8px; overflow: hidden;
+}
+
+.scenario {
+  background: var(--bg-card); padding: 32px 28px;
+  position: relative; overflow: hidden; transition: background 0.2s;
+}
+.scenario:hover { background: var(--bg-card-hover); }
+
+.scenario-index {
+  font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px;
+}
+
+.scenario-title {
+  font-size: 1.05rem; font-weight: 700; color: var(--text-primary);
+  margin-bottom: 12px; line-height: 1.35;
+}
+
+.scenario-chain {
+  display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 16px;
+}
+
+.chain-tag {
+  font-size: 0.62rem; font-weight: 600; letter-spacing: 0.08em;
+  padding: 3px 8px; border-radius: 3px;
+  background: var(--cs-red-dim); color: #FF6680;
+  border: 1px solid var(--cs-red-border);
+}
+
+.scenario-points { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.scenario-points li {
+  font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5;
+  display: flex; gap: 8px;
+}
+.scenario-points li::before {
+  content: '—'; color: var(--text-muted); flex-shrink: 0;
+}
+
+/* ── ALERT LEVELS ── */
+.alerts-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px;
+  background: var(--border); border-radius: 12px; overflow: hidden;
+}
+
+.alert-card {
+  background: var(--bg-card); padding: 36px 24px 28px;
+  position: relative; overflow: hidden;
+  cursor: default;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.alert-card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 4px;
+}
+.alert-card.critical::before { background: #FF3355; }
+.alert-card.high::before    { background: #FF7040; }
+.alert-card.medium::before  { background: #F59E0B; }
+.alert-card.low::before     { background: #3B82F6; }
+.alert-card.info::before    { background: var(--text-muted); }
+
+/* 大号背景字 */
+.alert-card::after {
+  content: attr(data-level);
+  position: absolute; bottom: -12px; right: -4px;
+  font-size: 5rem; font-weight: 900; letter-spacing: -0.04em;
+  opacity: 0.04; line-height: 1;
+  transition: opacity 0.3s, transform 0.3s;
+}
+.alert-card:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(0,0,0,0.5); }
+.alert-card:hover::after { opacity: 0.08; transform: scale(1.05); }
+
+.alert-badge {
+  display: inline-block; font-size: 0.62rem; font-weight: 800;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 3px; margin-bottom: 20px;
+}
+.critical .alert-badge { background: rgba(255,51,85,0.15); color: #FF3355; }
+.high .alert-badge     { background: rgba(255,112,64,0.15); color: #FF7040; }
+.medium .alert-badge   { background: rgba(245,158,11,0.15); color: #F59E0B; }
+.low .alert-badge      { background: rgba(59,130,246,0.15); color: #60A5FA; }
+.info .alert-badge     { background: rgba(255,255,255,0.06); color: var(--text-muted); }
+
+.alert-sla {
+  font-size: 2.4rem; font-weight: 900; line-height: 1; margin-bottom: 4px;
+  letter-spacing: -0.02em;
+  transition: transform 0.3s;
+}
+.alert-card:hover .alert-sla { transform: scale(1.08); }
+.critical .alert-sla { color: #FF3355; }
+.high .alert-sla     { color: #FF7040; }
+.medium .alert-sla   { color: #F59E0B; }
+.low .alert-sla      { color: #60A5FA; }
+.info .alert-sla     { color: var(--text-muted); }
+
+.alert-sla-unit { font-size: 0.9rem; font-weight: 600; margin-left: 2px; }
+.alert-sla-label { font-size: 0.68rem; color: var(--text-muted); margin-bottom: 0; letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* ── SOP ── */
+.sop-section { background: var(--bg-secondary); }
+
+.sop-steps {
+  display: grid; grid-template-columns: repeat(6, 1fr);
+  gap: 2px; background: var(--border); border-radius: 12px; overflow: hidden;
+  margin-bottom: 48px;
+}
+
+.sop-step {
+  background: var(--bg-card); padding: 36px 20px 28px;
+  position: relative; overflow: hidden; cursor: default;
+  transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+.sop-step:hover {
+  background: var(--bg-card-hover);
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+  z-index: 1;
+}
+
+/* 大号数字背景 */
+.sop-step::before {
+  content: attr(data-num);
+  position: absolute; bottom: -16px; right: -4px;
+  font-size: 6rem; font-weight: 900; color: var(--cs-red);
+  opacity: 0.05; line-height: 1; letter-spacing: -0.04em;
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none;
+}
+.sop-step:hover::before { opacity: 0.1; transform: scale(1.05) translateY(-4px); }
+
+/* 顶部进度条 */
+.sop-step::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--cs-red); opacity: 0;
+  transition: opacity 0.25s;
+}
+.sop-step:hover::after { opacity: 1; }
+
+.sop-step-num {
+  font-size: 0.6rem; font-weight: 800; letter-spacing: 0.18em;
+  color: var(--cs-red); margin-bottom: 16px; text-transform: uppercase;
+  transition: letter-spacing 0.25s;
+}
+.sop-step:hover .sop-step-num { letter-spacing: 0.24em; }
+
+.sop-step-name {
+  font-size: 1.4rem; font-weight: 800; color: var(--text-primary);
+  margin-bottom: 4px; line-height: 1.1;
+  transition: color 0.25s;
+}
+.sop-step:hover .sop-step-name { color: #fff; }
+
+.sop-step-en { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 0.06em; }
+
+.escalation-path {
+  background: var(--bg-card); border-radius: 8px; padding: 48px 40px 40px;
+  border: 1px solid var(--border); margin-top: 24px;
+}
+
+.escalation-title {
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--text-muted); margin-bottom: 48px;
+  display: flex; align-items: center; gap: 10px;
+}
+.escalation-title::before {
+  content: ''; width: 16px; height: 2px; background: var(--cs-red);
+}
+
+/* 外层容器：相对定位，用于放连接线 */
+.escalation-flow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: relative;
+  padding-top: 0;
+}
+
+/* 连接线：默认隐藏，hover 时不显示 */
+.escalation-flow::before {
+  display: none;
+}
+
+.esc-node {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; position: relative; z-index: 1;
+  flex: 1;
+  transition: transform 0.25s ease;
+}
+.esc-node:hover { transform: translateY(-6px); }
+
+/* 圆圈：64px，圆心对齐连接线 */
+.esc-node-circle {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--bg-secondary);
+  border: 2px solid rgba(255,255,255,0.12);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.78rem; font-weight: 800; color: var(--text-muted);
+  letter-spacing: 0.04em;
+  margin-bottom: 20px;
+  transition: border-color 0.3s, background 0.3s, box-shadow 0.3s, color 0.3s;
+  flex-shrink: 0;
+}
+.esc-node:hover .esc-node-circle {
+  border-color: var(--cs-red);
+  background: rgba(228,0,43,0.1);
+  box-shadow: 0 0 0 4px rgba(228,0,43,0.1), 0 0 24px rgba(228,0,43,0.2);
+  color: #FF6680;
+}
+.esc-node.final .esc-node-circle {
+  background: var(--cs-red);
+  border-color: var(--cs-red);
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(228,0,43,0.2), 0 0 32px rgba(228,0,43,0.5);
+}
+.esc-node.final:hover .esc-node-circle {
+  box-shadow: 0 0 0 6px rgba(228,0,43,0.25), 0 0 40px rgba(228,0,43,0.6);
+}
+
+.esc-node-label {
+  font-size: 0.88rem; font-weight: 700; color: var(--text-primary);
+  margin-bottom: 8px; line-height: 1.45;
+  transition: color 0.2s;
+}
+.esc-node:hover .esc-node-label { color: #fff; }
+.esc-node.final .esc-node-label { color: #FF6680; }
+.esc-node.final:hover .esc-node-label { color: #ff8099; }
+
+.esc-node-desc {
+  font-size: 0.72rem; color: var(--text-muted);
+  line-height: 1.6; letter-spacing: 0.02em;
+  transition: color 0.2s;
+}
+.esc-node:hover .esc-node-desc { color: var(--text-secondary); }
+
+/* hover 时从下方浮现的触发条件 */
+.esc-node-trigger {
+  margin-top: 12px;
+  font-size: 0.65rem; font-weight: 600;
+  color: var(--cs-red); letter-spacing: 0.08em;
+  opacity: 0; transform: translateY(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  white-space: nowrap;
+}
+.esc-node:hover .esc-node-trigger { opacity: 1; transform: translateY(0); }
+
+/* ── ASSESSMENT ── */
+.assess-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+
+.assess-item {
+  background: var(--bg-card); padding: 36px 32px;
+  border-radius: 8px; position: relative; overflow: hidden;
+  border: 1px solid var(--border); cursor: default;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s;
+}
+.assess-item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 48px rgba(0,0,0,0.4);
+  border-color: rgba(228,0,43,0.3);
+}
+
+/* 左侧彩色竖线 */
+.assess-item::before {
+  content: ''; position: absolute;
+  left: 0; top: 0; bottom: 0; width: 3px;
+  background: var(--cs-red); opacity: 0.4;
+  transition: opacity 0.3s, width 0.3s;
+}
+.assess-item:hover::before { opacity: 1; width: 4px; }
+
+.assess-icon { font-size: 1.5rem; margin-bottom: 16px; }
+.assess-name { font-size: 0.95rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px; }
+.assess-desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.6; }
+
+/* ── CTA SECTION ── */
+.cta-section {
+  padding: 96px 0;
+  background: linear-gradient(135deg, var(--cs-red) 0%, #8B0000 100%);
+  position: relative; overflow: hidden;
+}
+
+.cta-section::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 80% 50%, rgba(255,255,255,0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 10% 50%, rgba(0,0,0,0.2) 0%, transparent 60%);
+}
+
+.cta-inner {
+  width: 100%; max-width: 1440px; margin: 0 auto; box-sizing: border-box; position: relative; z-index: 1;
+  padding: 0 clamp(32px, 6vw, 120px);
+  display: flex; justify-content: space-between; align-items: center; gap: 48px;
+}
+
+.cta-text h2 {
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem); font-weight: 800;
+  letter-spacing: -0.02em; color: #fff; margin-bottom: 12px; line-height: 1.2;
+}
+
+.cta-text p { font-size: 1rem; color: rgba(255,255,255,0.75); max-width: 480px; line-height: 1.7; }
+
+.cta-actions { display: flex; flex-direction: column; gap: 12px; flex-shrink: 0; }
+
+.btn-white { background: #fff; color: var(--cs-red); font-weight: 700; }
+.btn-white:hover { background: #f0f0f0; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+.btn-outline-white { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.4); }
+.btn-outline-white:hover { border-color: #fff; background: rgba(255,255,255,0.05); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--bg-primary); border-top: 1px solid var(--border);
+  padding: 0;
+}
+
+.footer-left { display: flex; align-items: center; gap: 10px; }
+.footer-brand { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--text-secondary); }
+.footer-copy { font-size: 0.72rem; color: var(--text-muted); }
+.footer-note { font-size: 0.72rem; color: var(--text-muted); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 0.65s ease both; }
+.d1 { animation-delay: 0.05s; }
+.d2 { animation-delay: 0.15s; }
+.d3 { animation-delay: 0.25s; }
+.d4 { animation-delay: 0.38s; }
+.d5 { animation-delay: 0.5s; }
+.d6 { animation-delay: 0.62s; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1024px) {
+  .pillars-grid { grid-template-columns: 1fr; }
+  .scenarios-grid { grid-template-columns: repeat(2, 1fr); }
+  .alerts-grid { grid-template-columns: repeat(3, 1fr); }
+  .sop-steps { grid-template-columns: repeat(3, 1fr); }
+  .sop-step::after { display: none; }
+  .assess-grid { grid-template-columns: repeat(2, 1fr); }
+  .cta-inner { flex-direction: column; align-items: flex-start; }
+  .cta-actions { flex-direction: row; }
+}
+
+@media (max-width: 768px) {
+  .escalation-flow { grid-template-columns: 1fr; }
+  .escalation-flow::before { display: none; }
+  .esc-node { flex-direction: row; text-align: left; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--border-light); }
+  .esc-node-circle { width: 40px; height: 40px; flex-shrink: 0; margin-bottom: 0; }
+  .esc-node-trigger { display: none; }
+  nav { padding: 0 16px; }
+  .section { padding: 64px 16px; }
+  .nav-cta .nav-link { display: none; }
+  .hero-metrics { grid-template-columns: repeat(2, 1fr); }
+  .days-tabs { flex-direction: column; border-radius: 8px 8px 0 0; }
+  .modules-list { grid-template-columns: 1fr; }
+  .module-row { border-right: none; }
+  .scenarios-grid { grid-template-columns: 1fr; }
+  .alerts-grid { grid-template-columns: repeat(2, 1fr); }
+  .sop-steps { grid-template-columns: repeat(2, 1fr); }
+  .outcomes-grid { grid-template-columns: 1fr; }
+  .assess-grid { grid-template-columns: 1fr; }
+  .days-tabs { display: flex; flex-direction: column; }
+  .day-tab { border-bottom: 1px solid var(--border); }
+  .audience-tags { display: none; }
+  .audience-en { display: none; }
+  .audience-role { font-size: 0.9rem; }
+}
+
+/* ══════════════════════════════════
+   HOVER EFFECTS
+══════════════════════════════════ */
+
+/* Nav links — 下划线滑入 */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: '';
+  position: absolute; bottom: -2px; left: 50%; right: 50%;
+  height: 1px; background: var(--cs-red);
+  transition: left 0.25s ease, right 0.25s ease;
+}
+.nav-link:hover::after { left: 8px; right: 8px; }
+
+/* Metric cards — 上浮 + 顶部红线亮起 */
+.metric-card {
+  position: relative; overflow: hidden;
+  transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+  border-top: 2px solid transparent;
+}
+.metric-card:hover {
+  background: var(--bg-card-hover);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+  border-top-color: var(--cs-red);
+}
+.metric-card .metric-num {
+  transition: transform 0.25s;
+}
+.metric-card:hover .metric-num { transform: scale(1.06); }
+
+/* Audience items — 左侧红线滑入 */
+.audience-item {
+  border-left: 3px solid transparent;
+  transition: background 0.2s, border-color 0.2s, padding-left 0.2s;
+}
+.audience-item:hover {
+  background: var(--bg-card-hover);
+  border-left-color: var(--cs-red);
+  padding-left: 4px;
+}
+
+/* Pillar cards — 上浮 + 红线全亮 */
+.pillar {
+  transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+.pillar:hover {
+  background: var(--bg-card-hover);
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+}
+.pillar .pillar-number {
+  transition: color 0.25s, transform 0.3s;
+}
+.pillar:hover .pillar-number {
+  transform: scale(1.08) translateX(4px);
+}
+
+/* Outcome items — 勾号放大 + 左移 */
+.outcome-item {
+  transition: background 0.2s, padding-left 0.2s;
+}
+.outcome-item:hover { padding-left: 36px; }
+.outcome-check {
+  transition: transform 0.2s, background 0.2s;
+}
+.outcome-item:hover .outcome-check {
+  transform: scale(1.2);
+  background: rgba(228,0,43,0.2);
+}
+
+/* Scenario cards — 上浮 + 红色边框 + 左上角光晕 */
+.scenario {
+  transition: background 0.25s, transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+  border: 1px solid transparent;
+}
+.scenario:hover {
+  background: var(--bg-card-hover);
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+  border-color: rgba(228,0,43,0.35);
+  z-index: 1;
+}
+.scenario::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 3px; height: 0;
+  background: var(--cs-red);
+  transition: height 0.3s ease;
+}
+.scenario:hover::before { height: 100%; }
+
+.scenario-title {
+  transition: color 0.2s;
+}
+.scenario:hover .scenario-title { color: #fff; }
+
+/* Alert cards — 上浮 + SLA 数字放大 */
+.alert-card {
+  transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+.alert-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+}
+.alert-sla {
+  transition: transform 0.25s;
+}
+.alert-card:hover .alert-sla { transform: scale(1.1); }
+
+/* SOP steps — 上浮 + 红色数字放大 */
+.sop-step {
+  transition: background 0.2s, transform 0.2s;
+}
+.sop-step:hover {
+  background: var(--bg-card-hover);
+  transform: translateY(-3px);
+}
+.sop-step-num {
+  transition: letter-spacing 0.2s;
+}
+.sop-step:hover .sop-step-num { letter-spacing: 0.2em; }
+.sop-step-name {
+  transition: color 0.2s;
+}
+.sop-step:hover .sop-step-name { color: var(--cs-red); }
+
+/* Assess items — 上浮 + icon 旋转微动 */
+.assess-item {
+  transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+.assess-item:hover {
+  background: var(--bg-card-hover);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+}
+.assess-icon {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+.assess-item:hover .assess-icon { transform: scale(1.25) rotate(-5deg); }
+.assess-name {
+  transition: color 0.2s;
+}
+.assess-item:hover .assess-name { color: var(--cs-red); }
+
+/* Module rows — 左侧红色滑入 + 数字高亮 */
+.module-row {
+  border-left: 2px solid transparent;
+  transition: background 0.15s, border-color 0.2s;
+}
+.module-row:hover {
+  background: var(--bg-card-hover);
+  border-left-color: var(--cs-red);
+}
+.module-id {
+  transition: transform 0.2s;
+}
+.module-row:hover .module-id { transform: translateX(3px); }
+
+
+/* Hero pills */
+.pill {
+  transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.2s;
+  cursor: default;
+  pointer-events: auto;
+}
+.pill:hover {
+  border-color: var(--cs-red-border);
+  color: #FF6680;
+  background: var(--cs-red-dim);
+  transform: translateY(-2px);
+}
+
+
+/* 升级路径箭头连接器 */
+.esc-connector {
+  display: flex; align-items: flex-start; justify-content: center;
+  padding-top: 20px; /* 圆圈 64px，圆心在 32px，减去箭头自身高度约 12px */
+  flex-shrink: 0; width: 40px;
+}
+.esc-connector span {
+  font-size: 1.2rem; color: var(--text-muted);
+  transition: color 0.3s, transform 0.3s;
+  display: block;
+}
+/* 相邻节点 hover 时箭头高亮 */
+.esc-node:hover + .esc-connector span,
+.esc-connector:has(+ .esc-node:hover) span {
+  color: var(--cs-red);
+  transform: translateX(3px);
+}
+
+/* Day panel 内容逐行淡入 */
+.day-panel.active .module-row {
+  animation: rowFadeIn 0.4s ease both;
+}
+.day-panel.active .module-row:nth-child(1)  { animation-delay: 0.05s; }
+.day-panel.active .module-row:nth-child(2)  { animation-delay: 0.10s; }
+.day-panel.active .module-row:nth-child(3)  { animation-delay: 0.15s; }
+.day-panel.active .module-row:nth-child(4)  { animation-delay: 0.20s; }
+.day-panel.active .module-row:nth-child(5)  { animation-delay: 0.25s; }
+.day-panel.active .module-row:nth-child(6)  { animation-delay: 0.30s; }
+.day-panel.active .module-row:nth-child(7)  { animation-delay: 0.35s; }
+.day-panel.active .module-row:nth-child(8)  { animation-delay: 0.40s; }
+.day-panel.active .module-row:nth-child(9)  { animation-delay: 0.45s; }
+.day-panel.active .module-row:nth-child(10) { animation-delay: 0.50s; }
+
+@keyframes rowFadeIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── 滚动淡入：用 @keyframes 不碰 transition，hover 完全不受影响 ── */
+@keyframes scrollFadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.scroll-hidden {
+  opacity: 0;
+}
+
+.scroll-visible {
+  animation: scrollFadeUp 0.55s ease forwards;
+}
+
+/* Day panel 切换动画 — 纯 keyframe，不碰 transition */
+@keyframes panelEnter {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.day-panel.active.panel-enter {
+  animation: panelEnter 0.35s ease forwards;
+}
+/* module-row stagger 只在 panel-enter 时触发 */
+.day-panel.active.panel-enter .module-row {
+  animation: rowFadeIn 0.4s ease both;
+}
+
+/* assess-item 内部元素更新 */
+.assess-icon {
+  font-size: 2rem; margin-bottom: 16px; display: block;
+  transition: transform 0.3s ease;
+}
+.assess-item:hover .assess-icon { transform: scale(1.3) rotate(-5deg); }
+
+.assess-name {
+  font-size: 1.25rem; font-weight: 800; color: var(--text-primary);
+  margin-bottom: 8px; letter-spacing: -0.01em;
+  transition: color 0.25s;
+}
+.assess-item:hover .assess-name { color: var(--cs-red); }
+
+.assess-tag {
+  font-size: 0.72rem; font-weight: 500; color: var(--text-muted);
+  letter-spacing: 0.06em;
+}
+
+/* ══════════════════════════════════
+   COMBINED SECTION
+══════════════════════════════════ */
+.combined-section { background: var(--bg-secondary); }
+
+.combined-header { margin-bottom: 48px; }
+
+.combined-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2px;
+  background: var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.combined-col {
+  background: var(--bg-card);
+  padding: 36px 32px;
+}
+
+.combined-col-center {
+  background: var(--bg-card);
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+}
+
+.combined-col-label {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 28px; padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.combined-col-num {
+  font-size: 0.65rem; font-weight: 800; letter-spacing: 0.16em;
+  color: var(--cs-red); font-family: 'Inter', sans-serif;
+}
+
+.combined-col-title {
+  font-size: 0.88rem; font-weight: 700; color: var(--text-primary);
+}
+
+/* ── 告警列表 ── */
+.combined-alert-list { display: flex; flex-direction: column; gap: 2px; }
+
+.cal-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; border-radius: 4px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: default;
+}
+.cal-row:hover { transform: translateX(4px); }
+
+.cal-row.critical { background: rgba(255,51,85,0.08); }
+.cal-row.high     { background: rgba(255,112,64,0.08); }
+.cal-row.medium   { background: rgba(245,158,11,0.08); }
+.cal-row.low      { background: rgba(59,130,246,0.08); }
+.cal-row.info     { background: rgba(255,255,255,0.03); }
+
+.cal-badge {
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.cal-row.critical .cal-badge { color: #FF3355; }
+.cal-row.high     .cal-badge { color: #FF7040; }
+.cal-row.medium   .cal-badge { color: #F59E0B; }
+.cal-row.low      .cal-badge { color: #60A5FA; }
+.cal-row.info     .cal-badge { color: var(--text-muted); }
+
+.cal-sla {
+  font-size: 0.85rem; font-weight: 800; color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+/* ── SOP 列表 ── */
+.combined-sop-list { display: flex; flex-direction: column; gap: 2px; }
+
+.csl-step {
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-light);
+  cursor: default;
+  transition: padding-left 0.2s;
+}
+.csl-step:hover { padding-left: 6px; }
+.csl-step:last-child { border-bottom: none; }
+
+.csl-num {
+  font-size: 0.6rem; font-weight: 800; color: var(--cs-red);
+  letter-spacing: 0.1em; min-width: 20px; flex-shrink: 0;
+}
+
+.csl-name {
+  font-size: 0.92rem; font-weight: 700; color: var(--text-primary);
+  display: flex; align-items: center; gap: 10px;
+  transition: color 0.2s;
+}
+.csl-step:hover .csl-name { color: #fff; }
+
+.csl-name em {
+  font-style: normal;
+  font-size: 0.65rem; font-weight: 400;
+  color: var(--text-muted); letter-spacing: 0.04em;
+}
+
+.csl-final .csl-num { color: var(--gold, #F59E0B); }
+.csl-final .csl-name { color: var(--text-primary); }
+
+/* ── 评估列表 ── */
+.combined-assess-list {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+}
+
+.caal-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px; border-radius: 4px;
+  background: rgba(255,255,255,0.02);
+  cursor: default;
+  transition: background 0.2s, transform 0.2s;
+}
+.caal-item:hover {
+  background: rgba(228,0,43,0.08);
+  transform: scale(1.03);
+}
+
+.caal-icon {
+  font-size: 1.1rem; flex-shrink: 0;
+  transition: transform 0.25s;
+}
+.caal-item:hover .caal-icon { transform: scale(1.2) rotate(-5deg); }
+
+.caal-name {
+  font-size: 0.82rem; font-weight: 600; color: var(--text-secondary);
+  transition: color 0.2s;
+}
+.caal-item:hover .caal-name { color: var(--text-primary); }
+
+@media (max-width: 1024px) {
+  .combined-grid { grid-template-columns: 1fr; }
+  .combined-col-center { border-left: none; border-right: none; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .combined-assess-list { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+  .combined-assess-list { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── TEASER ── */
+.teaser-section { background: var(--bg-primary); padding: 96px 0; }
+
+/* 大标题区 */
+.teaser-header { text-align: left; margin-bottom: 64px; }
+
+.teaser-main-title {
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 800; line-height: 1.2;
+  letter-spacing: -0.03em; color: var(--text-primary);
+  margin-bottom: 16px;
+}
+.highlight-red { color: var(--cs-red); }
+
+.teaser-main-desc {
+  font-size: 1rem; color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+/* 三卡布局 */
+.teaser-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.teaser-card {
+  position: relative; border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  overflow: hidden; cursor: default;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s;
+}
+.teaser-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 32px 64px rgba(0,0,0,0.5);
+  border-color: rgba(228,0,43,0.4);
+}
+
+.teaser-card-highlight {
+  background: linear-gradient(145deg, var(--bg-card) 0%, rgba(228,0,43,0.05) 100%);
+  border-color: rgba(228,0,43,0.2);
+}
+.teaser-card-highlight:hover { border-color: rgba(228,0,43,0.6); }
+
+.teaser-card-inner {
+  padding: 40px 36px 36px; position: relative; z-index: 1;
+}
+
+/* 光晕背景 */
+.teaser-card-glow {
+  position: absolute; bottom: -40px; right: -40px;
+  width: 180px; height: 180px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(228,0,43,0.08) 0%, transparent 70%);
+  transition: opacity 0.35s, transform 0.35s;
+  opacity: 0;
+}
+.teaser-card:hover .teaser-card-glow {
+  opacity: 1; transform: scale(1.3);
+}
+.teaser-card-highlight .teaser-card-glow { opacity: 0.6; }
+.teaser-card-highlight:hover .teaser-card-glow { opacity: 1; transform: scale(1.5); }
+
+.teaser-num {
+  font-size: 0.62rem; font-weight: 800; letter-spacing: 0.22em;
+  color: var(--cs-red); margin-bottom: 24px;
+  transition: letter-spacing 0.3s;
+}
+.teaser-card:hover .teaser-num { letter-spacing: 0.3em; }
+
+.teaser-icon-wrap {
+  color: var(--cs-red); margin-bottom: 24px;
+  opacity: 0.7; transition: opacity 0.3s, transform 0.35s;
+}
+.teaser-card:hover .teaser-icon-wrap {
+  opacity: 1; transform: scale(1.1);
+}
+
+.teaser-title {
+  font-size: 1.6rem; font-weight: 800;
+  color: var(--text-primary); line-height: 1.15;
+  margin-bottom: 6px; letter-spacing: -0.02em;
+  transition: color 0.25s; white-space: nowrap;
+}
+.teaser-card:hover .teaser-title { color: #fff; }
+
+.teaser-sub {
+  font-size: 0.68rem; color: var(--cs-red);
+  letter-spacing: 0.12em; font-weight: 600;
+  text-transform: uppercase; margin-bottom: 20px; white-space: nowrap;
+}
+
+.teaser-desc {
+  font-size: 0.82rem; color: var(--text-muted);
+  line-height: 1.65; padding-top: 16px;
+  border-top: 1px solid var(--border-light);
+  transition: color 0.25s; white-space: nowrap;
+}
+.teaser-card:hover .teaser-desc { color: var(--text-secondary); }
+
+@media (max-width: 1024px) {
+  .teaser-grid { grid-template-columns: 1fr; gap: 12px; }
+}
+
+
+.teaser-card {
+  background: var(--bg-card);
+  padding: 48px 40px;
+  position: relative; overflow: hidden;
+  cursor: default;
+  transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+.teaser-card:hover {
+  background: var(--bg-card-hover);
+  transform: translateY(-6px);
+  box-shadow: 0 24px 56px rgba(0,0,0,0.5);
+  z-index: 1;
+}
+
+/* 顶部红线 */
+.teaser-card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: var(--cs-red);
+  opacity: 0; transition: opacity 0.3s;
+}
+.teaser-card:hover::before { opacity: 1; }
+
+/* 高亮中间卡片 */
+.teaser-card-highlight {
+  background: var(--surface, #162840);
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+}
+.teaser-card-highlight::before { opacity: 0.4; }
+.teaser-card-highlight:hover::before { opacity: 1; }
+
+.teaser-num {
+  font-size: 0.65rem; font-weight: 800;
+  letter-spacing: 0.2em; color: var(--cs-red);
+  margin-bottom: 20px;
+  transition: letter-spacing 0.3s;
+}
+.teaser-card:hover .teaser-num { letter-spacing: 0.28em; }
+
+.teaser-title {
+  font-size: 1.6rem; font-weight: 800;
+  color: var(--text-primary); line-height: 1.2;
+  margin-bottom: 10px; letter-spacing: -0.02em;
+  transition: color 0.25s;
+}
+.teaser-card:hover .teaser-title { color: #fff; }
+
+.teaser-sub {
+  font-size: 0.75rem; color: var(--text-muted);
+  letter-spacing: 0.08em; font-weight: 400;
+}
+
+@media (max-width: 768px) {
+  .teaser-grid { grid-template-columns: 1fr; }
+  .teaser-card-highlight { border-left: none; border-right: none;
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+}
+
+/* ── DROPDOWN NAV ── */
+.nav-group {
+  position: relative;
+}
+
+.nav-group-label {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 0.78rem; font-weight: 500;
+  color: var(--text-secondary); cursor: pointer;
+  padding: 6px 12px; border-radius: 4px;
+  transition: color 0.2s, background 0.2s;
+  user-select: none; white-space: nowrap;
+}
+.nav-group-label svg { transition: transform 0.25s; opacity: 0.6; }
+.nav-group:hover .nav-group-label {
+  color: var(--text-primary);
+  background: rgba(255,255,255,0.05);
+}
+.nav-group:hover .nav-group-label svg { transform: rotate(180deg); }
+
+.nav-dropdown {
+  position: absolute; top: calc(100% + 10px); left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px; padding: 6px;
+  min-width: 160px;
+  opacity: 0; visibility: hidden;
+  transform: translateX(-50%) translateY(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+  z-index: 300;
+}
+
+/* 顶部小三角 */
+.nav-dropdown::before {
+  content: '';
+  position: absolute; top: -5px; left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 8px; height: 8px;
+  background: var(--bg-card);
+  border-left: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+}
+
+.nav-group:hover .nav-dropdown {
+  opacity: 1; visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.nav-drop-link {
+  display: block; padding: 9px 14px;
+  font-size: 0.78rem; color: var(--text-secondary);
+  text-decoration: none; border-radius: 5px;
+  transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+.nav-drop-link:hover {
+  background: rgba(228,0,43,0.08);
+  color: var(--text-primary);
+}
+.nav-drop-link::before {
+  content: none; /* 覆盖 nav-link 的下划线伪元素 */
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">
+      <div class="nav-logo-icon"></div>
+      <span class="nav-logo-text">CrowdStrike Falcon · 安全培训</span>
+    </a>
+    <div class="nav-cta">
+      <a href="#audience" class="nav-link">适用对象</a>
+      <a href="#design" class="nav-link">课程设计</a>
+      <a href="#outcomes" class="nav-link">培训成果</a>
+      <a href="#curriculum" class="nav-link">课程大纲</a>
+      <a href="#scenarios" class="nav-link">攻防场景</a>
+      <a href="#framework" class="nav-link">培训体系</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+
+  <!-- Geometric SVG -->
+  <svg class="hero-geo" viewBox="0 0 700 700" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="350,50 650,200 650,500 350,650 50,500 50,200" stroke="white" stroke-width="1" fill="none"/>
+    <polygon points="350,120 590,240 590,460 350,580 110,460 110,240" stroke="white" stroke-width="0.5" fill="none"/>
+    <polygon points="350,190 530,280 530,420 350,510 170,420 170,280" stroke="white" stroke-width="0.5" fill="none"/>
+    <line x1="350" y1="50" x2="350" y2="650" stroke="white" stroke-width="0.3"/>
+    <line x1="50" y1="200" x2="650" y2="500" stroke="white" stroke-width="0.3"/>
+    <line x1="650" y1="200" x2="50" y2="500" stroke="white" stroke-width="0.3"/>
+    <circle cx="350" cy="350" r="120" stroke="white" stroke-width="0.5" fill="none" stroke-dasharray="4 6"/>
+    <circle cx="350" cy="350" r="200" stroke="white" stroke-width="0.3" fill="none" stroke-dasharray="2 8"/>
+  </svg>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow fade-up d1">EDR / XDR 实战培训方案</div>
+
+    <h1 class="fade-up d2">
+      以<em>攻击者视角</em>驱动蓝队检测能力建设
+    </h1>
+
+    <p class="hero-subtitle fade-up d3">
+      基于红蓝对抗、MITRE ATT&CK 与 Cyber Kill Chain 的 CrowdStrike Falcon 安全运营实战培训，帮助外包服务团队建立从告警分析到事件闭环的完整能力。
+    </p>
+
+    <div class="hero-pills fade-up d4">
+      <span class="pill red">Red Team Thinking</span>
+      <span class="pill red">Blue Team Detection</span>
+      <span class="pill">MITRE ATT&CK</span>
+      <span class="pill">Cyber Kill Chain</span>
+      <span class="pill">SecOps SOP</span>
+    </div>
+
+    <div class="hero-actions fade-up d5">
+      <a href="#curriculum" class="btn btn-red">查看培训课程 →</a>
+    </div>
+
+    <div class="hero-metrics fade-up d6">
+      <div class="metric-card">
+        <div class="metric-num">3 <span class="metric-unit">天</span></div>
+        <div class="metric-title">标准课程时长</div>
+        <div class="metric-label">共 18 小时，每天 6 小时，可压缩为 2 天强化版</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-num">6 <span class="metric-unit">+</span></div>
+        <div class="metric-title">攻防实战场景</div>
+        <div class="metric-label">覆盖钓鱼 / C2 / 横向移动 / 凭证窃取 / 勒索软件等全链路</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-num">6</div>
+        <div class="metric-title">动手实验</div>
+        <div class="metric-label">每个攻防场景配套独立实验，真实 Falcon Console 环境操作</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-num">7 <span class="metric-unit">类</span></div>
+        <div class="metric-title">覆盖目标角色</div>
+        <div class="metric-label">从 L1 SOC 到服务交付经理，运维、安全、管理全覆盖</div>
+      </div>
+    </div>
+<hr class="divider">
+
+<!-- AUDIENCE -->
+<section class="section audience-section" id="audience">
+  <div class="section-inner">
+    <div class="eyebrow">适用对象</div>
+    <h2 class="section-title">面向运维团队的专项培训</h2>
+    <p class="section-desc">专为大型全球企业的运维、安全运维及安全支持团队设计。</p>
+
+    <div class="audience-list">
+      <div class="audience-item">
+        <span class="audience-num">01</span>
+        <div class="audience-divider"></div>
+        <span class="audience-role">IT 运维工程师</span>
+        <span class="audience-en">IT Operations</span>
+        <div class="audience-tags"><span class="audience-tag ops">运维</span></div>
+      </div>
+      <div class="audience-item">
+        <span class="audience-num">02</span>
+        <div class="audience-divider"></div>
+        <span class="audience-role">桌面运维工程师</span>
+        <span class="audience-en">Endpoint Support</span>
+        <div class="audience-tags"><span class="audience-tag ops">运维</span></div>
+      </div>
+      <div class="audience-item">
+        <span class="audience-num">03</span>
+        <div class="audience-divider"></div>
+        <span class="audience-role">安全运维工程师</span>
+        <span class="audience-en">SecOps Engineer</span>
+        <div class="audience-tags"><span class="audience-tag sec">安全</span></div>
+      </div>
+      <div class="audience-item">
+        <span class="audience-num">04</span>
+        <div class="audience-divider"></div>
+        <span class="audience-role">SOC 一线 / 二线分析师</span>
+        <span class="audience-en">L1–L2 SOC Analyst</span>
+        <div class="audience-tags"><span class="audience-tag sec">安全</span></div>
+      </div>
+      <div class="audience-item">
+        <span class="audience-num">05</span>
+        <div class="audience-divider"></div>
+        <span class="audience-role">服务交付经理</span>
+        <span class="audience-en">Service Delivery Manager</span>
+        <div class="audience-tags"><span class="audience-tag mgmt">管理</span></div>
+      </div>
+      <div class="audience-item">
+        <span class="audience-num">06</span>
+        <div class="audience-divider"></div>
+        <span class="audience-role">客户现场支持</span>
+        <span class="audience-en">On-site Support</span>
+        <div class="audience-tags"><span class="audience-tag ops">运维</span></div>
+      </div>
+      <div class="audience-item">
+        <span class="audience-num">07</span>
+        <div class="audience-divider"></div>
+        <span class="audience-role">事件响应协同人员</span>
+        <span class="audience-en">IR Coordinator</span>
+        <div class="audience-tags"><span class="audience-tag sec">安全</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- THREE PILLARS -->
+<section class="section" id="design">
+  <div class="section-inner">
+    <div class="eyebrow">课程设计</div>
+    <h2 class="section-title">三条核心主线，覆盖完整能力闭环</h2>
+    <p class="section-desc">不只讲工具操作——以攻击链驱动检测逻辑，以服务 SOP 驱动交付闭环。</p>
+
+    <div class="pillars-grid">
+      <div class="pillar">
+        <div class="pillar-number">01</div>
+        <div class="pillar-en">Product Capability</div>
+        <div class="pillar-name">产品能力线</div>
+        <div class="pillar-desc">Falcon 架构、Sensor 部署、策略配置、告警分析、响应动作——会部署、会配置、会运维。</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-number">02</div>
+        <div class="pillar-en">Offense & Defense</div>
+        <div class="pillar-name">攻防对抗线</div>
+        <div class="pillar-desc">钓鱼、脚本执行、C2 外联、横向移动、凭证窃取、勒索软件六大场景——会看攻击、会识别行为。</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-number">03</div>
+        <div class="pillar-en">Service Delivery</div>
+        <div class="pillar-name">服务交付线</div>
+        <div class="pillar-desc">告警分级、SLA 管理、升级流程、客户沟通与事件报告——会交付、会闭环、会留痕。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- OUTCOMES -->
+<section class="section outcomes-section" id="outcomes">
+  <div class="section-inner">
+    <div class="eyebrow">培训成果</div>
+    <h2 class="section-title">完成培训后，学员能够做到</h2>
+    <p class="section-desc">以可量化的能力目标驱动培训设计，确保知识真正落地。</p>
+
+    <div class="outcomes-grid">
+      <div class="outcome-item">
+        <div class="outcome-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#E4002B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="outcome-text">从红队攻击路径角度理解 EDR / XDR 检测逻辑</span>
+      </div>
+      <div class="outcome-item">
+        <div class="outcome-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#E4002B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="outcome-text">使用 ATT&CK 框架识别常见攻击技术，用 Kill Chain 还原攻击过程</span>
+      </div>
+      <div class="outcome-item">
+        <div class="outcome-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#E4002B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="outcome-text">掌握 Process Tree、Timeline、Network、IOC、IOA 核心分析方法</span>
+      </div>
+      <div class="outcome-item">
+        <div class="outcome-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#E4002B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="outcome-text">对钓鱼、C2 外联、横向移动、勒索软件等场景进行独立告警分析</span>
+      </div>
+      <div class="outcome-item">
+        <div class="outcome-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#E4002B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="outcome-text">按外包运维服务要求执行事件升级、隔离、取证、恢复和报告</span>
+      </div>
+      <div class="outcome-item">
+        <div class="outcome-check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l3 3 5-6" stroke="#E4002B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span class="outcome-text">建立适合大型全球企业环境的标准化安全运维 SOP</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- CURRICULUM -->
+<section class="section" id="curriculum">
+  <div class="section-inner">
+    <div class="eyebrow">培训大纲</div>
+    <h2 class="section-title">三日课程安排</h2>
+    <p class="section-desc">标准版共 3 天每天 6 小时，也可压缩为 2 天强化版。</p>
+
+    <div class="days-tabs" id="dayTabs">
+      <button class="day-tab active" onclick="switchDay(0)" data-day="0">
+        <div class="day-tab-label">Day 1</div>
+        <div class="day-tab-title">Falcon 基础架构、部署与策略配置</div>
+      </button>
+      <button class="day-tab" onclick="switchDay(1)" data-day="1">
+        <div class="day-tab-label">Day 2</div>
+        <div class="day-tab-title">红蓝对抗 · ATT&CK / Kill Chain 检测分析</div>
+      </button>
+      <button class="day-tab" onclick="switchDay(2)" data-day="2">
+        <div class="day-tab-label">Day 3</div>
+        <div class="day-tab-title">威胁狩猎 · 事件响应 · 外包服务 SOP</div>
+      </button>
+    </div>
+
+    <div class="day-panel active" id="panel-0">
+      <div class="modules-list">
+        <div class="module-row"><span class="module-id">1.1</span><span class="module-text">大型全球企业安全运维场景导入：资产可见性、终端防护、告警响应、合规报告</span></div>
+        <div class="module-row"><span class="module-id">1.2</span><span class="module-text">Falcon 在企业安全架构中的定位：EPP / EDR / XDR / MDR 的区别</span></div>
+        <div class="module-row"><span class="module-id">1.3</span><span class="module-text">Falcon Console 控制台导览：Dashboard、Host Management、Detections、Investigate</span></div>
+        <div class="module-row"><span class="module-id">1.4</span><span class="module-text">Falcon Sensor 原理与部署：Windows / Linux / macOS，CID，云端通信机制</span></div>
+        <div class="module-row"><span class="module-id">1.5</span><span class="module-text">Prevention Policy 防护策略：分组设计、机器学习检测、IOA 行为阻断、勒索防护</span></div>
+        <div class="module-row"><span class="module-id">1.6</span><span class="module-text">Sensor Update Policy：N / N-1 / N-2 版本策略，分阶段更新，更新风险控制</span></div>
+      </div>
+    </div>
+
+    <div class="day-panel" id="panel-1">
+      <div class="modules-list">
+        <div class="module-row"><span class="module-id">2.1</span><span class="module-text">红蓝对抗基础：红队 / 蓝队 / 紫队，从"看告警"到"看攻击过程"的思维转变</span></div>
+        <div class="module-row"><span class="module-id">2.2</span><span class="module-text">Cyber Kill Chain 七阶段模型：侦察 → 投递 → 利用 → 安装 → C2 → 目标达成</span></div>
+        <div class="module-row"><span class="module-id">2.3</span><span class="module-text">MITRE ATT&CK：Tactics / Techniques / Procedures，检测规则设计，复盘报告</span></div>
+        <div class="module-row"><span class="module-id">2.4</span><span class="module-text">Falcon 检测逻辑：IOC 与 IOA 的本质区别，行为检测的核心价值</span></div>
+        <div class="module-row"><span class="module-id">2.5</span><span class="module-text">场景：钓鱼邮件与恶意文档执行分析</span></div>
+        <div class="module-row"><span class="module-id">2.6</span><span class="module-text">场景：PowerShell 与脚本攻击 / 无文件攻击检测</span></div>
+        <div class="module-row"><span class="module-id">2.7</span><span class="module-text">场景：C2 外联与 Beacon 行为识别</span></div>
+        <div class="module-row"><span class="module-id">2.8</span><span class="module-text">场景：LSASS 凭证访问与 Mimikatz 检测</span></div>
+        <div class="module-row"><span class="module-id">2.9</span><span class="module-text">场景：横向移动检测（PsExec / WMI / RDP / SMB）</span></div>
+        <div class="module-row"><span class="module-id">2.10</span><span class="module-text">场景：勒索软件行为识别与影响范围评估</span></div>
+      </div>
+    </div>
+
+    <div class="day-panel" id="panel-2">
+      <div class="modules-list">
+        <div class="module-row"><span class="module-id">3.1</span><span class="module-text">Falcon 告警分析方法论：Process Tree / Timeline / Network / User 四视角</span></div>
+        <div class="module-row"><span class="module-id">3.2</span><span class="module-text">标准告警分析 12 步骤：从确认基本信息到编写事件记录</span></div>
+        <div class="module-row"><span class="module-id">3.3</span><span class="module-text">告警分级标准：Critical / High / Medium / Low / Informational 响应要求</span></div>
+        <div class="module-row"><span class="module-id">3.4</span><span class="module-text">威胁狩猎 Threat Hunting：假设驱动型、IOC / IOA / ATT&CK-driven Hunting</span></div>
+        <div class="module-row"><span class="module-id">3.5</span><span class="module-text">企业多产品联动：Email Security → EDR → Firewall / Proxy → SIEM → SOAR → ITSM</span></div>
+        <div class="module-row"><span class="module-id">3.6</span><span class="module-text">外包服务响应 SOP：检测 → 分析 → 遏制 → 清除 → 恢复 → 复盘</span></div>
+        <div class="module-row"><span class="module-id">3.7</span><span class="module-text">事件升级触发条件与升级路径：L1 外包 → L2 安全 → 客户本地 → Global SOC</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- SCENARIOS -->
+<section class="section scenarios-section" id="scenarios">
+  <div class="section-inner">
+    <div class="eyebrow">攻防场景</div>
+    <h2 class="section-title">六大实战场景，贯穿完整攻击链</h2>
+    <p class="section-desc" style="white-space: nowrap;">每个场景包含红队行为描述、ATT&CK 映射、Falcon 分析重点与动手实验任务。</p>
+
+    <div class="scenarios-grid">
+
+      <div class="scenario">
+        <div class="scenario-index">SCENARIO 01</div>
+        <div class="scenario-title">钓鱼邮件与恶意文档执行</div>
+        <div class="scenario-chain">
+          <span class="chain-tag">Initial Access</span>
+          <span class="chain-tag">Execution</span>
+        </div>
+        <ul class="scenario-points">
+          <li>Office / 浏览器启动异常子进程</li>
+          <li>PowerShell / cmd / wscript 执行</li>
+          <li>Parent Process 溯源分析</li>
+          <li>编码命令 / 隐藏窗口识别</li>
+        </ul>
+      </div>
+
+      <div class="scenario">
+        <div class="scenario-index">SCENARIO 02</div>
+        <div class="scenario-title">PowerShell 脚本攻击检测</div>
+        <div class="scenario-chain">
+          <span class="chain-tag">Execution</span>
+          <span class="chain-tag">Defense Evasion</span>
+        </div>
+        <ul class="scenario-points">
+          <li>EncodedCommand / Bypass Policy</li>
+          <li>DownloadString / Invoke-Expression</li>
+          <li>无文件攻击 Fileless Attack</li>
+          <li>计划任务 / 注册表持久化</li>
+        </ul>
+      </div>
+
+      <div class="scenario">
+        <div class="scenario-index">SCENARIO 03</div>
+        <div class="scenario-title">C2 外联与 Beacon 行为</div>
+        <div class="scenario-chain">
+          <span class="chain-tag">Command & Control</span>
+        </div>
+        <ul class="scenario-points">
+          <li>非浏览器进程异常外联</li>
+          <li>HTTPS / DNS / Cloud 伪装</li>
+          <li>Beacon 周期性连接特征</li>
+          <li>联动 NGFW / Proxy / DNS 安全</li>
+        </ul>
+      </div>
+
+      <div class="scenario">
+        <div class="scenario-index">SCENARIO 04</div>
+        <div class="scenario-title">凭证访问与 LSASS 防护</div>
+        <div class="scenario-chain">
+          <span class="chain-tag">Credential Access</span>
+          <span class="chain-tag">Privilege Escalation</span>
+        </div>
+        <ul class="scenario-points">
+          <li>Mimikatz / ProcDump 检测</li>
+          <li>LSASS 访问进程溯源</li>
+          <li>内存转储文件识别</li>
+          <li>凭证横向移动关联分析</li>
+        </ul>
+      </div>
+
+      <div class="scenario">
+        <div class="scenario-index">SCENARIO 05</div>
+        <div class="scenario-title">横向移动检测分析</div>
+        <div class="scenario-chain">
+          <span class="chain-tag">Lateral Movement</span>
+          <span class="chain-tag">Discovery</span>
+        </div>
+        <ul class="scenario-points">
+          <li>PsExec / WMI / RDP / SMB</li>
+          <li>同账号多主机短时访问</li>
+          <li>远程服务创建检测</li>
+          <li>联动 AD / VPN / 堡垒机日志</li>
+        </ul>
+      </div>
+
+      <div class="scenario">
+        <div class="scenario-index">SCENARIO 06</div>
+        <div class="scenario-title">勒索软件行为识别</div>
+        <div class="scenario-chain">
+          <span class="chain-tag">Impact</span>
+          <span class="chain-tag">Exfiltration</span>
+        </div>
+        <ul class="scenario-points">
+          <li>文件批量修改 / 扩展名变化</li>
+          <li>vssadmin / bcdedit 命令</li>
+          <li>单点扩散至文件服务器</li>
+          <li>数据外传迹象识别</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- COMBINED -->
+<section class="section teaser-section" id="framework">
+  <div class="section-inner">
+
+    <!-- 区块大标题 -->
+    <div class="teaser-header">
+      <div class="eyebrow">培训体系</div>
+      <h2 class="teaser-main-title">
+        有据可<span class="highlight-red">查</span>，有章可<span class="highlight-red">循</span>。
+      </h2>
+      <p class="teaser-main-desc">三套标准化框架，让每个安全决策都有依据</p>
+    </div>
+
+    <!-- 三张卡片 -->
+    <div class="teaser-grid">
+
+      <div class="teaser-card" id="sop">
+        <div class="teaser-card-inner">
+          <div class="teaser-num">01</div>
+          <div class="teaser-icon-wrap">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <rect x="4" y="4" width="32" height="32" rx="4" stroke="currentColor" stroke-width="1.5" opacity="0.3"/>
+              <circle cx="20" cy="14" r="4" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M8 32c0-6.627 5.373-12 12-12s12 5.373 12 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="teaser-title">五级告警分级</div>
+          <div class="teaser-sub">Alert Classification</div>
+          <div class="teaser-desc">Critical → Info，每级配套 SLA 响应时限</div>
+        </div>
+        <div class="teaser-card-glow"></div>
+      </div>
+
+      <div class="teaser-card teaser-card-highlight" id="assessment">
+        <div class="teaser-card-inner">
+          <div class="teaser-num">02</div>
+          <div class="teaser-icon-wrap">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <path d="M8 20h4l4-10 6 20 4-14 4 4h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="teaser-title">事件响应 SOP</div>
+          <div class="teaser-sub">Incident Response</div>
+          <div class="teaser-desc">六步闭环流程，标准化处置每一个安全事件</div>
+        </div>
+        <div class="teaser-card-glow"></div>
+      </div>
+
+      <div class="teaser-card">
+        <div class="teaser-card-inner">
+          <div class="teaser-num">03</div>
+          <div class="teaser-icon-wrap">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+              <path d="M20 4l4 8 9 1.3-6.5 6.3 1.5 9L20 24l-8 4.6 1.5-9L7 13.3 16 12z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="teaser-title">六维能力评估</div>
+          <div class="teaser-sub">Capability Assessment</div>
+          <div class="teaser-desc">可量化指标验证，确保培训成效真正落地</div>
+        </div>
+        <div class="teaser-card-glow"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="cta-inner">
+    <div class="cta-text">
+      <h2>准备好提升团队的安全运营能力了吗？</h2>
+      <p>基于团队规模、现有技能水平和时间安排，我们提供 3 天标准版和 2 天强化版两种方案，也可根据客户需求进行定制。</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="nav-inner" style="flex-direction:row; padding: 28px clamp(32px, 6vw, 120px); box-sizing: border-box;">
+    <div class="footer-left">
+      <div class="nav-logo-icon" style="width:24px;height:24px;"></div>
+      <span class="footer-brand">CrowdStrike Falcon 安全培训</span>
+    </div>
+    <div class="footer-copy">基于 MITRE ATT&CK® 框架 · Cyber Kill Chain 模型 · CrowdStrike Falcon Platform</div>
+    <div class="footer-note">本文档为内部培训提案，仅供参考</div>
+  </div>
+</footer>
+
+<script>
+function switchDay(index) {
+  document.querySelectorAll('.day-tab').forEach((t, i) => {
+    t.classList.toggle('active', i === index);
+  });
+  document.querySelectorAll('.day-panel').forEach((p, i) => {
+    const wasActive = p.classList.contains('active');
+    p.classList.toggle('active', i === index);
+    // 新激活的面板：移除旧动画 class，强制 reflow，再加回来触发动画
+    if (i === index && !wasActive) {
+      p.classList.remove('panel-enter');
+      void p.offsetWidth;
+      p.classList.add('panel-enter');
+      // 动画结束后移除 panel-enter，module-row hover 恢复正常
+      p.addEventListener('animationend', () => {
+        p.classList.remove('panel-enter');
+      }, { once: true });
+    }
+  });
+}
+
+// Scroll-triggered fade-in
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      el.classList.add('scroll-visible');
+      // 动画结束后移除所有动画 class，元素回归纯 CSS，hover 正常工作
+      el.addEventListener('animationend', () => {
+        el.classList.remove('scroll-hidden', 'scroll-visible');
+      }, { once: true });
+      observer.unobserve(el);
+    }
+  });
+}, { threshold: 0.08 });
+
+document.querySelectorAll('.pillar, .audience-item, .scenario, .alert-card, .assess-item, .outcome-item, .metric-card, .esc-node, .sop-step').forEach((el, i) => {
+  el.classList.add('scroll-hidden');
+  el.style.animationDelay = (i % 8) * 0.06 + 's';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
