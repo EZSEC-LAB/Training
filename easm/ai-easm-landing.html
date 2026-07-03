@@ -1,0 +1,1772 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI驱动的外部攻击面管理免费试用</title>
+  <meta name="description" content="AI驱动的外部攻击面管理页面，面向安全团队提供资产发现、风险排序、漏洞核验与试用入口。">
+  <style>
+    :root {
+      --bg: #f6f8f5;
+      --panel: #ffffff;
+      --ink: #17211c;
+      --muted: #617067;
+      --line: #d9e1dc;
+      --accent: #14785f;
+      --accent-dark: #0d5e49;
+      --accent-soft: #dcefe8;
+      --warn: #c77a24;
+      --danger: #b9473d;
+      --deep: #111816;
+      --radius: 14px;
+      --shadow: 0 28px 70px rgba(35, 54, 47, 0.12);
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+      --serif: Georgia, "Times New Roman", "Songti SC", serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 6%, rgba(20, 120, 95, 0.10), transparent 32rem),
+        linear-gradient(180deg, #f8faf7 0%, var(--bg) 44%, #eef3ef 100%);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .page {
+      overflow: hidden;
+    }
+
+    .container {
+      width: min(1160px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(246, 248, 245, 0.86);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(217, 225, 220, 0.8);
+    }
+
+    .nav-inner {
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-width: 0;
+    }
+
+    .mark {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 750;
+      letter-spacing: 0.01em;
+      min-width: 0;
+    }
+
+    .mark span:last-child {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .mark-symbol {
+      width: 32px;
+      height: 32px;
+      flex: 0 0 32px;
+      border-radius: 10px;
+      background: var(--deep);
+      position: relative;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12);
+    }
+
+    .mark-symbol::before,
+    .mark-symbol::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border: 1px solid #7ad6bd;
+      border-radius: 8px;
+    }
+
+    .mark-symbol::after {
+      inset: 13px;
+      background: #7ad6bd;
+      border-radius: 999px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      color: #3f4d45;
+      font-size: 14px;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent-dark);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 20px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-weight: 720;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: var(--accent);
+      box-shadow: 0 14px 34px rgba(20, 120, 95, 0.22);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-dark);
+    }
+
+    .btn-secondary {
+      color: var(--ink);
+      background: rgba(255,255,255,0.7);
+      border-color: var(--line);
+    }
+
+    .btn-secondary:hover {
+      border-color: #9ab0a6;
+      background: #fff;
+    }
+
+    .hero {
+      min-height: calc(100dvh - 68px);
+      display: grid;
+      align-items: center;
+      padding: 64px 0 54px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(420px, 1.05fr);
+      gap: 56px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      font-size: 13px;
+      font-weight: 720;
+      margin-bottom: 20px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(42px, 6vw, 74px);
+      line-height: 0.98;
+      letter-spacing: -0.035em;
+      max-width: 760px;
+    }
+
+    .hero-copy {
+      max-width: 640px;
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.75;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .trial-note {
+      margin-top: 18px;
+      color: #53645a;
+      font-size: 14px;
+    }
+
+    .console {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      border-radius: 22px;
+      background: #101816;
+      color: #dcefe8;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.08);
+      overflow: hidden;
+    }
+
+    .console-top {
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+    }
+
+    .traffic {
+      display: flex;
+      gap: 7px;
+    }
+
+    .traffic span {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: #60746b;
+    }
+
+    .console-title {
+      font-size: 13px;
+      color: #9ab0a6;
+      letter-spacing: 0.02em;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .console-body {
+      padding: 20px;
+      display: grid;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .metric {
+      min-width: 0;
+      min-height: 86px;
+      border-radius: 14px;
+      padding: 14px;
+      background: rgba(255,255,255,0.055);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .metric b {
+      display: block;
+      color: #fff;
+      font-size: 24px;
+      line-height: 1;
+      margin-bottom: 9px;
+    }
+
+    .metric span {
+      color: #9fb3aa;
+      font-size: 13px;
+    }
+
+    .scan-map {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      gap: 14px;
+      min-height: 292px;
+      min-width: 0;
+    }
+
+    .map-panel,
+    .risk-panel {
+      min-width: 0;
+      border-radius: 16px;
+      padding: 16px;
+      background: rgba(255,255,255,0.045);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .map-panel {
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(rgba(122, 214, 189, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(122, 214, 189, 0.08) 1px, transparent 1px),
+        rgba(255,255,255,0.04);
+      background-size: 32px 32px;
+    }
+
+    .entry-path {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+      min-width: 0;
+    }
+
+    .entry-row {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 11px;
+      border-radius: 13px;
+      background: rgba(16, 24, 22, 0.74);
+      border: 1px solid rgba(122, 214, 189, 0.12);
+    }
+
+    .entry-dot {
+      width: 26px;
+      height: 26px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: rgba(122, 214, 189, 0.16);
+      color: #7ad6bd;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .entry-row strong {
+      min-width: 0;
+      display: block;
+      color: #f4fbf8;
+      font-size: 14px;
+      line-height: 1.25;
+      margin-bottom: 4px;
+    }
+
+    .entry-row span {
+      color: #9fb3aa;
+      font-size: 12px;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
+
+    .queue-list {
+      display: grid;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .queue-item {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border-radius: 13px;
+      background: rgba(255,255,255,0.055);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .queue-item strong {
+      min-width: 0;
+      display: block;
+      color: #f4fbf8;
+      font-size: 14px;
+      margin-bottom: 3px;
+    }
+
+    .queue-item span {
+      color: #9fb3aa;
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .queue-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 38px;
+      height: 30px;
+      border-radius: 999px;
+      color: #101816;
+      background: #7ad6bd;
+      font-weight: 800;
+      font-size: 12px;
+    }
+
+    .queue-badge.hot {
+      background: #df7770;
+    }
+
+    .queue-badge.warn {
+      background: #e5a24f;
+    }
+
+    .node {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      background: #7ad6bd;
+      box-shadow: 0 0 0 8px rgba(122, 214, 189, 0.12);
+    }
+
+    .node.n1 { left: 18%; top: 24%; }
+    .node.n2 { left: 44%; top: 48%; background: var(--warn); box-shadow: 0 0 0 8px rgba(199, 122, 36, 0.13); }
+    .node.n3 { left: 70%; top: 28%; }
+    .node.n4 { left: 78%; top: 70%; background: var(--danger); box-shadow: 0 0 0 8px rgba(185, 71, 61, 0.14); }
+    .node.n5 { left: 26%; top: 74%; }
+
+    .map-line {
+      position: absolute;
+      height: 1px;
+      background: rgba(122, 214, 189, 0.28);
+      transform-origin: left center;
+    }
+
+    .line-a { left: 21%; top: 28%; width: 150px; transform: rotate(22deg); }
+    .line-b { left: 47%; top: 51%; width: 140px; transform: rotate(-18deg); }
+    .line-c { left: 29%; top: 75%; width: 250px; transform: rotate(-10deg); }
+
+    .panel-label {
+      color: #9fb3aa;
+      font-size: 12px;
+      margin-bottom: 14px;
+    }
+
+    .risk-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .risk-item {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.052);
+      color: #dcefe8;
+      font-size: 13px;
+    }
+
+    .tag {
+      border-radius: 999px;
+      padding: 3px 8px;
+      font-size: 12px;
+      color: #101816;
+      background: #7ad6bd;
+      font-weight: 720;
+    }
+
+    .tag.warn {
+      background: #e5a24f;
+    }
+
+    .tag.danger {
+      background: #df7770;
+    }
+
+    section {
+      padding: 92px 0;
+    }
+
+    .section-head {
+      max-width: 720px;
+      margin-bottom: 36px;
+      min-width: 0;
+    }
+
+    .section-head h2 {
+      font-family: var(--serif);
+      font-size: clamp(34px, 4vw, 54px);
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+    }
+
+    .section-head p {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .ransom {
+      background: #101816;
+      color: #fff;
+      border-block: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .ransom-layout {
+      display: grid;
+      grid-template-columns: 0.82fr 1.18fr;
+      gap: 34px;
+      align-items: stretch;
+    }
+
+    .ransom-copy {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 30px;
+      padding: 34px;
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(122, 214, 189, 0.16), transparent 18rem),
+        rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .ransom-copy h2 {
+      font-family: var(--serif);
+      font-size: clamp(34px, 4vw, 56px);
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+      margin: 0;
+    }
+
+    .ransom-copy p {
+      color: #b8c9c1;
+      font-size: 17px;
+      margin-top: 18px;
+    }
+
+    .ransom-stat {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .ransom-stat div {
+      padding: 16px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.09);
+    }
+
+    .ransom-stat b {
+      display: block;
+      font-size: 26px;
+      line-height: 1;
+      color: #7ad6bd;
+      margin-bottom: 8px;
+    }
+
+    .ransom-stat span {
+      color: #b8c9c1;
+      font-size: 13px;
+    }
+
+    .attack-flow {
+      display: grid;
+      gap: 14px;
+    }
+
+    .attack-step {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: 76px 1fr minmax(180px, 0.72fr);
+      gap: 16px;
+      align-items: stretch;
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.055);
+      border: 1px solid rgba(255,255,255,0.09);
+    }
+
+    .attack-step strong {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      background: rgba(122, 214, 189, 0.12);
+      color: #7ad6bd;
+      font-size: 15px;
+    }
+
+    .attack-step h3 {
+      font-size: 20px;
+      line-height: 1.2;
+      margin-bottom: 7px;
+    }
+
+    .attack-step p {
+      color: #b8c9c1;
+      font-size: 14px;
+    }
+
+    .easm-action {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      padding: 14px;
+      border-radius: 14px;
+      background: #dcefe8;
+      color: #123027;
+      font-weight: 750;
+      font-size: 14px;
+    }
+
+    .ai-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .ai-card {
+      min-width: 0;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: 0 16px 42px rgba(35, 54, 47, 0.06);
+    }
+
+    .ai-card.large {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 28px;
+      align-items: center;
+      background: #12201c;
+      color: #fff;
+      border-color: #12201c;
+    }
+
+    .ai-card h3 {
+      font-size: 22px;
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+
+    .ai-card p {
+      color: #5c6a62;
+    }
+
+    .ai-card.large p {
+      color: #b8c9c1;
+    }
+
+    .signal-stack {
+      display: grid;
+      gap: 10px;
+    }
+
+    .decision-board {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .decision-cell {
+      min-height: 96px;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.075);
+      border: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .decision-cell b {
+      display: block;
+      color: #fff;
+      font-size: 24px;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .decision-cell span {
+      color: #a8bcb3;
+      font-size: 13px;
+    }
+
+    .signal {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.07);
+      color: #dcefe8;
+      font-size: 14px;
+    }
+
+    .ai-side {
+      display: grid;
+      gap: 22px;
+    }
+
+    .mini-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .mini-tags span {
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      font-size: 13px;
+      font-weight: 720;
+    }
+
+    .icon-pill {
+      width: 42px;
+      height: 42px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      font-weight: 760;
+      margin-bottom: 18px;
+    }
+
+    .features {
+      background: #fff;
+      border-block: 1px solid var(--line);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .feature {
+      min-width: 0;
+      padding: 24px;
+      min-height: 230px;
+      border-right: 1px solid var(--line);
+    }
+
+    .feature:last-child {
+      border-right: 0;
+    }
+
+    .feature:nth-child(2),
+    .feature:nth-child(4) {
+      background: #f4f7f3;
+    }
+
+    .feature h3 {
+      font-size: 18px;
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+
+    .feature p {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .feature-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .feature-tags span {
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: #edf4f0;
+      color: #3f4d45;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .pain {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.42), rgba(255,255,255,0)),
+        var(--bg);
+    }
+
+    .pain-layout {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .pain-copy {
+      position: sticky;
+      top: 92px;
+    }
+
+    .surface-board {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .surface-tile {
+      min-width: 0;
+      min-height: 190px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.94), rgba(244,247,243,0.86)),
+        radial-gradient(circle at 82% 20%, rgba(20,120,95,0.16), transparent 9rem);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 14px 34px rgba(35, 54, 47, 0.055);
+    }
+
+    .surface-tile.dark {
+      background:
+        linear-gradient(135deg, #12201c, #182a25);
+      color: #fff;
+      border-color: #12201c;
+    }
+
+    .surface-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .surface-title {
+      font-size: 20px;
+      font-weight: 780;
+      line-height: 1.2;
+    }
+
+    .surface-code {
+      color: var(--accent-dark);
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .surface-tile.dark .surface-code {
+      color: #7ad6bd;
+    }
+
+    .surface-line {
+      height: 8px;
+      border-radius: 999px;
+      background: #dce7e1;
+      overflow: hidden;
+      margin-top: 18px;
+    }
+
+    .surface-line span {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--accent);
+    }
+
+    .surface-meta {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .surface-tile.dark .surface-meta {
+      color: #b8c9c1;
+    }
+
+    .trial-band {
+      padding: 0;
+    }
+
+    .trial-box {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 36px;
+      align-items: center;
+      padding: 44px;
+      border-radius: 24px;
+      background: #12201c;
+      color: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .trial-box h2 {
+      font-family: var(--serif);
+      font-size: clamp(32px, 4vw, 52px);
+      line-height: 1.06;
+      letter-spacing: -0.025em;
+    }
+
+    .trial-box p {
+      margin-top: 14px;
+      color: #b8c9c1;
+      max-width: 680px;
+    }
+
+    .trial-points {
+      display: grid;
+      gap: 10px;
+    }
+
+    .trial-point {
+      padding: 13px 14px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.08);
+      color: #e7f3ee;
+      font-size: 14px;
+    }
+
+    .proof {
+      display: grid;
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .proof-panel {
+      min-width: 0;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 28px;
+    }
+
+    .proof-panel h3 {
+      font-size: 22px;
+      margin-bottom: 14px;
+    }
+
+    .proof-panel p {
+      color: var(--muted);
+    }
+
+    .guard-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .guard-item {
+      min-height: 92px;
+      padding: 16px;
+      border-radius: 14px;
+      background: #f4f7f3;
+      border: 1px solid var(--line);
+    }
+
+    .guard-item strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    .guard-item span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    footer {
+      padding: 36px 0 44px;
+      color: #617067;
+      border-top: 1px solid var(--line);
+      font-size: 14px;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 980px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      .hero-grid,
+      .ransom-layout,
+      .ai-grid,
+      .ai-card.large,
+      .pain-layout,
+      .trial-box,
+      .proof {
+        grid-template-columns: 1fr;
+      }
+
+      .pain-copy {
+        position: static;
+      }
+
+      .console {
+        transform: none;
+      }
+
+      .feature-grid,
+      .surface-board,
+      .guard-grid,
+      .ransom-stat {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .attack-step {
+        grid-template-columns: 64px 1fr;
+      }
+
+      .easm-action {
+        grid-column: 2;
+      }
+
+      .feature {
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .feature:nth-child(odd) {
+        border-right: 1px solid var(--line);
+      }
+
+      .feature:nth-last-child(-n+1) {
+        border-bottom: 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        width: min(100% - 24px, 1160px);
+      }
+
+      .nav-inner {
+        height: 58px;
+        gap: 12px;
+      }
+
+      .mark {
+        gap: 8px;
+        font-size: 14px;
+        max-width: 100%;
+      }
+
+      .mark-symbol {
+        width: 28px;
+        height: 28px;
+        flex-basis: 28px;
+        border-radius: 9px;
+      }
+
+      .mark-symbol::before {
+        inset: 7px;
+        border-radius: 7px;
+      }
+
+      .mark-symbol::after {
+        inset: 12px;
+      }
+
+      .nav .btn {
+        min-height: 40px;
+        padding: 0 14px;
+        font-size: 14px;
+      }
+
+      .hero {
+        padding: 34px 0 30px;
+      }
+
+      h1 {
+        font-size: clamp(34px, 10vw, 42px);
+        line-height: 1.04;
+      }
+
+      .hero-copy {
+        font-size: 16px;
+        line-height: 1.62;
+      }
+
+      .hero-actions {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+
+      .scan-map,
+      .feature-grid,
+      .surface-board,
+      .guard-grid,
+      .ransom-stat {
+        grid-template-columns: 1fr;
+      }
+
+      #ai .section-head {
+        margin-bottom: 22px;
+      }
+
+      #ai .section-head h2 {
+        font-size: clamp(30px, 9vw, 38px);
+      }
+
+      #ai .section-head p {
+        max-width: 30ch;
+      }
+
+      .ai-grid {
+        gap: 14px;
+      }
+
+      .ai-card {
+        padding: 18px;
+        border-radius: 16px;
+      }
+
+      .ai-card.large {
+        gap: 16px;
+      }
+
+      .ai-card h3 {
+        font-size: 19px;
+        margin-bottom: 8px;
+      }
+
+      .ai-card p {
+        font-size: 14px;
+        line-height: 1.55;
+      }
+
+      .decision-board {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .decision-cell {
+        min-height: 78px;
+        padding: 11px;
+        border-radius: 12px;
+      }
+
+      .decision-cell b {
+        font-size: 17px;
+        margin-bottom: 7px;
+      }
+
+      .decision-cell span {
+        display: block;
+        font-size: 12px;
+        line-height: 1.35;
+      }
+
+      .ai-side {
+        gap: 12px;
+      }
+
+      .icon-pill {
+        width: 34px;
+        height: 34px;
+        border-radius: 10px;
+        margin-bottom: 12px;
+      }
+
+      .mini-tags {
+        gap: 6px;
+        margin-top: 12px;
+      }
+
+      .mini-tags span {
+        padding: 5px 8px;
+        font-size: 12px;
+      }
+
+      .console {
+        width: 100%;
+        max-width: calc(100vw - 24px);
+        border-radius: 16px;
+      }
+
+      .console-top {
+        padding: 0 14px;
+      }
+
+      .console-body {
+        padding: 12px;
+        gap: 10px;
+      }
+
+      .metric-row {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .metric {
+        min-height: auto;
+        padding: 10px;
+        border-radius: 12px;
+      }
+
+      .metric b {
+        font-size: 20px;
+        margin-bottom: 6px;
+      }
+
+      .metric span {
+        display: block;
+        font-size: 11px;
+        line-height: 1.25;
+      }
+
+      .scan-map {
+        min-height: auto;
+      }
+
+      .map-panel {
+        min-height: auto;
+      }
+
+      .map-panel,
+      .risk-panel {
+        padding: 12px;
+        border-radius: 14px;
+      }
+
+      .entry-path,
+      .queue-list {
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .entry-row {
+        grid-template-columns: 24px 1fr;
+        padding: 10px;
+      }
+
+      .entry-dot {
+        width: 22px;
+        height: 22px;
+        font-size: 11px;
+      }
+
+      .entry-row strong,
+      .queue-item strong {
+        font-size: 13px;
+      }
+
+      .entry-row span,
+      .queue-item span {
+        font-size: 11px;
+      }
+
+      .queue-item {
+        padding: 10px;
+        grid-template-columns: minmax(0, 1fr) auto;
+      }
+
+      .queue-badge {
+        min-width: 32px;
+        height: 26px;
+      }
+
+      .risk-item {
+        align-items: flex-start;
+      }
+
+      .risk-item span:first-child {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+
+      .ransom-copy {
+        padding: 24px;
+      }
+
+      .ransom-copy h2,
+      .section-head h2,
+      .trial-box h2 {
+        font-size: clamp(30px, 9vw, 38px);
+        line-height: 1.08;
+      }
+
+      .ransom-copy p,
+      .section-head p,
+      .trial-box p {
+        font-size: 15px;
+        line-height: 1.65;
+      }
+
+      .attack-step {
+        grid-template-columns: 1fr;
+        padding: 14px;
+        border-radius: 16px;
+      }
+
+      .attack-step strong,
+      .easm-action {
+        justify-content: flex-start;
+      }
+
+      .easm-action {
+        grid-column: auto;
+      }
+
+      .feature,
+      .feature:nth-child(odd) {
+        border-right: 0;
+      }
+
+      .feature {
+        min-height: auto;
+        padding: 20px;
+      }
+
+      .feature:last-child {
+        border-bottom: 0;
+      }
+
+      .surface-tile {
+        min-height: 160px;
+        padding: 18px;
+      }
+
+      section {
+        padding: 56px 0;
+      }
+
+      .trial-box {
+        padding: 24px;
+        border-radius: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="nav">
+      <div class="container nav-inner">
+        <a class="mark" href="#top" aria-label="返回页面顶部">
+          <span class="mark-symbol" aria-hidden="true"></span>
+          <span>外部攻击面管理 · EASM</span>
+        </a>
+        <nav class="nav-links" aria-label="页面导航">
+          <a href="#ransom">攻击路径</a>
+          <a href="#ai">AI能力</a>
+          <a href="#features">功能模块</a>
+          <a href="#pain">适用场景</a>
+          <a href="#trial">试用入口</a>
+          <a class="btn btn-primary" href="trial.html">免费试用</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <!-- Hero -->
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <div class="eyebrow">外部攻击面管理</div>
+            <h1>AI驱动的外部攻击面管理，先看见风险再处理风险</h1>
+            <p class="hero-copy">勒索团队常从未知入口打入客户环境。EASM先发现这些入口，再收敛真正危险的风险。</p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="trial.html">免费试用</a>
+              <a class="btn btn-secondary" href="#features">查看功能</a>
+            </div>
+            <p class="trial-note">试用申请由独立页面承接，本页只展示能力与适用场景。</p>
+          </div>
+
+          <figure class="console" aria-label="AI外部攻击面管理平台界面示意">
+            <div class="console-top">
+              <div class="traffic" aria-hidden="true"><span></span><span></span><span></span></div>
+              <div class="console-title">外部暴露面态势</div>
+            </div>
+            <div class="console-body">
+              <div class="metric-row">
+                <div class="metric">
+                  <b>23</b>
+                  <span>未知入口</span>
+                </div>
+                <div class="metric">
+                  <b>8</b>
+                  <span>可利用风险</span>
+                </div>
+                <div class="metric">
+                  <b>4</b>
+                  <span>需立即关闭</span>
+                </div>
+              </div>
+              <div class="scan-map">
+                <div class="map-panel">
+                  <div class="panel-label">勒索入口路径</div>
+                  <div class="entry-path">
+                    <div class="entry-row">
+                      <span class="entry-dot">1</span>
+                      <div>
+                        <strong>未知公网入口</strong>
+                        <span>不在台账内的子域名、测试系统、临时服务</span>
+                      </div>
+                    </div>
+                    <div class="entry-row">
+                      <span class="entry-dot">2</span>
+                      <div>
+                        <strong>弱配置或旧组件</strong>
+                        <span>开放管理面、过期证书、可识别的弱版本</span>
+                      </div>
+                    </div>
+                    <div class="entry-row">
+                      <span class="entry-dot">3</span>
+                      <div>
+                        <strong>进入客户环境</strong>
+                        <span>入口虽小，但足以成为后续攻击起点</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="risk-panel">
+                  <div class="panel-label">处置队列</div>
+                  <div class="queue-list">
+                    <div class="queue-item">
+                      <div>
+                        <strong>公网管理入口</strong>
+                        <span>证据完整，建议立即关闭或限制访问</span>
+                      </div>
+                      <span class="queue-badge hot">高</span>
+                    </div>
+                    <div class="queue-item">
+                      <div>
+                        <strong>弱版本组件</strong>
+                        <span>可被远程探测，需复核修复窗口</span>
+                      </div>
+                      <span class="queue-badge hot">高</span>
+                    </div>
+                    <div class="queue-item">
+                      <div>
+                        <strong>过期证书资产</strong>
+                        <span>关联历史服务，需确认是否仍在使用</span>
+                      </div>
+                      <span class="queue-badge warn">中</span>
+                    </div>
+                    <div class="queue-item">
+                      <div>
+                        <strong>未知子域名</strong>
+                        <span>归属待确认，进入持续观察</span>
+                      </div>
+                      <span class="queue-badge">低</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Ransomware entry narrative -->
+      <section class="ransom" id="ransom">
+        <div class="container ransom-layout">
+          <div class="ransom-copy">
+            <div>
+              <h2>勒索团队常从看不见的外部入口开始</h2>
+              <p>暴露在公网的管理入口、临时测试服务、过期组件和无人认领的子域名，可能比核心系统更早被扫描到。EASM要解决的不是“扫一遍”，而是持续把这些入口找出来、排优先级、推动关闭。</p>
+            </div>
+            <div class="ransom-stat" aria-label="勒索入口治理关注点">
+              <div>
+                <b>外部</b>
+                <span>入口先被发现，后续才进入客户环境</span>
+              </div>
+              <div>
+                <b>未知</b>
+                <span>未入台账的资产最容易漏管</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="attack-flow" aria-label="勒索入口路径与EASM控制点">
+            <article class="attack-step">
+              <strong>路径 01</strong>
+              <div>
+                <h3>发现暴露入口</h3>
+                <p>勒索团队会持续寻找公网管理面、旧系统、测试域名和异常端口。</p>
+              </div>
+              <div class="easm-action">EASM持续发现未知资产</div>
+            </article>
+            <article class="attack-step">
+              <strong>路径 02</strong>
+              <div>
+                <h3>验证是否可利用</h3>
+                <p>入口一旦关联弱口令、过期组件或错误配置，就会进入更高优先级。</p>
+              </div>
+              <div class="easm-action">识别漏洞、证书、端口与指纹</div>
+            </article>
+            <article class="attack-step">
+              <strong>路径 03</strong>
+              <div>
+                <h3>进入客户环境</h3>
+                <p>初始入口可能很小，但足以成为后续横向移动和权限提升的起点。</p>
+              </div>
+              <div class="easm-action">按可利用性排序处置</div>
+            </article>
+            <article class="attack-step">
+              <strong>路径 04</strong>
+              <div>
+                <h3>扩大影响范围</h3>
+                <p>风险如果缺少归属和证据，整改会慢下来，窗口期被进一步拉长。</p>
+              </div>
+              <div class="easm-action">输出证据、归属和关闭依据</div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- AI capability -->
+      <section id="ai">
+        <div class="container">
+          <div class="section-head">
+            <h2>AI如何参与EASM</h2>
+            <p>把分散的外部信号整理成资产、风险和处置理由。</p>
+          </div>
+
+          <div class="ai-grid">
+            <article class="ai-card large">
+              <div>
+                <h3>把外部信号整理成可处置风险</h3>
+                <p>域名、证书、端口、漏洞和页面指纹会先被归并，再按暴露程度和可利用性排序。</p>
+              </div>
+              <div class="decision-board" aria-label="风险优先级示意">
+                <div class="decision-cell"><b>归并</b><span>同一资产的多条外部线索</span></div>
+                <div class="decision-cell"><b>识别</b><span>未知入口、影子资产、异常变化</span></div>
+                <div class="decision-cell"><b>排序</b><span>优先处理可被利用的入口</span></div>
+                <div class="decision-cell"><b>解释</b><span>给出证据和处置理由</span></div>
+              </div>
+            </article>
+
+            <div class="ai-side">
+              <article class="ai-card">
+                <div class="icon-pill">归</div>
+                <h3>资产归并</h3>
+                <p>把域名、证书、IP、端口和页面指纹合并到同一个资产视图。</p>
+                <div class="mini-tags">
+                  <span>域名</span>
+                  <span>证书</span>
+                  <span>端口</span>
+                  <span>指纹</span>
+                </div>
+              </article>
+              <article class="ai-card">
+                <div class="icon-pill">序</div>
+                <h3>风险排序</h3>
+                <p>把公网暴露、漏洞可利用性、资产变化放在一起判断优先级。</p>
+                <div class="mini-tags">
+                  <span>暴露面</span>
+                  <span>可利用</span>
+                  <span>高优先级</span>
+                  <span>可复核</span>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features -->
+      <section class="features" id="features">
+        <div class="container">
+          <div class="section-head">
+            <h2>围绕EASM日常工作的核心模块</h2>
+            <p>每个模块只解决一个问题：看见、判断、分派、关闭。</p>
+          </div>
+
+          <div class="feature-grid">
+            <article class="feature">
+              <div class="icon-pill">01</div>
+              <h3>持续资产发现</h3>
+              <div class="feature-tags"><span>域名</span><span>IP</span><span>云入口</span></div>
+            </article>
+            <article class="feature">
+              <div class="icon-pill">02</div>
+              <h3>漏洞与配置核验</h3>
+              <div class="feature-tags"><span>漏洞</span><span>证书</span><span>管理端口</span></div>
+            </article>
+            <article class="feature">
+              <div class="icon-pill">03</div>
+              <h3>AI风险评分</h3>
+              <div class="feature-tags"><span>优先级</span><span>影响面</span><span>可利用性</span></div>
+            </article>
+            <article class="feature">
+              <div class="icon-pill">04</div>
+              <h3>处置跟踪</h3>
+              <div class="feature-tags"><span>责任方</span><span>状态</span><span>复测</span></div>
+            </article>
+            <article class="feature">
+              <div class="icon-pill">05</div>
+              <h3>风险报告导出</h3>
+              <div class="feature-tags"><span>清单</span><span>证据</span><span>建议</span></div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Pain points -->
+      <section class="pain" id="pain">
+        <div class="container pain-layout">
+          <div class="pain-copy section-head">
+            <h2>很多勒索事件，第一步都不是内网深处</h2>
+            <p>公网入口、历史系统、临时服务，往往是勒索团队最先寻找的突破点。</p>
+          </div>
+
+          <div class="surface-board" aria-label="攻击面管理问题矩阵">
+            <article class="surface-tile dark">
+              <div class="surface-top">
+                <span class="surface-title">未知入口</span>
+                <span class="surface-code">A01</span>
+              </div>
+              <div>
+                <div class="surface-line"><span style="width: 72%"></span></div>
+                <p class="surface-meta">EASM提前发现，避免被勒索团队先看到</p>
+              </div>
+            </article>
+            <article class="surface-tile">
+              <div class="surface-top">
+                <span class="surface-title">告警过载</span>
+                <span class="surface-code">B14</span>
+              </div>
+              <div>
+                <div class="surface-line"><span style="width: 58%"></span></div>
+                <p class="surface-meta">低价值结果挤占处置时间</p>
+              </div>
+            </article>
+            <article class="surface-tile">
+              <div class="surface-top">
+                <span class="surface-title">外部变更</span>
+                <span class="surface-code">C09</span>
+              </div>
+              <div>
+                <div class="surface-line"><span style="width: 84%"></span></div>
+                <p class="surface-meta">解析、证书、端口持续变化</p>
+              </div>
+            </article>
+            <article class="surface-tile dark">
+              <div class="surface-top">
+                <span class="surface-title">整改断点</span>
+                <span class="surface-code">D22</span>
+              </div>
+              <div>
+                <div class="surface-line"><span style="width: 46%"></span></div>
+                <p class="surface-meta">缺证据、缺归属、缺关闭依据</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- Mid-page conversion -->
+      <section class="trial-band" id="trial" aria-label="免费试用说明">
+        <div class="container">
+          <div class="trial-box">
+            <div>
+              <h2>免费试用</h2>
+              <p>本页只做能力判断。试用申请放在独立页面处理。</p>
+              <div class="hero-actions">
+                <a class="btn btn-primary" href="trial.html">免费试用</a>
+                <a class="btn btn-secondary" href="#proof">查看保障</a>
+              </div>
+            </div>
+            <div class="trial-points">
+              <div class="trial-point">不在本页收集信息</div>
+              <div class="trial-point">按钮跳转到试用入口</div>
+              <div class="trial-point">链接后续可替换</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Trust / proof -->
+      <section id="proof">
+        <div class="container proof">
+          <div class="section-head">
+            <h2>适合谨慎推进的安全团队</h2>
+            <p>结果要能复核，动作要能分派，边界要清楚。</p>
+          </div>
+
+          <div class="proof-panel">
+            <h3>使用边界</h3>
+            <div class="guard-grid">
+              <div class="guard-item"><strong>授权范围</strong><span>先确认边界，再开始发现</span></div>
+              <div class="guard-item"><strong>低影响策略</strong><span>控制频率、深度和时间窗口</span></div>
+              <div class="guard-item"><strong>证据留存</strong><span>风险项保留触发依据</span></div>
+              <div class="guard-item"><strong>可复核结果</strong><span>工程师确认后再推进整改</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-inner">
+        <span>外部攻击面管理 · EASM</span>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    document.querySelectorAll('a[href="trial.html"]').forEach(function (link) {
+      link.setAttribute("aria-label", "跳转到免费试用入口");
+    });
+  </script>
+</body>
+</html>

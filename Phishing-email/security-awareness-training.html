@@ -1,0 +1,1033 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>企业安全意识培训服务</title>
+  <meta name="description" content="面向企业的安全意识培训服务，覆盖体验式攻防活动、全真钓鱼邮件演练、安全文化物料、AI辅助运营和交付报告。">
+  <style>
+    :root {
+      --bg: #f5f6f1;
+      --surface: #ffffff;
+      --surface-soft: #ecefe7;
+      --ink: #171a16;
+      --muted: #626b61;
+      --line: #d6dace;
+      --accent: #2f6f5e;
+      --accent-dark: #224f43;
+      --accent-soft: #dce8e2;
+      --risk: #a5533f;
+      --amber: #9b6b2f;
+      --deep: #20251f;
+      --radius: 14px;
+      --shadow: 0 28px 80px rgba(42, 50, 39, 0.14);
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", "PingFang SC", sans-serif;
+      --serif: Georgia, "Times New Roman", "Songti SC", serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--ink);
+      background:
+        linear-gradient(115deg, rgba(47, 111, 94, 0.10), transparent 32rem),
+        linear-gradient(180deg, #fbfcf7 0%, var(--bg) 46%, #eef1ea 100%);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    .page {
+      overflow: hidden;
+    }
+
+    .container {
+      width: min(1160px, calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(245, 246, 241, 0.88);
+      border-bottom: 1px solid rgba(214, 218, 206, 0.85);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav-inner {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 760;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+
+    .mark-symbol {
+      width: 34px;
+      height: 34px;
+      border-radius: 11px;
+      background: var(--deep);
+      position: relative;
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.10);
+    }
+
+    .mark-symbol::before {
+      content: "";
+      position: absolute;
+      inset: 7px 9px 8px;
+      border: 2px solid #9fd2c2;
+      border-top-width: 5px;
+      border-radius: 8px 8px 10px 10px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      font-size: 14px;
+      color: #485249;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent-dark);
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+      font-weight: 720;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+
+    .nav-cta:hover {
+      border-color: #aab6a7;
+      background: #fff;
+    }
+
+    .nav-cta:active,
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .hero {
+      min-height: calc(100dvh - 68px);
+      display: grid;
+      align-items: center;
+      padding: 62px 0 56px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, .96fr) minmax(420px, 1.04fr);
+      gap: 56px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 11px;
+      margin-bottom: 20px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+      font-size: 13px;
+      font-weight: 760;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      max-width: 760px;
+      font-family: var(--serif);
+      font-size: clamp(42px, 5.7vw, 72px);
+      line-height: 1.02;
+      letter-spacing: -0.035em;
+    }
+
+    .hero-copy {
+      max-width: 610px;
+      margin-top: 22px;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.75;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 22px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      font-weight: 760;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: var(--accent);
+      box-shadow: 0 16px 38px rgba(47, 111, 94, 0.24);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-dark);
+    }
+
+    .btn-secondary {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.70);
+      border-color: var(--line);
+    }
+
+    .btn-secondary:hover {
+      background: #fff;
+      border-color: #aab6a7;
+    }
+
+    .risk-panel {
+      background: var(--deep);
+      color: #f7f8f1;
+      border-radius: 22px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .risk-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+      background-size: 36px 36px;
+      mask-image: linear-gradient(180deg, rgba(0,0,0,.9), transparent 84%);
+    }
+
+    .risk-panel > * {
+      position: relative;
+    }
+
+    .panel-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .panel-label {
+      color: #aebbb3;
+      font-size: 13px;
+    }
+
+    .panel-number {
+      margin-top: 6px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 58px;
+      line-height: 1;
+      letter-spacing: -0.05em;
+    }
+
+    .panel-note {
+      max-width: 210px;
+      color: #dbe3dc;
+      font-size: 14px;
+    }
+
+    .path {
+      display: grid;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .path-item {
+      display: grid;
+      grid-template-columns: 108px 1fr;
+      gap: 16px;
+      align-items: start;
+      padding: 14px;
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+    }
+
+    .path-time {
+      color: #9fd2c2;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+    }
+
+    .path-title {
+      font-weight: 760;
+    }
+
+    .path-text {
+      margin-top: 3px;
+      color: #cad5ce;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    section {
+      padding: 92px 0;
+    }
+
+    .section-title {
+      max-width: 760px;
+      font-family: var(--serif);
+      font-size: clamp(32px, 4.4vw, 54px);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+    }
+
+    .section-copy {
+      max-width: 680px;
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    .stat-stack {
+      display: grid;
+      gap: 16px;
+    }
+
+    .stat-card {
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .stat-value {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 46px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: var(--accent-dark);
+    }
+
+    .stat-card p {
+      margin-top: 12px;
+      color: var(--muted);
+    }
+
+    .attack-chain {
+      display: grid;
+      gap: 14px;
+    }
+
+    .chain-row {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 18px;
+      padding: 20px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .chain-row:last-child {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .chain-stage {
+      color: var(--risk);
+      font-weight: 760;
+    }
+
+    .chain-row p {
+      color: var(--muted);
+    }
+
+    .solution {
+      background: rgba(255, 255, 255, 0.45);
+      border-top: 1px solid rgba(214, 218, 206, 0.78);
+      border-bottom: 1px solid rgba(214, 218, 206, 0.78);
+    }
+
+    .capability-grid {
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+      margin-top: 36px;
+    }
+
+    .capability-large,
+    .capability-list,
+    .report-card,
+    .guardrail-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+    }
+
+    .capability-large {
+      min-height: 380px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .capability-large::after {
+      content: "";
+      position: absolute;
+      right: -70px;
+      bottom: -110px;
+      width: 330px;
+      height: 330px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(47, 111, 94, 0.22), transparent 68%);
+    }
+
+    .mini-flow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      position: relative;
+    }
+
+    .mini-step {
+      min-height: 92px;
+      padding: 13px;
+      border-radius: var(--radius);
+      background: var(--surface-soft);
+      border: 1px solid rgba(47, 111, 94, 0.12);
+      font-size: 13px;
+      color: #445046;
+    }
+
+    .mini-step strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--ink);
+      font-size: 15px;
+    }
+
+    .capability-large h3,
+    .capability-list h3,
+    .report-card h3,
+    .guardrail-card h3,
+    .price-card h3 {
+      font-size: 22px;
+      line-height: 1.25;
+      margin: 0;
+    }
+
+    .capability-large p,
+    .capability-list p,
+    .report-card p,
+    .guardrail-card p {
+      color: var(--muted);
+    }
+
+    .capability-list {
+      padding: 8px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .capability-item {
+      padding: 22px;
+      border-radius: 11px;
+      background: #f8f9f5;
+    }
+
+    .capability-item + .capability-item {
+      border-top: 1px solid var(--line);
+    }
+
+    .evidence-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 36px;
+    }
+
+    .report-card,
+    .guardrail-card {
+      padding: 28px;
+    }
+
+    .report-list {
+      display: grid;
+      gap: 13px;
+      margin-top: 22px;
+    }
+
+    .report-list div {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 12px 0;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .report-list strong {
+      color: var(--ink);
+      white-space: nowrap;
+    }
+
+    .guardrail-card {
+      background: var(--deep);
+      color: #f7f8f1;
+    }
+
+    .guardrail-card p,
+    .guardrail-card .guardrail-list {
+      color: #cdd7ce;
+    }
+
+    .guardrail-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 22px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .guardrail-list li {
+      padding: 14px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+    }
+
+    .pricing {
+      background:
+        linear-gradient(180deg, rgba(47, 111, 94, 0.08), transparent 24rem),
+        rgba(255, 255, 255, 0.28);
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 36px;
+      align-items: stretch;
+    }
+
+    .price-card {
+      display: flex;
+      flex-direction: column;
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.82);
+    }
+
+    .price-card.featured {
+      background: var(--surface);
+      border-color: rgba(47, 111, 94, 0.55);
+      box-shadow: 0 24px 70px rgba(47, 111, 94, 0.16);
+      transform: translateY(-10px);
+    }
+
+    .price {
+      margin: 18px 0 8px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 42px;
+      line-height: 1;
+      letter-spacing: -0.045em;
+    }
+
+    .price small {
+      font-family: var(--sans);
+      color: var(--muted);
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+
+    .price-card p {
+      color: var(--muted);
+    }
+
+    .price-card ul {
+      display: grid;
+      gap: 12px;
+      margin: 24px 0;
+      padding: 0;
+      list-style: none;
+      color: #424b43;
+    }
+
+    .price-card li {
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .price-card li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: .72em;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .price-card .btn {
+      margin-top: auto;
+      width: 100%;
+    }
+
+    .cta-section {
+      padding: 92px 0 52px;
+    }
+
+    .cta-box {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 36px;
+      align-items: center;
+      padding: 36px;
+      border-radius: 24px;
+      background: var(--deep);
+      color: #f8faf3;
+      box-shadow: var(--shadow);
+    }
+
+    .cta-box h2 {
+      max-width: 720px;
+      font-family: var(--serif);
+      font-size: clamp(30px, 4vw, 52px);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+    }
+
+    .cta-box p {
+      margin-top: 16px;
+      color: #ccd6cf;
+    }
+
+    footer {
+      padding: 30px 0 44px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      .risk-panel,
+      .stat-card,
+      .capability-large,
+      .capability-list,
+      .report-card,
+      .guardrail-card,
+      .price-card,
+      .cta-box {
+        animation: rise .7s ease both;
+      }
+
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(18px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    }
+
+    @media (max-width: 920px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 54px 0 46px;
+      }
+
+      .hero-grid,
+      .problem-grid,
+      .capability-grid,
+      .evidence-layout,
+      .pricing-grid,
+      .cta-box {
+        grid-template-columns: 1fr;
+      }
+
+      .price-card.featured {
+        transform: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        width: min(100% - 28px, 1160px);
+      }
+
+      .nav-inner {
+        min-height: 62px;
+      }
+
+      .mark {
+        font-size: 14px;
+      }
+
+      .hero-actions,
+      .footer-inner {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      h1 {
+        font-size: clamp(38px, 13vw, 52px);
+      }
+
+      .hero-copy,
+      .section-copy {
+        font-size: 16px;
+      }
+
+      .risk-panel,
+      .cta-box {
+        padding: 22px;
+        border-radius: 18px;
+      }
+
+      .panel-top,
+      .chain-row,
+      .path-item,
+      .report-list div {
+        grid-template-columns: 1fr;
+      }
+
+      .panel-top {
+        display: grid;
+      }
+
+      .mini-flow,
+      .guardrail-list {
+        grid-template-columns: 1fr;
+      }
+
+      .chain-row {
+        gap: 6px;
+      }
+
+      section,
+      .cta-section {
+        padding: 68px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="nav" aria-label="页面导航">
+      <div class="container nav-inner">
+        <a class="mark" href="#top" aria-label="返回页面顶部">
+          <span class="mark-symbol" aria-hidden="true">&nbsp;</span>
+          <span>安全意识培训服务</span>
+        </a>
+        <nav class="nav-links" aria-label="主要栏目">
+          <a href="#risk">风险背景</a>
+          <a href="#service">服务体系</a>
+          <a href="#evidence">报告交付</a>
+          <a href="#pricing">方案</a>
+        </nav>
+        <a class="nav-cta" href="#">马上尝试</a>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="container hero-grid">
+          <div>
+            <span class="eyebrow">安全意识建设全案</span>
+            <h1 id="hero-title">让员工看得见风险，也知道下一步该怎么做</h1>
+            <p class="hero-copy">覆盖现场体验、钓鱼演练、宣发物料和持续复盘，把安全要求转成日常可执行动作。</p>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#">马上尝试</a>
+              <a class="btn btn-secondary" href="#service">查看服务范围</a>
+            </div>
+          </div>
+
+          <aside class="risk-panel" aria-label="人为风险概览">
+            <div class="panel-top">
+              <div>
+                <div class="panel-label">安全意识建设重点</div>
+                <div class="panel-number">全员</div>
+              </div>
+              <p class="panel-note">覆盖日常办公、重点岗位、管理层决策和多地业务现场。</p>
+            </div>
+            <div class="path" aria-label="安全意识服务模块">
+              <div class="path-item">
+                <div class="path-time">体验</div>
+                <div>
+                  <div class="path-title">把威胁还原到现场</div>
+                  <div class="path-text">Wi-Fi、AI 换脸、二维码、Bad USB 等风险用可控方式展示。</div>
+                </div>
+              </div>
+              <div class="path-item">
+                <div class="path-time">演练</div>
+                <div>
+                  <div class="path-title">检验真实判断</div>
+                  <div class="path-text">钓鱼邮件和社工场景记录员工反应，当场完成纠错。</div>
+                </div>
+              </div>
+              <div class="path-item">
+                <div class="path-time">运营</div>
+                <div>
+                  <div class="path-title">持续提醒和复盘</div>
+                  <div class="path-text">微课、简报、海报和报告形成后续培训依据。</div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="risk" aria-labelledby="risk-title">
+        <div class="container problem-grid">
+          <div class="stat-stack">
+            <div class="stat-card">
+              <div class="stat-value">4类</div>
+              <p>邮件、公共网络、移动介质和视频会议都可能成为社工入口。员工需要在真实场景里练习判断。</p>
+            </div>
+            <div class="stat-card">
+              <div class="stat-value">长期</div>
+              <p>一次培训很难改变习惯。更有效的做法是反复提醒、复测和复盘，让规则进入日常动作。</p>
+            </div>
+          </div>
+
+          <div>
+            <h2 id="risk-title" class="section-title">人员风险不只发生在收件箱里</h2>
+            <p class="section-copy">参考文件的主轴是企业安全意识建设。它要处理员工在办公、商旅、审批、会议和线下接触中的判断习惯。</p>
+            <div class="attack-chain">
+              <div class="chain-row">
+                <div class="chain-stage">信任被利用</div>
+                <p>员工可能相信领导口吻、供应商通知、熟悉的会议邀请或看似正常的审批材料。</p>
+              </div>
+              <div class="chain-row">
+                <div class="chain-stage">场景被伪装</div>
+                <p>免费 Wi-Fi、二维码、充电线、U 盘和视频画面都可能被包装成日常工作动作。</p>
+              </div>
+              <div class="chain-row">
+                <div class="chain-stage">规则没有落地</div>
+                <p>制度写得清楚，但员工不一定知道遇到异常时该停、该问谁、该如何上报。</p>
+              </div>
+              <div class="chain-row">
+                <div class="chain-stage">后果进入业务</div>
+                <p>账号被盗、数据外泄、勒索软件、付款误导和合规说明会一起消耗安全团队精力。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="service" class="solution" aria-labelledby="service-title">
+        <div class="container">
+          <h2 id="service-title" class="section-title">把人员风险放进可复盘的流程</h2>
+          <p class="section-copy">演练只在授权范围内进行。技术团队先确认目标人群、邮件主题、发送节奏和退出机制，再开展模拟和培训。</p>
+
+          <div class="capability-grid">
+            <article class="capability-large">
+              <div>
+                <h3>真实但受控的模拟场景</h3>
+                <p>围绕财务审批、共享文档、账号提醒、供应链通知等办公场景设计，不采集敏感凭据，不提供可被滥用的攻击细节。</p>
+              </div>
+              <div class="mini-flow" aria-label="演练流程">
+                <div class="mini-step"><strong>授权确认</strong>明确范围、人员和时间窗口。</div>
+                <div class="mini-step"><strong>场景配置</strong>选择主题、语言和提醒规则。</div>
+                <div class="mini-step"><strong>模拟投递</strong>记录打开、点击和上报行为。</div>
+                <div class="mini-step"><strong>复盘培训</strong>按部门和风险类型安排课程。</div>
+              </div>
+            </article>
+
+            <div class="capability-list">
+              <article class="capability-item">
+                <h3>详细分析报告</h3>
+                <p>报告展示点击率、上报率、重复高风险人群、部门差异和改进建议，便于安全负责人向管理层说明投入效果。</p>
+              </article>
+              <article class="capability-item">
+                <h3>持续培训支持</h3>
+                <p>短课件、复盘材料和员工提醒模板可按季度更新，避免演练结束后风险反弹。</p>
+              </article>
+              <article class="capability-item">
+                <h3>合规与边界控制</h3>
+                <p>演练不诱导真实转账，不触碰个人敏感信息，不绕过客户环境的授权边界。</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="evidence" aria-labelledby="evidence-title">
+        <div class="container">
+          <h2 id="evidence-title" class="section-title">报告要能回答管理层的问题</h2>
+          <p class="section-copy">服务交付不只是一份点击名单。更重要的是识别风险分布，说明下一轮培训应该优先覆盖哪些岗位和流程。</p>
+
+          <div class="evidence-layout">
+            <article class="report-card">
+              <h3>交付物样式</h3>
+              <p>以下为报告字段示例，用于说明交付结构。</p>
+              <div class="report-list">
+                <div><span>整体打开率、点击率、上报率</span><strong>趋势视图</strong></div>
+                <div><span>部门与岗位风险分布</span><strong>分组对比</strong></div>
+                <div><span>高风险场景排序</span><strong>优先级建议</strong></div>
+                <div><span>培训完成与复测结果</span><strong>闭环记录</strong></div>
+              </div>
+            </article>
+
+            <article class="guardrail-card">
+              <h3>服务边界写在前面</h3>
+              <p>所有活动以培训和风险评估为目的，由客户授权后执行。页面不提供恶意代码、钓鱼链接或绕过防护的技术步骤。</p>
+              <ul class="guardrail-list">
+                <li>演练域名与内容提前确认</li>
+                <li>不收集真实账号口令</li>
+                <li>不影响业务系统可用性</li>
+                <li>员工复盘材料可审阅</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="pricing" class="pricing" aria-labelledby="pricing-title">
+        <div class="container">
+          <h2 id="pricing-title" class="section-title">按需求确认服务方案</h2>
+          <p class="section-copy">费用根据人数、演练频次、培训深度和报告要求确认。以下方案用于说明服务组合，具体价格按实际范围评估。</p>
+
+          <div class="pricing-grid">
+            <article class="price-card">
+              <h3>基础版</h3>
+              <div class="price">按需报价 <small>/ 按范围确认</small></div>
+              <p>适合首次验证员工识别能力的团队。</p>
+              <ul>
+                <li>1次授权模拟演练</li>
+                <li>最多300名员工</li>
+                <li>基础统计报告</li>
+                <li>一次线上复盘会议</li>
+              </ul>
+              <a class="btn btn-secondary" href="#">马上尝试</a>
+            </article>
+
+            <article class="price-card featured">
+              <h3>专业版</h3>
+              <div class="price">按需报价 <small>/ 按范围确认</small></div>
+              <p>适合需要形成持续改进闭环的安全团队。</p>
+              <ul>
+                <li>季度多主题模拟演练</li>
+                <li>最多1,500名员工</li>
+                <li>部门风险对比报告</li>
+                <li>培训课件与复测建议</li>
+              </ul>
+              <a class="btn btn-primary" href="#">马上尝试</a>
+            </article>
+
+            <article class="price-card">
+              <h3>企业版</h3>
+              <div class="price">按需报价 <small>/ 按范围确认</small></div>
+              <p>适合多地域、多部门、合规要求较高的客户环境。</p>
+              <ul>
+                <li>年度演练计划</li>
+                <li>不限员工规模评估</li>
+                <li>管理层汇报材料</li>
+                <li>定制培训与制度建议</li>
+              </ul>
+              <a class="btn btn-secondary" href="#">马上尝试</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="assessment" class="cta-section" aria-labelledby="cta-title">
+        <div class="container">
+          <div class="cta-box">
+            <div>
+              <h2 id="cta-title">准备把安全意识训练跑起来</h2>
+              <p>先选择跳转入口，后续可统一接入试用、咨询或内部审批页面。</p>
+            </div>
+
+            <a class="btn btn-primary cta-jump" href="#">马上尝试</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-inner">
+        <span>企业钓鱼邮件模拟演练服务</span>
+        <span>仅用于合法授权演练、员工培训和风险评估。</span>
+      </div>
+    </footer>
+  </div>
+
+</body>
+</html>
