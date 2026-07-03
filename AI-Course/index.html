@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业级 Vibe Coding 进阶：从意图驱动到 AI 软件工厂</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; background-color: #f8fafc; color: #0f172a; }
+        .bg-dark-tech { background-color: #0b1120; background-image: radial-gradient(circle at top right, #1e293b, transparent); }
+        .text-cyan-glow { color: #22d3ee; text-shadow: 0 0 15px rgba(34, 211, 238, 0.5); }
+        .glass-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(226, 232, 240, 0.8); }
+        .dark-glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(51, 65, 85, 0.5); }
+        
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin: auto; height: 320px; }
+        
+        /* 卡片悬浮特效 */
+        .feature-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+        .feature-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        
+        /* 交互架构块 */
+        .arch-block { transition: all 0.3s ease; border-width: 2px; }
+        .arch-block:hover { border-color: #0ea5e9; background-color: #f0f9ff; }
+        .arch-block.active { background-color: #e0f2fe; border-color: #0284c7; box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06); }
+
+        /* 时间线样式 */
+        .timeline-container::before {
+            content: ''; position: absolute; top: 0; bottom: 0; left: 24px; width: 2px; background: #e2e8f0; z-index: 1;
+        }
+        @media (min-width: 768px) {
+            .timeline-container::before { left: 50%; transform: translateX(-50%); }
+        }
+        .timeline-dot {
+            position: absolute; left: 24px; width: 16px; height: 16px; border-radius: 50%; background: #0ea5e9;
+            border: 4px solid #fff; transform: translateX(-50%); z-index: 2; box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+        }
+        @media (min-width: 768px) {
+            .timeline-dot { left: 50%; }
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-cyan-200 selection:text-cyan-900">
+
+    <!-- 导航栏 -->
+    <nav class="fixed w-full z-50 glass-panel shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center font-bold text-xl text-slate-800 tracking-tight">
+                    <i class="fa-solid fa-layer-group text-cyan-600 mr-2"></i> VibeCoding<span class="text-cyan-600 font-black">Pro</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#cognition" class="text-sm font-semibold text-slate-600 hover:text-cyan-600 transition">认知体系重塑</a>
+                    <a href="#governance" class="text-sm font-semibold text-slate-600 hover:text-cyan-600 transition">双核治理体系</a>
+                    <a href="#security" class="text-sm font-semibold text-slate-600 hover:text-cyan-600 transition">AI DevSecOps</a>
+                    <a href="#roadmap" class="text-sm font-semibold text-slate-600 hover:text-cyan-600 transition">实战大纲</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄首屏 -->
+    <header class="bg-dark-tech text-white pt-32 pb-24 px-4 overflow-hidden relative border-b border-slate-800">
+        <!-- 装饰背景 -->
+        <div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(#38bdf8 1px, transparent 1px); background-size: 32px 32px;"></div>
+        
+        <div class="max-w-5xl mx-auto text-center relative z-10 space-y-8">
+            <span class="px-4 py-1.5 rounded-full dark-glass text-cyan-400 text-xs font-bold tracking-widest uppercase mb-4 inline-flex items-center shadow-lg">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse mr-2"></span>
+                企业级 AI 软件工厂落地指南
+            </span>
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight">
+                重塑开发范式：<br />
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-indigo-400">
+                    Vibe Coding 与意图驱动工程
+                </span>
+            </h1>
+            <p class="max-w-3xl mx-auto text-lg md:text-xl text-slate-400 leading-relaxed">
+                告别语法奴役，向“意图架构师”转型。本课程聚焦大型项目中的需求对齐、资产治理（Requirement/Prompt OS）与高安全场景下的影子部署。
+            </p>
+            <div class="flex justify-center gap-4 pt-4">
+                <a href="#roadmap" class="px-6 py-3 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg font-semibold transition shadow-lg shadow-cyan-500/30">
+                    查看培训大纲
+                </a>
+                <a href="#cognition" class="px-6 py-3 dark-glass hover:bg-slate-800 text-slate-300 rounded-lg font-semibold transition">
+                    深入核心理论
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-16 space-y-32">
+
+        <!-- 模块一：认知重塑 (对比纯 Vibe 与 Agentic) -->
+        <section id="cognition" class="scroll-mt-24">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl font-extrabold text-slate-900 mb-4 tracking-tight">
+                    范式升维：从 YOLO 到代理工程
+                </h2>
+                <p class="text-slate-600 text-lg">在企业级项目中，单纯依赖“感觉”会带来架构失真。我们需要从“纯粹 Vibe Coding”跃迁至人类主导的“代理工程 (Agentic Engineering)”。</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- 纯粹 Vibe Coding -->
+                <div class="glass-panel p-8 rounded-2xl border-t-4 border-slate-300 feature-card">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-bold text-slate-800"><i class="fa-solid fa-bolt text-yellow-500 mr-2"></i>纯粹 Vibe Coding</h3>
+                        <span class="px-3 py-1 bg-slate-100 text-slate-500 text-xs rounded-full font-mono">YOLO 模式</span>
+                    </div>
+                    <ul class="space-y-4 text-slate-600 text-sm">
+                        <li class="flex items-start"><i class="fa-solid fa-xmark text-red-400 mt-1 mr-3"></i> <b>人类角色：</b>提示词 DJ，仅提供模糊口语化指令。</li>
+                        <li class="flex items-start"><i class="fa-solid fa-xmark text-red-400 mt-1 mr-3"></i> <b>代码评审：</b>极少，主要靠肉眼观察运行结果。</li>
+                        <li class="flex items-start"><i class="fa-solid fa-xmark text-red-400 mt-1 mr-3"></i> <b>隐患风险：</b>严重的上下文漂移与极高的“理解债务”。</li>
+                    </ul>
+                    <div class="mt-6 p-4 bg-slate-50 rounded-lg border border-slate-100 text-xs text-slate-500">
+                        适用场景：快速原型验证、短期外包项目、个人工具开发。
+                    </div>
+                </div>
+
+                <!-- 代理工程 -->
+                <div class="glass-panel p-8 rounded-2xl border-t-4 border-cyan-500 feature-card relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10"><i class="fa-solid fa-microchip text-8xl text-cyan-500"></i></div>
+                    <div class="flex items-center justify-between mb-6 relative z-10">
+                        <h3 class="text-xl font-bold text-cyan-900"><i class="fa-solid fa-diagram-project text-cyan-600 mr-2"></i>专业代理工程</h3>
+                        <span class="px-3 py-1 bg-cyan-100 text-cyan-700 text-xs rounded-full font-mono">企业级模式</span>
+                    </div>
+                    <ul class="space-y-4 text-slate-700 text-sm relative z-10">
+                        <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-3"></i> <b>人类角色：</b>意图架构师，主导顶层设计与技术规格。</li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-3"></i> <b>需求输入：</b>结构化的设计文档 (implementation_plan.md)。</li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-3"></i> <b>质量控制：</b>无情测试，强制思维链解释，Diff 行级评审。</li>
+                    </ul>
+                    <div class="mt-6 p-4 bg-cyan-50 rounded-lg border border-cyan-100 text-xs text-cyan-800 relative z-10">
+                        适用场景：大型商业项目、高安全级别系统、需要长期维护的企业底座。
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 模块二：双核治理体系 (Requirement & Prompt OS) -->
+        <section id="governance" class="scroll-mt-24">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl font-extrabold text-slate-900 mb-4 tracking-tight">
+                    构建双核资产治理体系
+                </h2>
+                <p class="text-slate-600 text-lg">将散乱的对话转化为企业核心资产。通过规范需求落地流程，有效治理 AI 带来的“理解债”。</p>
+            </div>
+
+            <div class="grid lg:grid-cols-12 gap-8 items-stretch">
+                <!-- 交互式架构图 -->
+                <div class="lg:col-span-7 glass-panel p-6 rounded-2xl flex flex-col justify-center">
+                    <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-6 text-center">点击查看治理模块详情</h3>
+                    
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div class="arch-block p-5 rounded-xl bg-white text-center cursor-pointer shadow-sm active" data-target="req-os">
+                            <i class="fa-solid fa-file-invoice text-3xl text-indigo-500 mb-3"></i>
+                            <h4 class="font-bold text-slate-800">Requirement OS</h4>
+                            <p class="text-xs text-slate-500 mt-1">动态意图对齐系统</p>
+                        </div>
+                        <div class="arch-block p-5 rounded-xl bg-white text-center cursor-pointer shadow-sm" data-target="prompt-os">
+                            <i class="fa-solid fa-terminal text-3xl text-cyan-500 mb-3"></i>
+                            <h4 class="font-bold text-slate-800">Prompt OS</h4>
+                            <p class="text-xs text-slate-500 mt-1">提示词生命周期管理</p>
+                        </div>
+                    </div>
+                    
+                    <div class="arch-block p-5 rounded-xl bg-white text-center cursor-pointer shadow-sm border-dashed" data-target="debt">
+                        <i class="fa-solid fa-scale-balanced text-3xl text-rose-500 mb-3"></i>
+                        <h4 class="font-bold text-slate-800">技术与理解债务治理 (TDR)</h4>
+                        <p class="text-xs text-slate-500 mt-1">消除“ Accept All ”带来的系统摇摆</p>
+                    </div>
+
+                    <!-- 详情展示区 -->
+                    <div class="mt-6 p-6 bg-slate-50 rounded-xl border border-slate-200 min-h-[160px]" id="os-details">
+                        <!-- 动态内容由 JS 填充 -->
+                    </div>
+                </div>
+
+                <!-- 雷达图：治理效果对比 -->
+                <div class="lg:col-span-5 glass-panel p-6 rounded-2xl flex flex-col">
+                    <h3 class="font-bold text-slate-800 mb-2">治理前后效能指标对比</h3>
+                    <p class="text-xs text-slate-500 mb-6">双核 OS 引入后，显著降低理解债务并提升代码溯源率。</p>
+                    <div class="flex-grow flex items-center justify-center">
+                        <div class="chart-container w-full">
+                            <canvas id="governanceChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 模块三：AI DevSecOps 与安全底座 -->
+        <section id="security" class="scroll-mt-24">
+            <div class="glass-panel p-8 md:p-12 rounded-3xl bg-slate-900 text-white relative overflow-hidden">
+                <!-- 装饰 -->
+                <div class="absolute top-0 right-0 w-64 h-64 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 transform translate-x-1/2 -translate-y-1/2"></div>
+                
+                <div class="mb-12 relative z-10">
+                    <span class="text-cyan-400 font-bold tracking-wider text-sm uppercase mb-2 block">Security by Construction</span>
+                    <h2 class="text-3xl font-extrabold mb-4">合规 Agent 与影子部署落地</h2>
+                    <p class="text-slate-300 max-w-2xl">在高信息安全场景下（如 SAP 复杂环境），AI 生成的代码具有高度“不可信性”。必须通过前置架构约束和自动化流水线构建安全栅栏。</p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-6 relative z-10">
+                    <div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700 hover:border-cyan-500/50 transition">
+                        <div class="w-12 h-12 bg-cyan-900/50 rounded-lg flex items-center justify-center mb-4">
+                            <i class="fa-solid fa-mask text-cyan-400 text-xl"></i>
+                        </div>
+                        <h4 class="font-bold text-lg mb-2">影子部署 (Shadow Env)</h4>
+                        <p class="text-sm text-slate-400">构建完全隔离的生产副本。AI 代理仅在沙箱内模拟变更，经多维合规指标验证通过后，方可一键晋升 (Promote) 至生产环境。</p>
+                    </div>
+
+                    <div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700 hover:border-indigo-500/50 transition">
+                        <div class="w-12 h-12 bg-indigo-900/50 rounded-lg flex items-center justify-center mb-4">
+                            <i class="fa-solid fa-shield-halved text-indigo-400 text-xl"></i>
+                        </div>
+                        <h4 class="font-bold text-lg mb-2">SCA 与血缘追踪审计</h4>
+                        <p class="text-sm text-slate-400">实时扫描 AI 引入的代码片段，阻断传染性开源协议（如 GPL）。为每行代码建立“需求-提示词-生成”的完整知识产权血缘链条。</p>
+                    </div>
+
+                    <div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700 hover:border-rose-500/50 transition">
+                        <div class="w-12 h-12 bg-rose-900/50 rounded-lg flex items-center justify-center mb-4">
+                            <i class="fa-solid fa-user-lock text-rose-400 text-xl"></i>
+                        </div>
+                        <h4 class="font-bold text-lg mb-2">上下文盲区与权限拦截</h4>
+                        <p class="text-sm text-slate-400">利用 OPA 策略引擎集成流水线。强校验权限矩阵 (RBAC)，防止 AI 遗漏关键授权对象校验，拒绝不合规库引用，实现“坏行为无法发生”。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 模块四：课程大纲时间线 -->
+        <section id="roadmap" class="scroll-mt-24 mb-20">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl font-extrabold text-slate-900 mb-4 tracking-tight">
+                    一天实战进阶大纲
+                </h2>
+                <p class="text-slate-600 text-lg">专为研发团队设计的 1 天密集型培训，结合真实案例演练，实现效能与合规的双提升。</p>
+            </div>
+
+            <div class="max-w-4xl mx-auto relative timeline-container py-4">
+                
+                <!-- 09:00 -->
+                <div class="relative flex flex-col md:flex-row items-start mb-12 group">
+                    <div class="timeline-dot top-6 md:top-1/2 md:-translate-y-1/2"></div>
+                    <div class="md:w-1/2 md:pr-12 md:text-right pl-12 md:pl-0 pt-1 md:pt-0">
+                        <span class="text-cyan-600 font-bold text-lg block mb-1">09:00 - 10:30</span>
+                        <h3 class="font-bold text-slate-800 text-xl">模块一：核心认知重塑</h3>
+                    </div>
+                    <div class="md:w-1/2 md:pl-12 pl-12 mt-2 md:mt-0">
+                        <div class="glass-panel p-5 rounded-xl group-hover:border-cyan-400 transition shadow-sm">
+                            <ul class="text-sm text-slate-600 space-y-2">
+                                <li>• Vibe Coding 与代理工程的边界与价值。</li>
+                                <li>• OODA 循环中的人类职责转化。</li>
+                                <li>• <b>实操：</b>熟悉 Requirement / Prompt OS 基础。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 10:45 -->
+                <div class="relative flex flex-col md:flex-row items-start mb-12 group">
+                    <div class="timeline-dot top-6 md:top-1/2 md:-translate-y-1/2"></div>
+                    <div class="md:w-1/2 md:pr-12 md:text-right pl-12 md:pl-0 pt-1 md:pt-0">
+                        <span class="text-cyan-600 font-bold text-lg block mb-1">10:45 - 12:00</span>
+                        <h3 class="font-bold text-slate-800 text-xl">模块二：需求管理与债务治理</h3>
+                    </div>
+                    <div class="md:w-1/2 md:pl-12 pl-12 mt-2 md:mt-0">
+                        <div class="glass-panel p-5 rounded-xl group-hover:border-indigo-400 transition shadow-sm">
+                            <ul class="text-sm text-slate-600 space-y-2">
+                                <li>• 需求拓扑拆解，动态意图文件 (CLAUDE.md) 构建。</li>
+                                <li>• AI 变更流管理与爆炸半径评估。</li>
+                                <li>• <b>实操：</b>代码巡检，量化与处理“理解债务”。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 13:00 -->
+                <div class="relative flex flex-col md:flex-row items-start mb-12 group">
+                    <div class="timeline-dot top-6 md:top-1/2 md:-translate-y-1/2"></div>
+                    <div class="md:w-1/2 md:pr-12 md:text-right pl-12 md:pl-0 pt-1 md:pt-0">
+                        <span class="text-cyan-600 font-bold text-lg block mb-1">13:00 - 14:30</span>
+                        <h3 class="font-bold text-slate-800 text-xl">模块三：安全合规红线解析</h3>
+                    </div>
+                    <div class="md:w-1/2 md:pl-12 pl-12 mt-2 md:mt-0">
+                        <div class="glass-panel p-5 rounded-xl group-hover:border-rose-400 transition shadow-sm">
+                            <ul class="text-sm text-slate-600 space-y-2">
+                                <li>• 数据分级、操作审计与开源许可规避 (SCA)。</li>
+                                <li>• 识别 AI 在企业系统 (如 SAP) 中的授权盲区。</li>
+                                <li>• 剖析安全违规案例与防御策略。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 14:45 -->
+                <div class="relative flex flex-col md:flex-row items-start mb-12 group">
+                    <div class="timeline-dot top-6 md:top-1/2 md:-translate-y-1/2"></div>
+                    <div class="md:w-1/2 md:pr-12 md:text-right pl-12 md:pl-0 pt-1 md:pt-0">
+                        <span class="text-cyan-600 font-bold text-lg block mb-1">14:45 - 16:15</span>
+                        <h3 class="font-bold text-slate-800 text-xl">模块四：合规 Agent 影子部署落地</h3>
+                    </div>
+                    <div class="md:w-1/2 md:pl-12 pl-12 mt-2 md:mt-0">
+                        <div class="glass-panel p-5 rounded-xl group-hover:border-emerald-400 transition shadow-sm">
+                            <ul class="text-sm text-slate-600 space-y-2">
+                                <li>• 将合规约束注入 Agent 运行上下文。</li>
+                                <li>• AI DevSecOps 流水线：策略引擎自动化审查。</li>
+                                <li>• <b>实操：</b>影子环境配置及验证晋升机制。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 16:15 -->
+                <div class="relative flex flex-col md:flex-row items-start group">
+                    <div class="timeline-dot top-6 md:top-1/2 md:-translate-y-1/2 bg-indigo-500 border-indigo-200 shadow-[0_0_0_4px_rgba(99,102,241,0.2)]"></div>
+                    <div class="md:w-1/2 md:pr-12 md:text-right pl-12 md:pl-0 pt-1 md:pt-0">
+                        <span class="text-indigo-600 font-bold text-lg block mb-1">16:15 - 17:00</span>
+                        <h3 class="font-bold text-slate-800 text-xl">模块五：官网开发综合演练</h3>
+                    </div>
+                    <div class="md:w-1/2 md:pl-12 pl-12 mt-2 md:mt-0">
+                        <div class="bg-gradient-to-br from-slate-800 to-slate-900 text-white p-5 rounded-xl shadow-lg border border-slate-700">
+                            <ul class="text-sm text-slate-300 space-y-2">
+                                <li><i class="fa-solid fa-flag-checkered text-green-400 mr-2"></i>全流程串联：意图拆解 -> 资产管理 -> 代码生成 -> 安全校验。</li>
+                                <li><i class="fa-solid fa-comments text-cyan-400 mr-2"></i>导师复盘及工作场景答疑。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-slate-900 py-10 border-t border-slate-800 text-center">
+        <div class="max-w-7xl mx-auto px-4">
+            <h3 class="text-slate-300 font-bold text-lg mb-2"><i class="fa-solid fa-microchip text-cyan-500 mr-2"></i>VibeCoding Pro</h3>
+            <p class="text-slate-500 text-sm mb-6">迈向 2026 企业级 AI 软件工厂，重塑工程范式。</p>
+            <p class="text-slate-600 text-xs">&copy; 2026 内部高阶培训课件 · 商业机密严禁外传</p>
+        </div>
+    </footer>
+
+    <script>
+        // 治理 OS 模块数据
+        const osData = {
+            'req-os': {
+                title: 'Requirement OS (需求治理)',
+                icon: 'fa-file-invoice text-indigo-500',
+                content: `
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-2"></i><b>动态规格工件：</b>通过 CLAUDE.md / INSTRUCTIONS.md 建立全局硬约束，防止上下文漂移。</li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-2"></i><b>质量辨别闭环：</b>系统自动提取生成行为与需求进行比对，实施 0/1 判定与反馈。</li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-2"></i><b>意图转化器：</b>将模糊业务 Vibe 转化为无歧义的指令集（冗余度、命名规范、架构约束）。</li>
+                    </ul>
+                `
+            },
+            'prompt-os': {
+                title: 'Prompt OS (资产治理)',
+                icon: 'fa-terminal text-cyan-500',
+                content: `
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-2"></i><b>全生命周期管理 (PLM)：</b>建立企业级提示词图书馆，实现资产的沉淀与版本化 (Vault 回滚)。</li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-2"></i><b>智能变量与多引擎：</b>支持行业/安全模板变量，支持多模型 (GPT-4/Claude) 效果横测。</li>
+                        <li class="flex items-start"><i class="fa-solid fa-check text-green-500 mt-1 mr-2"></i><b>RBAC 权限阻断：</b>防止普通开发者利用 Prompt 绕过系统核心安全验证逻辑。</li>
+                    </ul>
+                `
+            },
+            'debt': {
+                title: '债务追踪与强制解释',
+                icon: 'fa-scale-balanced text-rose-500',
+                content: `
+                    <ul class="space-y-3 text-sm text-slate-600">
+                        <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-amber-500 mt-1 mr-2"></i><b>量化理解债：</b>引入 TDR (技术债务比率)。生成比例过高但评审过短将触发系统阻断。</li>
+                        <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-amber-500 mt-1 mr-2"></i><b>强制思维链解释：</b>核心鉴权、计费代码提交前，AI 必须向人类输出可读逻辑，否则拒合 PR。</li>
+                        <li class="flex items-start"><i class="fa-solid fa-triangle-exclamation text-amber-500 mt-1 mr-2"></i><b>防退化记忆层：</b>利用长期记忆图谱确保需求变更迭代时不破坏原有架构意图。</li>
+                    </ul>
+                `
+            }
+        };
+
+        // 处理治理模块的点击交互
+        const detailsContainer = document.getElementById('os-details');
+        const archBlocks = document.querySelectorAll('.arch-block');
+
+        function updateOsDetail(key) {
+            const data = osData[key];
+            detailsContainer.innerHTML = `
+                <h4 class="font-bold text-slate-800 text-lg mb-3 flex items-center">
+                    <i class="fa-solid ${data.icon} mr-2"></i>${data.title}
+                </h4>
+                ${data.content}
+            `;
+        }
+
+        // 初始化显示第一个
+        updateOsDetail('req-os');
+
+        archBlocks.forEach(block => {
+            block.addEventListener('click', () => {
+                archBlocks.forEach(b => b.classList.remove('active'));
+                block.classList.add('active');
+                updateOsDetail(block.getAttribute('data-target'));
+            });
+        });
+
+        // 绘制治理前后对比雷达图
+        const ctx = document.getElementById('governanceChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['意图对齐度', '理解债务(越低越好)', '架构漂移率(越低越好)', '资产溯源率', '安全门禁拦截率'],
+                datasets: [
+                    { 
+                        label: '纯 YOLO 模式 (治理前)', 
+                        data: [40, 90, 85, 20, 30], 
+                        backgroundColor: 'rgba(244, 63, 94, 0.15)', // rose
+                        borderColor: '#f43f5e',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#f43f5e'
+                    },
+                    { 
+                        label: 'OS双核治理 (治理后)', 
+                        data: [95, 15, 10, 90, 95], 
+                        backgroundColor: 'rgba(14, 165, 233, 0.2)', // cyan
+                        borderColor: '#0ea5e9',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#0ea5e9'
+                    }
+                ]
+            },
+            options: { 
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { 
+                    r: { 
+                        min: 0, max: 100, 
+                        ticks: { display: false, stepSize: 20 },
+                        grid: { color: 'rgba(226, 232, 240, 0.8)' },
+                        angleLines: { color: 'rgba(226, 232, 240, 0.8)' },
+                        pointLabels: { font: { size: 12, family: 'Inter' }, color: '#475569' }
+                    } 
+                },
+                plugins: {
+                    legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8, font: { family: 'Inter'} } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

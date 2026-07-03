@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业级安全实战演训平台 | 效能驱动的能力建设</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        corp: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            800: '#1e293b',
+                            900: '#0f172a', // Deep corporate navy
+                            primary: '#2563eb', // Professional blue
+                            primaryHover: '#1d4ed8',
+                            accent: '#0ea5e9', // Subtle highlight
+                            success: '#059669'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        html { scroll-behavior: smooth; }
+        .business-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+        }
+        .business-card:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+            border-color: #cbd5e1;
+            transform: translateY(-2px);
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 3px;
+            background: #2563eb;
+            margin: 1rem auto 0;
+            border-radius: 2px;
+        }
+        .nav-scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+        }
+        .loading-dots::after {
+            content: '.';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60% { content: '...'; }
+            80%, 100% { content: ''; }
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+    </style>
+</head>
+<body class="bg-corp-50 text-slate-700 font-sans antialiased overflow-x-hidden selection:bg-corp-primary selection:text-white">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 transition-all duration-300 py-2 border-b border-transparent" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Generic Corporate Logo/Brand -->
+                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <div class="w-9 h-9 bg-corp-900 flex items-center justify-center text-white rounded shadow-sm">
+                        <i class="fas fa-shield-halved text-lg"></i>
+                    </div>
+                    <span class="font-bold text-xl tracking-tight text-corp-900">企业级安全实战平台</span>
+                </div>
+                
+                <div class="hidden lg:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#pain-points" class="text-slate-600 hover:text-corp-primary px-3 py-2 text-sm font-medium transition-colors">核心痛点</a>
+                        <a href="#scenarios" class="text-slate-600 hover:text-corp-primary px-3 py-2 text-sm font-medium transition-colors">演练场景</a>
+                        <a href="#features" class="text-slate-600 hover:text-corp-primary px-3 py-2 text-sm font-medium transition-colors">平台架构</a>
+                        <a href="#training" class="text-corp-primary bg-blue-50 px-4 py-2 rounded-full text-sm font-bold transition-colors border border-blue-100"><i class="fas fa-graduation-cap mr-1"></i> 培训体系</a>
+                        <a href="#services" class="text-slate-600 hover:text-corp-primary px-3 py-2 text-sm font-medium transition-colors">交付矩阵</a>
+                        <a href="#faq" class="text-slate-600 hover:text-corp-primary px-3 py-2 text-sm font-medium transition-colors">Q&A</a>
+                    </div>
+                </div>
+                <div class="lg:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-slate-600 hover:text-corp-primary focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-white absolute w-full border-b border-slate-200 shadow-lg">
+            <div class="px-4 pt-2 pb-4 space-y-1">
+                <a href="#pain-points" class="block px-3 py-3 text-base font-medium text-slate-700 hover:text-corp-primary hover:bg-slate-50 border-b border-slate-100">核心痛点</a>
+                <a href="#scenarios" class="block px-3 py-3 text-base font-medium text-slate-700 hover:text-corp-primary hover:bg-slate-50 border-b border-slate-100">演练场景</a>
+                <a href="#features" class="block px-3 py-3 text-base font-medium text-slate-700 hover:text-corp-primary hover:bg-slate-50 border-b border-slate-100">平台架构</a>
+                <a href="#training" class="block px-3 py-3 text-base font-medium text-corp-primary hover:bg-slate-50 border-b border-slate-100">培训体系</a>
+                <a href="#services" class="block px-3 py-3 text-base font-medium text-slate-700 hover:text-corp-primary hover:bg-slate-50 border-b border-slate-100">交付矩阵</a>
+                <a href="#faq" class="block px-3 py-3 text-base font-medium text-slate-700 hover:text-corp-primary hover:bg-slate-50">常见问题</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-24 bg-white overflow-hidden">
+        <div class="absolute top-0 right-0 w-1/2 h-full bg-corp-50 skew-x-12 translate-x-32 -z-10 hidden lg:block"></div>
+        
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded border border-corp-200 bg-white text-corp-600 mb-6 text-xs font-bold tracking-wider uppercase text-slate-500 shadow-sm">
+                        <span class="w-2 h-2 rounded-full bg-corp-primary animate-pulse"></span>
+                        构建企业专属安全技术肌肉
+                    </div>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold text-corp-900 tracking-tight mb-6 leading-[1.15]">
+                        从被动学习到 <br/>
+                        <span class="text-corp-primary relative inline-block">
+                            效能驱动
+                            <svg class="absolute w-full h-3 -bottom-1 left-0 text-blue-200 -z-10" viewBox="0 0 100 10" preserveAspectRatio="none"><path d="M0 5 Q 50 10 100 5 L 100 10 L 0 10 Z" fill="currentColor"></path></svg>
+                        </span> 的实战演训场
+                    </h1>
+                    <p class="text-lg text-slate-600 mb-10 leading-relaxed max-w-lg">
+                        以战代训 —— 彻底告别理论与业务脱节的传统培训。依托高仿真CTF实战靶场与自动化对抗场景，为企业建立持续、可量化的安全人才能力评价与成长体系。
+                    </p>
+                    <div class="flex flex-wrap gap-4">
+                        <a href="#features" class="bg-corp-900 hover:bg-slate-800 text-white px-8 py-3.5 rounded text-sm font-semibold transition-all shadow-md hover:shadow-lg flex items-center gap-2">
+                            探索平台能力
+                        </a>
+                        <a href="#training" class="bg-white border border-corp-200 hover:border-corp-primary hover:text-corp-primary hover:bg-blue-50 text-slate-700 px-8 py-3.5 rounded text-sm font-semibold transition-all shadow-sm flex items-center gap-2">
+                            了解实战培训方案 <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Hero Data Visualization -->
+                <div class="hidden lg:block relative">
+                    <div class="business-card rounded-xl p-8 w-full max-w-lg ml-auto relative z-10 border-t-4 border-t-corp-primary">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-5 mb-6">
+                            <div>
+                                <h3 class="font-bold text-corp-900 text-base">人员安全能力评估矩阵</h3>
+                                <p class="text-xs text-slate-500 mt-1">实时对抗数据采集</p>
+                            </div>
+                            <span class="text-xs text-corp-success bg-green-50 px-3 py-1 rounded-full font-bold border border-green-100 flex items-center gap-1">
+                                <i class="fas fa-circle text-[8px] animate-pulse"></i> 运行中
+                            </span>
+                        </div>
+                        <div class="space-y-6">
+                            <div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="text-slate-600 font-medium"><i class="fas fa-code-branch w-5 text-corp-accent"></i> 攻防实战化转化率</span>
+                                    <span class="font-bold text-corp-900">85%</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-2">
+                                    <div class="bg-corp-primary h-2 rounded-full" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="text-slate-600 font-medium"><i class="fas fa-users-gear w-5 text-corp-accent"></i> 产研人员能力覆盖</span>
+                                    <span class="font-bold text-corp-900">92%</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-2">
+                                    <div class="bg-corp-900 h-2 rounded-full" style="width: 92%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-sm mb-2">
+                                    <span class="text-slate-600 font-medium"><i class="fas fa-shield-virus w-5 text-corp-accent"></i> 业务漏洞主动发现率</span>
+                                    <span class="font-bold text-corp-900">+78%</span>
+                                </div>
+                                <div class="w-full bg-slate-100 rounded-full h-2">
+                                    <div class="bg-corp-accent h-2 rounded-full" style="width: 78%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Decorative backdrops -->
+                    <div class="absolute -top-6 -right-6 w-full h-full border-2 border-corp-100 rounded-xl -z-10"></div>
+                    <div class="absolute -bottom-8 -left-8 w-40 h-40 bg-corp-50 rounded-full -z-20 border border-corp-100"></div>
+                </div>
+            </div>
+            
+            <!-- Global Stats Banner -->
+            <div class="mt-20 lg:mt-32 grid grid-cols-1 md:grid-cols-3 gap-8 border-y border-slate-200 py-10 bg-white">
+                <div class="text-center md:text-left md:pl-8 md:border-l border-slate-200 first:border-l-0">
+                    <div class="text-3xl lg:text-4xl font-extrabold text-corp-900 mb-2">340<span class="text-xl text-slate-500 font-normal">万</span></div>
+                    <div class="text-sm font-medium text-slate-500">全球网络安全人才缺口巨大</div>
+                </div>
+                <div class="text-center md:text-left md:pl-8 md:border-l border-slate-200">
+                    <div class="text-3xl lg:text-4xl font-extrabold text-corp-900 mb-2">140<span class="text-xl text-slate-500 font-normal">万+</span></div>
+                    <div class="text-sm font-medium text-slate-500">中国安全防御人才供需失衡</div>
+                </div>
+                <div class="text-center md:text-left md:pl-8 md:border-l border-slate-200">
+                    <div class="text-3xl lg:text-4xl font-extrabold text-corp-900 mb-2">20<span class="text-xl text-slate-500 font-normal">%</span></div>
+                    <div class="text-sm font-medium text-slate-500">行业高级人才缺口年复合增速</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Pain Points Section (Aligned with PPT) -->
+    <section id="pain-points" class="py-24 bg-corp-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-corp-primary font-bold tracking-widest uppercase text-xs">Industry Challenges</span>
+                <h2 class="text-3xl font-bold text-corp-900 section-title mt-2">企业安全能力建设为何停滞不前？</h2>
+                <p class="text-slate-600 mt-6 max-w-2xl mx-auto text-sm leading-relaxed">数百万的安全培训与演练投入，却拿不出一份科学的人员防御能力增长画像。传统模式正面临四大核心痛点：</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Pain 1 -->
+                <div class="business-card p-8 rounded-xl bg-white relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-slate-200 group-hover:bg-red-500 transition-colors"></div>
+                    <div class="w-12 h-12 bg-slate-50 rounded-lg flex items-center justify-center text-slate-500 mb-6 group-hover:text-red-500 group-hover:bg-red-50 transition-all">
+                        <i class="fas fa-box-open text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-corp-900 mb-3">人才评估「盲盒化」</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">简历与单纯的理论考试无法反映人员真实的攻防水平。个人与团队能力差异难以量化，关键时刻核心人才“顶不上”。</p>
+                </div>
+                
+                <!-- Pain 2 -->
+                <div class="business-card p-8 rounded-xl bg-white relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-slate-200 group-hover:bg-orange-500 transition-colors"></div>
+                    <div class="w-12 h-12 bg-slate-50 rounded-lg flex items-center justify-center text-slate-500 mb-6 group-hover:text-orange-500 group-hover:bg-orange-50 transition-all">
+                        <i class="fas fa-water text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-corp-900 mb-3">演练效应「断层化」</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">过度依赖一年一度的重保演练，缺乏日常的常态化训练与支撑环境。演练经验分散在个人，难以转化为组织长期的持续战力。</p>
+                </div>
+
+                <!-- Pain 3 -->
+                <div class="business-card p-8 rounded-xl bg-white relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-slate-200 group-hover:bg-blue-500 transition-colors"></div>
+                    <div class="w-12 h-12 bg-slate-50 rounded-lg flex items-center justify-center text-slate-500 mb-6 group-hover:text-blue-500 group-hover:bg-blue-50 transition-all">
+                        <i class="fas fa-plug-circle-xmark text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-corp-900 mb-3">业务风险「脱节感」</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">外部培训内容往往与企业实际运行的技术栈和环境脱节。员工听完了PPT，却无法将学到的安全技术真正落地到内部防御场景中。</p>
+                </div>
+
+                <!-- Pain 4 -->
+                <div class="business-card p-8 rounded-xl bg-white relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-1 h-full bg-slate-200 group-hover:bg-corp-primary transition-colors"></div>
+                    <div class="w-12 h-12 bg-slate-50 rounded-lg flex items-center justify-center text-slate-500 mb-6 group-hover:text-corp-primary group-hover:bg-blue-50 transition-all">
+                        <i class="fas fa-magnifying-glass-chart text-xl"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-corp-900 mb-3">投资产出「量化难」</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">安全培训被视为纯成本中心。管理层投入大量预算后，却无法通过科学的数据看板，直观看到团队防御能力的实际增长曲线。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Expanded Section: Core Scenarios -->
+    <section id="scenarios" class="py-24 bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+                <div class="max-w-2xl">
+                    <span class="text-corp-primary font-bold tracking-widest uppercase text-xs">Training Scenarios</span>
+                    <h2 class="text-3xl font-bold text-corp-900 mt-2">全栈覆盖的实战演练场景</h2>
+                    <p class="text-slate-600 mt-4 text-sm leading-relaxed">内置数百套标准化场景与独立沙箱，覆盖从底层二进制到上层业务逻辑的完整技术栈，满足红蓝对抗、研发安全等全方位需求。</p>
+                </div>
+                <div class="pb-2">
+                    <span class="bg-corp-50 border border-corp-200 text-corp-900 px-4 py-2 rounded-full text-sm font-bold shadow-sm">
+                        <i class="fas fa-cubes mr-2 text-corp-primary"></i> 模块化题库架构
+                    </span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Scenario 1 -->
+                <div class="flex gap-4 p-6 border border-slate-200 rounded-xl hover:border-corp-primary hover:shadow-lg transition-all duration-300">
+                    <div class="w-14 h-14 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0 text-blue-600 text-2xl border border-blue-100">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-corp-900 text-lg mb-2">Web 安全漏洞挖掘</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-3">涵盖 SQL注入、XSS、CSRF、SSRF、文件上传及复杂的反序列化漏洞，直击企业常见外网暴露面风险。</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-[10px] font-mono bg-slate-100 text-slate-600 px-2 py-1 rounded">OWASP Top 10</span>
+                            <span class="text-[10px] font-mono bg-slate-100 text-slate-600 px-2 py-1 rounded">逻辑漏洞</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scenario 2 -->
+                <div class="flex gap-4 p-6 border border-slate-200 rounded-xl hover:border-corp-primary hover:shadow-lg transition-all duration-300">
+                    <div class="w-14 h-14 rounded-lg bg-purple-50 flex items-center justify-center flex-shrink-0 text-purple-600 text-2xl border border-purple-100">
+                        <i class="fas fa-bug"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-corp-900 text-lg mb-2">Pwn 二进制安全</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-3">基于 Linux/Windows 平台的底层内存溢出、ROP链构造、格式化字符串等高级利用技术，锻炼极致的漏洞挖掘能力。</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-[10px] font-mono bg-slate-100 text-slate-600 px-2 py-1 rounded">栈溢出</span>
+                            <span class="text-[10px] font-mono bg-slate-100 text-slate-600 px-2 py-1 rounded">堆利用</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scenario 3 -->
+                <div class="flex gap-4 p-6 border border-slate-200 rounded-xl hover:border-corp-primary hover:shadow-lg transition-all duration-300">
+                    <div class="w-14 h-14 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0 text-emerald-600 text-2xl border border-emerald-100">
+                        <i class="fas fa-unlock-keyhole"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-corp-900 text-lg mb-2">Reverse 逆向工程</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-3">包含恶意软件分析、移动端APP逆向、加壳脱壳及反调试技术，提升应对高级木马与勒索软件的底层分析能力。</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-[10px] font-mono bg-slate-100 text-slate-600 px-2 py-1 rounded">Android/iOS</span>
+                            <span class="text-[10px] font-mono bg-slate-100 text-slate-600 px-2 py-1 rounded">恶意代码分析</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scenario 4 -->
+                <div class="flex gap-4 p-6 border border-slate-200 rounded-xl hover:border-corp-primary hover:shadow-lg transition-all duration-300">
+                    <div class="w-14 h-14 rounded-lg bg-amber-50 flex items-center justify-center flex-shrink-0 text-amber-600 text-2xl border border-amber-100">
+                        <i class="fas fa-magnifying-glass-chart"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-corp-900 text-lg mb-2">安全应急响应 (IR)</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-3">提供真实的流量包(PCAP)、服务器日志、内存镜像，训练蓝队人员在突发安全事件中的溯源分析与取证能力。</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-[10px] font-mono bg-slate-100 text-slate-600 px-2 py-1 rounded">流量分析</span>
+                            <span class="text-[10px] font-mono bg-slate-100 text-slate-600 px-2 py-1 rounded">日志审计</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scenario 5 -->
+                <div class="flex gap-4 p-6 border border-slate-200 rounded-xl hover:border-corp-primary hover:shadow-lg transition-all duration-300">
+                    <div class="w-14 h-14 rounded-lg bg-cyan-50 flex items-center justify-center flex-shrink-0 text-cyan-600 text-2xl border border-cyan-100">
+                        <i class="fas fa-file-code"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-corp-900 text-lg mb-2">DevSecOps 代码审计</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed mb-3">专为研发团队设计的白盒测试场景，包含 Java, Python, Go 等多语言包含缺陷的源码，培养研发自愈能力。</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-[10px] font-mono bg-slate-100 text-slate-600 px-2 py-1 rounded">白盒审计</span>
+                            <span class="text-[10px] font-mono bg-slate-100 text-slate-600 px-2 py-1 rounded">安全编码</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scenario 6 -->
+                <div class="flex gap-4 p-6 border border-slate-200 rounded-xl hover:border-corp-primary hover:shadow-lg transition-all duration-300 bg-slate-50">
+                    <div class="w-14 h-14 rounded-lg bg-corp-900 flex items-center justify-center flex-shrink-0 text-white text-2xl">
+                        <i class="fas fa-gears"></i>
+                    </div>
+                    <div class="flex flex-col justify-center">
+                        <h4 class="font-bold text-corp-900 text-lg mb-2">企业私有业务靶场定制</h4>
+                        <p class="text-sm text-slate-600 leading-relaxed">基于企业真实的内网架构、行业特性（如金融支付、车联网、工控等）进行 1:1 的高仿真沙箱环境复现与命题定制。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 体系化安全培训 -->
+    <section id="training" class="py-24 bg-corp-900 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-600 rounded-full mix-blend-screen filter blur-[150px] opacity-10 transform translate-x-1/3 -translate-y-1/3 pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16">
+                <span class="text-corp-accent font-bold tracking-widest uppercase text-xs">Capability Training</span>
+                <h2 class="text-3xl font-bold text-white section-title mt-2">安全能力实战化培训体系</h2>
+                <p class="text-slate-300 mt-6 max-w-2xl mx-auto text-sm leading-relaxed">告别纯理论的“纸上谈兵”，我们将攻防演练与系统化培训深度融合，打造从“学、练、测、评”四位一体的安全能力进阶之路。</p>
+            </div>
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="bg-corp-800 p-8 rounded-xl border border-slate-700 hover:border-corp-primary transition-all">
+                    <div class="w-14 h-14 bg-corp-900 rounded-lg flex items-center justify-center text-corp-accent text-2xl mb-6 shadow-inner border border-slate-700">
+                        <i class="fas fa-chalkboard-user"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">专家级理论授课</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">由一线红蓝对抗专家与CTF冠军导师倾囊相授，剖析最新攻防趋势、漏洞原理与修复方案，夯实底层基础。</p>
+                </div>
+                <div class="bg-corp-800 p-8 rounded-xl border border-slate-700 hover:border-corp-primary transition-all transform md:-translate-y-4">
+                    <div class="w-14 h-14 bg-corp-900 rounded-lg flex items-center justify-center text-corp-accent text-2xl mb-6 shadow-inner border border-slate-700">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">场景化上机实操</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">理论结合实战，学员直接进入专属靶场环境进行真实漏洞复现与防御加固，将书本知识瞬间转化为肌肉记忆。</p>
+                </div>
+                <div class="bg-corp-800 p-8 rounded-xl border border-slate-700 hover:border-corp-primary transition-all">
+                    <div class="w-14 h-14 bg-corp-900 rounded-lg flex items-center justify-center text-corp-accent text-2xl mb-6 shadow-inner border border-slate-700">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">考核与能力定级</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">通过阶段性测验与内部技术比武，量化培训成果。为企业沉淀出清晰的人才能力图谱，辅助员工岗位晋升与定级。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Platform Features -->
+    <section id="features" class="py-24 bg-corp-50 border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-corp-primary font-bold tracking-widest uppercase text-xs">Core Platform</span>
+                <h2 class="text-3xl font-bold text-corp-900 section-title mt-2">全栈式实战演练管理支撑底座</h2>
+                <p class="text-slate-600 mt-6 max-w-2xl mx-auto text-sm leading-relaxed">提供统一入口、统一沙箱、统一防作弊规则，为企业常态化安全能力建设保驾护航。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Feature 1 -->
+                <div class="flex flex-col sm:flex-row gap-6 p-8 business-card rounded-xl bg-white">
+                    <div class="w-16 h-16 bg-blue-50 flex items-center justify-center flex-shrink-0 border border-blue-100 rounded-xl">
+                        <i class="fas fa-server text-2xl text-blue-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-corp-900 mb-2">沙箱环境独立分配与秒级启停</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            平台采用容器化与轻量级虚拟化技术，为每位参训学员动态分配完全隔离的独立靶机沙箱。学员操作互不干扰，资源秒级分配与回收，对物理宿主机绝对安全。
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="flex flex-col sm:flex-row gap-6 p-8 business-card rounded-xl bg-white">
+                    <div class="w-16 h-16 bg-emerald-50 flex items-center justify-center flex-shrink-0 border border-emerald-100 rounded-xl">
+                        <i class="fas fa-shield-cat text-2xl text-emerald-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-corp-900 mb-2">动态 Flag 签发与深度防作弊机制</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            支持为同一题目下的不同用户或战队动态生成独一无二的专属 Flag 标识。从底层运行机制上阻断结果共享与抄袭作弊，确保训练及考核数据的绝对客观。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="flex flex-col sm:flex-row gap-6 p-8 business-card rounded-xl bg-white">
+                    <div class="w-16 h-16 bg-purple-50 flex items-center justify-center flex-shrink-0 border border-purple-100 rounded-xl">
+                        <i class="fas fa-chart-pie text-2xl text-purple-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-corp-900 mb-2">自动化态势感知与多维能力雷达</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            支持实战大屏展示，实时滚动解题动态与积分排行。系统自动沉淀演练数据，生成个人/团队的技能雷达图（如Web、溯源、代码审计能力值），能力短板一目了然。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="flex flex-col sm:flex-row gap-6 p-8 business-card rounded-xl bg-white">
+                    <div class="w-16 h-16 bg-amber-50 flex items-center justify-center flex-shrink-0 border border-amber-100 rounded-xl">
+                        <i class="fas fa-sitemap text-2xl text-amber-600"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-corp-900 mb-2">企业组织架构无缝映射接入</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            支持与企业内部单点登录(SSO)、LDAP 目录服务打通，完整映射企业组织架构树。支持按部门（如基础平台部、业务线研发等）开展定向赛道配置与数据隔离管理。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Matrix (Informational Only) -->
+    <section id="services" class="py-24 bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-corp-primary font-bold tracking-widest uppercase text-xs">Service Matrix</span>
+                <h2 class="text-3xl font-bold text-corp-900 section-title mt-2">灵活交付的服务矩阵</h2>
+                <p class="text-slate-600 mt-6 max-w-2xl mx-auto text-sm leading-relaxed">适配不同规模企业发展阶段，提供从轻量级验证到企业级基建的多元化部署方案。</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                
+                <!-- SaaS -->
+                <div class="business-card p-10 rounded-2xl flex flex-col bg-slate-50 border-slate-200">
+                    <div class="mb-6">
+                        <div class="w-14 h-14 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center mb-5 text-corp-900 text-2xl">
+                            <i class="fas fa-cloud"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-corp-900 mb-2">SaaS 线上演训</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">无需企业内部署任何服务器与运维资源。开通公有云SaaS账号即可快速接入，适合初创团队或轻量级内部日常打卡训练。</p>
+                    </div>
+                    <ul class="space-y-4 mt-auto border-t border-slate-200 pt-6 text-sm text-slate-700 font-medium">
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-corp-primary mt-0.5"></i> 便捷极速的云端访问</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-corp-primary mt-0.5"></i> 涵盖主流方向的基础实战题库</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-corp-primary mt-0.5"></i> 标准化的人员成绩与报表导出</li>
+                    </ul>
+                </div>
+
+                <!-- Private Deploy -->
+                <div class="bg-corp-900 p-10 rounded-2xl flex flex-col shadow-2xl relative transform md:-translate-y-4 border border-corp-800">
+                    <div class="absolute top-0 right-8 bg-corp-primary text-white text-[10px] font-bold px-4 py-1.5 rounded-b-lg uppercase tracking-widest shadow-md">核心推荐</div>
+                    <div class="mb-6 mt-2">
+                        <div class="w-14 h-14 bg-corp-800 rounded-xl border border-slate-700 flex items-center justify-center mb-5 text-white text-2xl">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-2">平台私有化部署</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed">部署于企业内网。演训数据不出域，资产完全自主掌控。支持百人以上的大规模同场并发竞技，是中大型企业沉淀长期安全能力的基石。</p>
+                    </div>
+                    <ul class="space-y-4 mt-auto border-t border-slate-700 pt-6 text-sm text-slate-200 font-medium">
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-corp-accent mt-0.5"></i> 完全独立物理/虚拟化内网部署</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-corp-accent mt-0.5"></i> 海量高阶题库源码与深度解析授权</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-corp-accent mt-0.5"></i> 企业级品牌视觉及 SSO 单点登录定制</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-corp-accent mt-0.5"></i> 原厂专家级系统长期运维与升级支持</li>
+                    </ul>
+                </div>
+
+                <!-- Custom Events -->
+                <div class="business-card p-10 rounded-2xl flex flex-col bg-slate-50 border-slate-200">
+                    <div class="mb-6">
+                        <div class="w-14 h-14 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center mb-5 text-corp-900 text-2xl">
+                            <i class="fas fa-users-viewfinder"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-corp-900 mb-2">定制化培训与赛事</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">由顶尖CTF赛事冠军导师或资深安全专家介入，提供结合业务线的定制化驻场授课，或承办企业年度大型“极客周”技术比武赛。</p>
+                    </div>
+                    <ul class="space-y-4 mt-auto border-t border-slate-200 pt-6 text-sm text-slate-700 font-medium">
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-corp-primary mt-0.5"></i> 资深专家面对面理论体系授课</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-corp-primary mt-0.5"></i> 结合演训平台进行逐题复盘与辅导</li>
+                        <li class="flex items-start gap-3"><i class="fas fa-check-circle text-corp-primary mt-0.5"></i> 行业定制靶场（如金融、车联网）开发</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Expanded FAQ Section (Based on PPT) -->
+    <section id="faq" class="py-24 bg-corp-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-corp-primary font-bold tracking-widest uppercase text-xs">Questions & Answers</span>
+                <h2 class="text-3xl font-bold text-corp-900 section-title mt-2">常见问题解答</h2>
+            </div>
+            
+            <div class="space-y-6">
+                <!-- FAQ 1 -->
+                <div class="bg-white rounded-xl p-6 md:p-8 border border-slate-200 shadow-sm">
+                    <h4 class="text-lg font-bold text-corp-900 mb-3 flex items-start gap-3">
+                        <i class="fas fa-question-circle text-corp-primary mt-1"></i> 我们不想搞大张旗鼓的比赛，只想提升人员日常能力，可以吗？
+                    </h4>
+                    <p class="text-slate-600 text-sm leading-relaxed pl-8">
+                        完全可以。平台的设计既支持集中式的内部大型比赛，同样完美支持细水长流的日常练习和阶段性打卡训练。竞赛仅仅是检验能力的一种外在形式，平台的核心价值在于提供高仿真的靶场环境，让员工把技术知识转化为真正的实战经验。
+                    </p>
+                </div>
+
+                <!-- FAQ 2 -->
+                <div class="bg-white rounded-xl p-6 md:p-8 border border-slate-200 shadow-sm">
+                    <h4 class="text-lg font-bold text-corp-900 mb-3 flex items-start gap-3">
+                        <i class="fas fa-question-circle text-corp-primary mt-1"></i> 既然平台有用到开源技术，那企业是不是可以找人自己搭建？
+                    </h4>
+                    <p class="text-slate-600 text-sm leading-relaxed pl-8">
+                        搭一个基础框架理论上是可行的；但企业实际面临的真正挑战在于：如何长期、稳定地维护沙箱环境、如何防作弊、如何持续输出高质量且贴合业务的实战题库。我们为您提供的是平台化整合后的**完整解决方案**，包括稳定的自动化部署、运维支持和持续的内容服务，为您省去庞大的隐性研发与内容建设成本。
+                    </p>
+                </div>
+
+                <!-- FAQ 3 -->
+                <div class="bg-white rounded-xl p-6 md:p-8 border border-slate-200 shadow-sm">
+                    <h4 class="text-lg font-bold text-corp-900 mb-3 flex items-start gap-3">
+                        <i class="fas fa-question-circle text-corp-primary mt-1"></i> 实战演练会不会影响企业的生产系统？有没有安全风险？
+                    </h4>
+                    <p class="text-slate-600 text-sm leading-relaxed pl-8">
+                        完全不用担心。平台及所有漏洞靶机均运行在高度隔离的独立虚拟网络环境（沙箱）中，主要用于受控范围内的内部训练。学员的所有攻击行为和网络流量都不涉及对企业生产系统和真实网络的任何直接操作，绝对保障您的核心业务安全无虞。
+                    </p>
+                </div>
+
+                <!-- FAQ 4 -->
+                <div class="bg-white rounded-xl p-6 md:p-8 border border-slate-200 shadow-sm">
+                    <h4 class="text-lg font-bold text-corp-900 mb-3 flex items-start gap-3">
+                        <i class="fas fa-question-circle text-corp-primary mt-1"></i> 平台的能力能否按我们的行业和业务需求完全定制？
+                    </h4>
+                    <p class="text-slate-600 text-sm leading-relaxed pl-8">
+                        可以。平台底层的调度能力、评估模型和管理方式是标准化的，但承载的内容（题库）支持深度定制。无论是金融行业的支付逻辑漏洞、制造业的工控设备破解，还是互联网的微服务安全，都可以通过模块化题库的形式导入，完美适配不同企业的核心训练重点。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Simple Footer -->
+    <footer class="bg-corp-900 border-t border-slate-800 py-12 text-center">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex items-center justify-center gap-2 mb-6">
+                <div class="w-8 h-8 bg-slate-800 flex items-center justify-center text-slate-400 rounded">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
+                <div class="text-slate-300 font-bold text-lg tracking-wide">企业级安全实战平台</div>
+            </div>
+            <p class="text-slate-500 text-sm">&copy; 2026 效能驱动的企业安全能力建设体系. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Interactive Scripts -->
+    <script>
+        // Navbar styling on scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 10) {
+                navbar.classList.add('nav-scrolled');
+                navbar.classList.remove('border-transparent', 'py-2');
+            } else {
+                navbar.classList.remove('nav-scrolled');
+                navbar.classList.add('border-transparent', 'py-2');
+            }
+        });
+
+        // Mobile menu toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        menu.addEventListener('click', () => {
+            menu.classList.add('hidden');
+        });
+
+    </script>
+</body>
+</html>

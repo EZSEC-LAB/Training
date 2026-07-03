@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业信息安全意识建设全案</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            300: '#6ee7b7',
+                            400: '#34d399',
+                            500: '#10b981', 
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                            950: '#022c22',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f8fafc; /* slate-50 */
+            color: #334155; /* slate-700 */
+        }
+        
+        /* Typography Gradients */
+        .gradient-text {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(135deg, #059669 0%, #2563eb 100%);
+        }
+        .gradient-text-warn {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+        }
+        
+        /* Background Effects */
+        .hero-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(16,185,129,0.08) 0%, rgba(248,250,252,0) 60%);
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .grid-bg {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+        }
+
+        /* Cards and Elements */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8); /* slate-200 */
+            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -10px rgba(16, 185, 129, 0.12);
+            border-color: rgba(52, 211, 153, 0.4);
+            background: rgba(255, 255, 255, 1);
+        }
+
+        /* Nav Blur */
+        .nav-blur {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(226, 232, 240, 1);
+        }
+
+        /* Scroll Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="antialiased font-sans text-slate-600 overflow-x-hidden selection:bg-brand-500 selection:text-white">
+
+    <!-- Grid Background Layer -->
+    <div class="fixed inset-0 grid-bg pointer-events-none z-[-2]"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 nav-blur transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-brand-500 to-blue-600 flex items-center justify-center text-white font-bold text-xl shadow-[0_4px_10px_rgba(16,185,129,0.3)]">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <span class="text-slate-900 font-bold text-xl tracking-wide">信息安全<span class="text-brand-600">赋能</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#home" class="text-slate-600 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">首页</a>
+                        <a href="#background" class="text-slate-600 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">战局背景</a>
+                        <a href="#services" class="text-slate-600 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">服务体系</a>
+                        <a href="#ai-agent" class="text-slate-600 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">AI 赋能</a>
+                        <a href="#cases" class="text-slate-600 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">行业案例</a>
+                        <a href="#contact" class="bg-slate-900 border border-slate-800 hover:bg-brand-600 hover:border-brand-600 text-white px-5 py-2.5 rounded-full text-sm font-medium transition-all shadow-lg hover:shadow-brand-500/30 ml-4">获取方案</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden min-h-[90vh] flex items-center">
+        <div class="hero-glow"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-4xl mx-auto reveal active">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card mb-8 text-sm text-brand-700 border border-brand-200 bg-white">
+                    <span class="relative flex h-2.5 w-2.5">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-500"></span>
+                    </span>
+                    智能化、实战化的企业安全防线
+                </div>
+                
+                <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 mb-8 leading-tight">
+                    信息安全意识 <br class="hidden md:block" />
+                    <span class="gradient-text">建设全案战略</span>
+                </h1>
+                
+                <p class="mt-6 text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
+                    面向企业全员的深度社会工程学防御战略。当信任被武器化，我们将您的员工从“最薄弱的环节”转化为坚不可摧的“人力防火墙”。
+                </p>
+                
+                <div class="mt-10 flex justify-center gap-4 flex-col sm:flex-row">
+                    <a href="#services" class="px-8 py-4 bg-brand-600 hover:bg-brand-500 text-white rounded-lg font-medium transition-all shadow-lg shadow-brand-500/30 hover:shadow-brand-500/50 flex items-center justify-center gap-2">
+                        探索服务体系 <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                    <a href="#background" class="px-8 py-4 bg-white border border-slate-200 text-slate-700 rounded-lg font-medium hover:bg-slate-50 transition-all shadow-sm flex items-center justify-center gap-2">
+                        了解安全现状
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Animated floating elements for tech feel -->
+        <div class="absolute top-1/4 left-10 w-24 h-24 bg-brand-400/20 rounded-full blur-2xl animate-pulse-slow"></div>
+        <div class="absolute bottom-1/4 right-10 w-32 h-32 bg-blue-400/20 rounded-full blur-2xl animate-pulse-slow delay-200"></div>
+    </section>
+
+    <!-- Background / Pain points Section -->
+    <section id="background" class="py-24 relative bg-white border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-sm font-semibold text-brand-600 tracking-wide uppercase mb-3">背景分析</h2>
+                <h3 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">当 <span class="text-red-500">信任</span> 被武器化</h3>
+                <p class="text-slate-600 max-w-2xl mx-auto">攻击者不再试图正面突破坚固的防火墙，而是瞄准防御体系中最薄弱的环节——“人”。</p>
+            </div>
+
+            <!-- Stats Highlight -->
+            <div class="max-w-4xl mx-auto bg-slate-50 border border-slate-100 rounded-2xl p-8 mb-20 text-center relative overflow-hidden reveal shadow-sm">
+                <div class="absolute -right-20 -top-20 w-64 h-64 bg-red-100 rounded-full blur-3xl"></div>
+                <h4 class="text-6xl md:text-7xl font-black gradient-text-warn mb-4">85%</h4>
+                <p class="text-xl text-slate-700 font-medium">的数据泄露源于 <span class="text-slate-900 border-b-2 border-red-500 pb-1">人为因素</span></p>
+                <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-6 border-t border-slate-200 pt-8">
+                    <div class="text-left pl-4 border-l-2 border-brand-400">
+                        <div class="text-slate-900 font-bold mb-1">侥幸心理</div>
+                        <div class="text-slate-500 text-sm">“这次不会有事”</div>
+                    </div>
+                    <div class="text-left pl-4 border-l-2 border-brand-400">
+                        <div class="text-slate-900 font-bold mb-1">从众心理</div>
+                        <div class="text-slate-500 text-sm">“大家都这么做”</div>
+                    </div>
+                    <div class="text-left pl-4 border-l-2 border-brand-400">
+                        <div class="text-slate-900 font-bold mb-1">权威心理</div>
+                        <div class="text-slate-500 text-sm">“领导让我这么干”</div>
+                    </div>
+                    <div class="text-left pl-4 border-l-2 border-brand-400">
+                        <div class="text-slate-900 font-bold mb-1">好奇心理</div>
+                        <div class="text-slate-500 text-sm">“这是什么，点一下”</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Consequences Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 reveal">
+                <div class="glass-card p-6 rounded-xl group hover:border-red-200">
+                    <div class="w-12 h-12 rounded-lg bg-red-50 text-red-500 flex items-center justify-center text-xl mb-4 group-hover:bg-red-100 group-hover:scale-110 transition-all">
+                        <i class="fa-solid fa-arrow-trend-down"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 mb-2">经济损失</h4>
+                    <p class="text-slate-600 text-sm">机密失窃、营销策略外泄带来的直接巨额财务损失与市值蒸发。</p>
+                </div>
+                <div class="glass-card p-6 rounded-xl group delay-100 hover:border-orange-200">
+                    <div class="w-12 h-12 rounded-lg bg-orange-50 text-orange-500 flex items-center justify-center text-xl mb-4 group-hover:bg-orange-100 group-hover:scale-110 transition-all">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 mb-2">商誉损害</h4>
+                    <p class="text-slate-600 text-sm">数据泄露导致客户大规模流失，品牌信任崩塌，修复成本极高。</p>
+                </div>
+                <div class="glass-card p-6 rounded-xl group delay-200 hover:border-yellow-200">
+                    <div class="w-12 h-12 rounded-lg bg-yellow-50 text-yellow-500 flex items-center justify-center text-xl mb-4 group-hover:bg-yellow-100 group-hover:scale-110 transition-all">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 mb-2">合规风险</h4>
+                    <p class="text-slate-600 text-sm">面临监管机构巨额罚款、法律诉讼与极度负面的公共形象危机。</p>
+                </div>
+                <div class="glass-card p-6 rounded-xl group delay-300 hover:border-blue-200">
+                    <div class="w-12 h-12 rounded-lg bg-blue-50 text-blue-500 flex items-center justify-center text-xl mb-4 group-hover:bg-blue-100 group-hover:scale-110 transition-all">
+                        <i class="fa-solid fa-server"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-slate-900 mb-2">业务中断</h4>
+                    <p class="text-slate-600 text-sm">勒索软件攻击导致核心业务系统永久性或暂时性被迫大规模关闭。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 relative bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 reveal">
+                <div class="max-w-2xl">
+                    <h2 class="text-sm font-semibold text-brand-600 tracking-wide uppercase mb-3">服务介绍</h2>
+                    <h3 class="text-3xl md:text-4xl font-bold text-slate-900">定制化、全感官的服务体系</h3>
+                </div>
+                <p class="text-slate-600 mt-4 md:mt-0 md:text-right max-w-sm">
+                    覆盖听、看、玩、练，将枯燥的合规要求转化为沉浸式的安全基因。
+                </p>
+            </div>
+
+            <!-- Horizontal layout for core strategies -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-16 reveal">
+                <div class="bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow p-8 rounded-2xl relative overflow-hidden">
+                    <div class="absolute right-0 top-0 opacity-5 text-8xl text-brand-600 -mt-6 -mr-4">
+                        <i class="fa-solid fa-sliders"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-3"><span class="text-brand-500">01 /</span> 个性化定制</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">根据企业所处行业（如金融、医疗、互联网）深度适配最相关的教学内容与真实场景案例。</p>
+                </div>
+                <div class="bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow p-8 rounded-2xl relative overflow-hidden delay-100">
+                    <div class="absolute right-0 top-0 opacity-5 text-8xl text-brand-600 -mt-6 -mr-6">
+                        <i class="fa-solid fa-gamepad"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-3"><span class="text-brand-500">02 /</span> 游戏化演练</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">模拟WiFi破解、AI换脸诈骗、无感盗刷等黑客攻击场景，帮助员工建立长效的肌肉防御记忆。</p>
+                </div>
+                <div class="bg-white border border-slate-200 shadow-sm hover:shadow-md transition-shadow p-8 rounded-2xl relative overflow-hidden delay-200">
+                    <div class="absolute right-0 top-0 opacity-5 text-8xl text-brand-600 -mt-6 -mr-4">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900 mb-3"><span class="text-brand-500">03 /</span> 合规对齐</h4>
+                    <p class="text-slate-600 text-sm leading-relaxed">强化行业规范与ISO27001标准，将全员培训测试数据纳入企业整体合规性闭环分析体系中。</p>
+                </div>
+            </div>
+
+            <!-- Deep Dive Tabs/Rows -->
+            <div class="space-y-8">
+                <!-- Row 1: 体验式活动 -->
+                <div class="glass-card rounded-2xl p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center reveal">
+                    <div class="w-full md:w-1/3 flex justify-center">
+                        <img src="./experiential_activities.png" alt="体验式活动" class="w-full max-w-[280px] md:max-w-xs h-auto rounded-2xl shadow-md border border-slate-100 object-cover transition-transform duration-500 hover:scale-[1.03]">
+                    </div>
+                    <div class="w-full md:w-2/3">
+                        <h4 class="text-2xl font-bold text-slate-900 mb-5">体验式活动：让威胁“肉眼可见”</h4>
+                        <div class="grid grid-cols-2 gap-4 w-full">
+                            <!-- 体验项 1 -->
+                            <div class="group relative bg-slate-50/50 backdrop-blur-sm p-4 rounded-2xl border border-slate-100 overflow-hidden hover:border-brand-300 transition-all cursor-pointer">
+                                <div class="absolute -right-4 -top-4 text-brand-100 opacity-30 group-hover:scale-125 transition-transform duration-500 pointer-events-none">
+                                    <i class="fa-solid fa-wifi text-6xl"></i>
+                                </div>
+                                <div class="relative z-10">
+                                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-brand-500 mb-3 group-hover:bg-brand-500 group-hover:text-white transition-colors">
+                                        <i class="fa-solid fa-wifi"></i>
+                                    </div>
+                                    <div class="text-slate-900 font-bold mb-1">Wi-Fi 破解体验</div>
+                                    <div class="text-slate-500 text-xs">模拟网络嗅探与数据抓取</div>
+                                </div>
+                            </div>
+                            <!-- 体验项 2 -->
+                            <div class="group relative bg-slate-50/50 backdrop-blur-sm p-4 rounded-2xl border border-slate-100 overflow-hidden hover:border-brand-300 transition-all cursor-pointer">
+                                <div class="absolute -right-4 -top-4 text-brand-100 opacity-30 group-hover:scale-125 transition-transform duration-500 pointer-events-none">
+                                    <i class="fa-solid fa-user-astronaut text-6xl"></i>
+                                </div>
+                                <div class="relative z-10">
+                                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-brand-500 mb-3 group-hover:bg-brand-500 group-hover:text-white transition-colors">
+                                        <i class="fa-solid fa-user-astronaut"></i>
+                                    </div>
+                                    <div class="text-slate-900 font-bold mb-1">AI 换脸体验</div>
+                                    <div class="text-slate-500 text-xs">识别深度伪造音视频欺诈</div>
+                                </div>
+                            </div>
+                            <!-- 体验项 3 -->
+                            <div class="group relative bg-slate-50/50 backdrop-blur-sm p-4 rounded-2xl border border-slate-100 overflow-hidden hover:border-brand-300 transition-all cursor-pointer">
+                                <div class="absolute -right-4 -top-4 text-brand-100 opacity-30 group-hover:scale-125 transition-transform duration-500 pointer-events-none">
+                                    <i class="fa-solid fa-qrcode text-6xl"></i>
+                                </div>
+                                <div class="relative z-10">
+                                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-brand-500 mb-3 group-hover:bg-brand-500 group-hover:text-white transition-colors">
+                                        <i class="fa-solid fa-qrcode"></i>
+                                    </div>
+                                    <div class="text-slate-900 font-bold mb-1">二维码隐患</div>
+                                    <div class="text-slate-500 text-xs">揭开“扫一扫即被盗”陷阱</div>
+                                </div>
+                            </div>
+                            <!-- 体验项 4 -->
+                            <div class="group relative bg-slate-50/50 backdrop-blur-sm p-4 rounded-2xl border border-slate-100 overflow-hidden hover:border-brand-300 transition-all cursor-pointer">
+                                <div class="absolute -right-4 -top-4 text-brand-100 opacity-30 group-hover:scale-125 transition-transform duration-500 pointer-events-none">
+                                    <i class="fa-brands fa-usb text-6xl"></i>
+                                </div>
+                                <div class="relative z-10">
+                                    <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-brand-500 mb-3 group-hover:bg-brand-500 group-hover:text-white transition-colors">
+                                        <i class="fa-brands fa-usb text-lg"></i>
+                                    </div>
+                                    <div class="text-slate-900 font-bold mb-1">Bad USB</div>
+                                    <div class="text-slate-500 text-xs">物理安全与环境介质防范测试</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 2: 核心主推项：全真钓鱼邮件演练 -->
+                <div class="glass-card rounded-2xl p-6 md:p-10 flex flex-col md:flex-row gap-10 items-center reveal delay-100 bg-gradient-to-br from-red-50/80 to-white border border-red-100 hover:shadow-xl transition-all relative overflow-hidden">
+                    <div class="absolute -right-20 -top-20 w-80 h-80 bg-red-400 opacity-5 rounded-full blur-3xl"></div>
+                    <div class="w-full md:w-2/3 order-2 md:order-1 relative z-10">
+                        <div class="flex items-center flex-wrap gap-3 mb-5">
+                            <h4 class="text-3xl font-extrabold text-red-600">全真钓鱼邮件演练</h4>
+                            <span class="px-3 py-1.5 rounded-md text-xs font-bold bg-red-600 text-white shadow-md flex items-center gap-1">
+                                <i class="fa-solid fa-bolt"></i> 核心高危实战项
+                            </span>
+                        </div>
+                        <p class="text-slate-700 text-[15px] mb-6 leading-relaxed font-medium">
+                            告别走过场式的理论背诵考核。针对人性弱点，用“贴近真实业务场景”的红队手段发起攻击，精准量化您的全员攻防底线，形成真实的防御潜意识肌肉记忆。
+                        </p>
+                        
+                        <div class="grid grid-cols-2 gap-4 mt-6">
+                            <!-- 核心面板 1 -->
+                            <div class="bg-white rounded-xl p-4 md:p-5 border border-red-100 shadow-[0_8px_30px_rgba(239,68,68,0.06)] relative overflow-hidden group hover:border-red-300 transition-colors">
+                                <div class="flex flex-col sm:flex-row justify-between sm:items-start mb-3 gap-2">
+                                    <div class="text-red-500 bg-red-50 w-9 h-9 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform"><i class="fa-solid fa-masks-theater text-lg"></i></div>
+                                    <span class="text-[9px] sm:text-[10px] font-extrabold text-red-500 bg-red-50 border border-red-100 px-2 py-0.5 rounded shadow-sm self-start">核心防御</span>
+                                </div>
+                                <div class="text-slate-900 font-bold text-[14px] md:text-base mb-1">高度逼真诱饵</div>
+                                <p class="text-slate-500 text-[11px] md:text-xs leading-relaxed">基于企业真实业务场景深度定制社会工程学剧本，具备极强迷惑性。</p>
+                            </div>
+                            <!-- 核心面板 2 -->
+                            <div class="bg-white rounded-xl p-4 md:p-5 border border-red-100 shadow-[0_8px_30px_rgba(239,68,68,0.06)] relative overflow-hidden group hover:border-red-300 transition-colors">
+                                <div class="flex flex-col sm:flex-row justify-between sm:items-start mb-3 gap-2">
+                                    <div class="text-orange-500 bg-orange-50 w-9 h-9 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform"><i class="fa-solid fa-chart-line text-lg"></i></div>
+                                    <span class="text-[9px] sm:text-[10px] font-extrabold text-orange-500 bg-orange-50 border border-orange-100 px-2 py-0.5 rounded shadow-sm self-start">数据闭环</span>
+                                </div>
+                                <div class="text-slate-900 font-bold text-[14px] md:text-base mb-1">行为链路追踪</div>
+                                <p class="text-slate-500 text-[11px] md:text-xs leading-relaxed">全面捕获受试者在多维交互阶段的操作行为转化数据。</p>
+                            </div>
+                            <!-- 核心面板 3 (横跨到底部) -->
+                            <div class="col-span-2 bg-gradient-to-r from-red-50/50 to-white rounded-xl p-4 border border-red-100 shadow-sm relative overflow-hidden group hover:border-red-300 transition-colors flex items-center gap-4">
+                                <div class="text-blue-500 bg-blue-50 w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 group-hover:rotate-12 transition-transform shadow-sm border border-blue-100/50"><i class="fa-solid fa-person-chalkboard text-lg"></i></div>
+                                <div>
+                                    <div class="text-slate-900 font-bold text-[13px] md:text-[14px] mb-0.5">即时拦截纠错</div>
+                                    <p class="text-slate-500 text-[11px] md:text-xs leading-relaxed">触发高危操作时实时阻断并展示通报宣教，达成阶段性的认知强化。</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-full md:w-1/3 flex justify-center order-1 md:order-2 relative z-10 px-4 md:px-0">
+                        <img src="./phishing_drill.png" alt="钓鱼邮件演练" class="w-full max-w-[320px] md:max-w-md h-auto rounded-2xl shadow-[0_20px_50px_-12px_rgba(239,68,68,0.25)] border-4 border-white object-cover transform rotate-1 transition-transform duration-500 hover:scale-[1.05] hover:-rotate-1">
+                    </div>
+                </div>
+
+                <!-- Row 3: 全场景沉浸式宣发物料 -->
+                <div class="glass-card rounded-2xl p-6 md:p-8 flex flex-col md:flex-row gap-8 items-center reveal delay-200">
+                    <div class="w-full md:w-1/3 flex justify-center">
+                        <img src="./promotional_materials.png" alt="沉浸式宣发物料" class="w-full max-w-[280px] md:max-w-xs h-auto rounded-2xl shadow-md border border-slate-100 object-cover transition-transform duration-500 hover:scale-[1.03]">
+                    </div>
+                    <div class="w-full md:w-2/3">
+                        <h4 class="text-2xl font-bold text-slate-900 mb-3">全场景沉浸式宣发与文化渗透物料</h4>
+                        <p class="text-slate-600 text-[14px] mb-6 leading-relaxed">
+                            让安全不止停留在内部门户上，而是通过实体场景及多媒体物料渗透入企业的日常办公环境，起到润物细无声的长效文化警示作用。
+                        </p>
+                        
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6">
+                            <!-- 物料 1 -->
+                            <div class="bg-gradient-to-br from-indigo-50/50 to-white border border-indigo-100/50 rounded-xl p-4 text-center group hover:-translate-y-1 hover:shadow-lg hover:shadow-indigo-500/10 transition-all cursor-pointer">
+                                <div class="w-12 h-12 mx-auto bg-white rounded-xl shadow-sm text-indigo-500 flex items-center justify-center text-xl mb-3 group-hover:scale-110 group-hover:bg-indigo-500 group-hover:text-white transition-all"><i class="fa-solid fa-image"></i></div>
+                                <div class="text-slate-800 font-bold text-[13px] mb-1">创意展架海报</div>
+                                <div class="text-slate-400 text-[10px]">高频区视觉轰炸</div>
+                            </div>
+                            <!-- 物料 2 -->
+                            <div class="bg-gradient-to-br from-teal-50/50 to-white border border-teal-100/50 rounded-xl p-4 text-center group hover:-translate-y-1 hover:shadow-lg hover:shadow-teal-500/10 transition-all cursor-pointer">
+                                <div class="w-12 h-12 mx-auto bg-white rounded-xl shadow-sm text-teal-500 flex items-center justify-center text-xl mb-3 group-hover:scale-110 group-hover:bg-teal-500 group-hover:text-white transition-all"><i class="fa-solid fa-campground"></i></div>
+                                <div class="text-slate-800 font-bold text-[13px] mb-1">宣传月布景</div>
+                                <div class="text-slate-400 text-[10px]">氛围地推防线</div>
+                            </div>
+                            <!-- 物料 3 -->
+                            <div class="bg-gradient-to-br from-amber-50/50 to-white border border-amber-100/50 rounded-xl p-4 text-center group hover:-translate-y-1 hover:shadow-lg hover:shadow-amber-500/10 transition-all cursor-pointer">
+                                <div class="w-12 h-12 mx-auto bg-white rounded-xl shadow-sm text-amber-500 flex items-center justify-center text-xl mb-3 group-hover:scale-110 group-hover:bg-amber-500 group-hover:text-white transition-all"><i class="fa-solid fa-newspaper text-[1.1rem]"></i></div>
+                                <div class="text-slate-800 font-bold text-[13px] mb-1">案情知识月刊</div>
+                                <div class="text-slate-400 text-[10px]">实战新闻警示集</div>
+                            </div>
+                            <!-- 物料 4 -->
+                            <div class="bg-gradient-to-br from-rose-50/50 to-white border border-rose-100/50 rounded-xl p-4 text-center group hover:-translate-y-1 hover:shadow-lg hover:shadow-rose-500/10 transition-all cursor-pointer">
+                                <div class="w-12 h-12 mx-auto bg-white rounded-xl shadow-sm text-rose-500 flex items-center justify-center text-xl mb-3 group-hover:scale-110 group-hover:bg-rose-500 group-hover:text-white transition-all"><i class="fa-solid fa-film"></i></div>
+                                <div class="text-slate-800 font-bold text-[13px] mb-1">碎片口袋微课</div>
+                                <div class="text-slate-400 text-[10px]">随见随点即领悟</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 向下滚动的显性过渡指引 -->
+    <div class="w-full bg-gradient-to-b from-white to-slate-900 py-16 flex flex-col items-center justify-center relative z-20 overflow-hidden">
+        <div class="absolute inset-0 bg-slate-50 [mask-image:linear-gradient(180deg,white,transparent)]"></div>
+        <div class="h-24 w-px bg-gradient-to-b from-transparent via-brand-400 to-brand-500 mb-6 relative z-10"></div>
+        <div class="text-slate-500 font-bold tracking-widest text-sm mb-6 relative z-10 uppercase">向下滚动，查看三大体系建设详情</div>
+        <a href="#detail-experience" class="w-14 h-14 rounded-full bg-white shadow-[0_0_30px_rgba(16,185,129,0.3)] border border-slate-100 flex items-center justify-center text-brand-500 hover:-translate-y-1 transition-all relative z-10 hover:bg-brand-50">
+            <i class="fa-solid fa-chevron-down animate-bounce mt-1 text-xl"></i>
+        </a>
+    </div>
+
+    <!-- ============================================== -->
+    <!--  Deep Dive 1: 攻防体验实验室 (Experience)      -->
+    <!-- ============================================== -->
+    <section id="detail-experience" class="py-24 md:py-32 relative bg-slate-900 overflow-hidden">
+        <!-- 深空科技感背景光晕 -->
+        <div class="absolute top-1/4 -left-64 w-96 h-96 bg-brand-600/20 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute bottom-0 -right-64 w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[150px] pointer-events-none"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- Title Area -->
+            <div class="text-center md:text-left mb-16 md:mb-24 md:w-2/3 reveal">
+                <span class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-slate-800 border border-slate-700 text-brand-400 text-xs font-bold uppercase tracking-widest mb-6 shadow-xl">
+                    <i class="fa-solid fa-flask-vial"></i> 独立深潜区 · 体验式攻防
+                </span>
+                <h2 class="text-4xl md:text-6xl font-black text-white mb-6 leading-tight tracking-tight">
+                    感官直击的<br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-300 via-emerald-200 to-indigo-400">场景化还原体验</span>
+                </h2>
+                <p class="text-slate-400 text-lg md:text-xl leading-relaxed max-w-2xl">
+                    摒弃传统的讲授式培训，我们将常见的信息安全风险还原到真实场景中。通过沉浸式演练，让员工直观感受到威胁的发生过程，从而内化形成本能的防范意识。
+                </p>
+            </div>
+
+            <!-- 大型垂直滚动陈列馆 -->
+            <div class="flex flex-col lg:flex-row gap-0 lg:gap-16 items-start">
+                
+                <!-- 左侧: 黏性大纲导航 -->
+                <div class="hidden lg:block lg:w-1/4 sticky top-32 text-slate-300 reveal self-start">
+                    <div class="text-xs text-slate-500 font-bold tracking-widest uppercase mb-8 border-b border-slate-800 pb-4">实验室展厅部署</div>
+                    <ul class="space-y-3 relative border-l-2 border-slate-800">
+                        <li class="relative group hover:text-white transition-colors cursor-pointer">
+                            <a href="#expo-wifi" class="block pl-6 py-2">
+                                <div class="absolute w-3 h-3 bg-brand-500 rounded-full -left-[7px] top-4 ring-4 ring-slate-900 shadow-[0_0_15px_#10b981]"></div>
+                                <h4 class="text-[15px] font-bold mb-1 group-hover:translate-x-1 transition-transform">01. 违规搭建与伪造热点</h4>
+                                <p class="text-[11px] text-slate-500">网络嗅探信息泄露测试</p>
+                            </a>
+                        </li>
+                        <li class="relative group text-slate-500 hover:text-white transition-colors cursor-pointer mt-4">
+                            <a href="#expo-ai" class="block pl-6 py-2">
+                                <div class="absolute w-1.5 h-1.5 bg-slate-700 group-hover:bg-indigo-400 rounded-full -left-[4px] top-4"></div>
+                                <h4 class="text-[15px] font-bold mb-1 group-hover:translate-x-1 transition-transform">02. 深度伪造对抗</h4>
+                                <p class="text-[11px]">AI 合成影像视觉诈骗</p>
+                            </a>
+                        </li>
+                        <li class="relative group text-slate-500 hover:text-white transition-colors cursor-pointer mt-4">
+                            <a href="#expo-hardware" class="block pl-6 py-2">
+                                <div class="absolute w-1.5 h-1.5 bg-slate-700 group-hover:bg-amber-400 rounded-full -left-[4px] top-4"></div>
+                                <h4 class="text-[15px] font-bold mb-1 group-hover:translate-x-1 transition-transform">03. 恶意物理终端</h4>
+                                <p class="text-[11px]">恶意硬件设备及来源不明扫码</p>
+                            </a>
+                        </li>
+                        <li class="relative group text-slate-500 hover:text-white transition-colors cursor-pointer mt-4">
+                            <a href="#expo-usb" class="block pl-6 py-2">
+                                <div class="absolute w-1.5 h-1.5 bg-slate-700 group-hover:bg-rose-400 rounded-full -left-[4px] top-4"></div>
+                                <h4 class="text-[15px] font-bold mb-1 group-hover:translate-x-1 transition-transform">04. Bad USB</h4>
+                                <p class="text-[11px]">办公区拾失物陷阱测试</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- 右侧: 巨型详情卡片流 -->
+                <div class="w-full lg:w-3/4 space-y-10 md:space-y-16">
+                     
+                     <!-- 展台 1: Wi-Fi -->
+                     <div id="expo-wifi" class="bg-slate-800/40 backdrop-blur-xl rounded-[2rem] border border-slate-700 p-6 md:p-12 hover:border-brand-500/50 transition-all duration-500 reveal shadow-2xl relative overflow-hidden group scroll-mt-24">
+                         <div class="absolute -right-16 -bottom-16 opacity-5 group-hover:opacity-10 transition-opacity duration-1000 pointer-events-none transform group-hover:scale-110">
+                             <i class="fa-solid fa-wifi" style="font-size: 24rem;"></i>
+                         </div>
+                         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-brand-400/20 to-brand-600/10 flex items-center justify-center text-brand-400 text-3xl mb-8 border border-brand-500/30 shadow-[inset_0_0_20px_rgba(16,185,129,0.1)]">
+                             <i class="fa-solid fa-wifi"></i>
+                         </div>
+                         <h3 class="text-3xl font-bold text-white mb-5 tracking-wide">钓鱼 Wi-Fi 防范测试</h3>
+                         <div class="prose prose-invert prose-lg max-w-none text-slate-300">
+                             <p class="leading-relaxed mb-6">
+                                 测试期间，我们会在公共区域（如大堂或餐饮区）部署隔离安全的定制热点，将其网络标识伪装成诸如 <strong>"Starbucks-Free"</strong> 或 <strong>"Company-Guest-Fast"</strong> 等常见的无密连接节点。
+                             </p>
+                             <p class="leading-relaxed mb-8">
+                                 若员工疏忽连入并进行未加密的浏览操作，旁侧监控屏将立刻<strong>脱敏滚动展示其实时抓取的数据轨迹、跳转的网址乃至表单记录</strong>。以直观强烈的视觉冲击，纠正员工在商旅与非可信环境中随意连接免费 Wi-Fi 的高危违规行为。
+                             </p>
+                         </div>
+                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-slate-700/60 pt-8 mt-6">
+                             <div class="bg-slate-900/50 p-4 rounded-xl">
+                                 <div class="flex items-center gap-2 mb-2">
+                                     <i class="fa-solid fa-shield-halved text-brand-400"></i>
+                                     <span class="text-white font-medium text-sm">核心教育落点</span>
+                                 </div>
+                                 <div class="text-slate-400 text-sm leading-relaxed">让员工养成外出强制连接办公 VPN 的习惯。</div>
+                             </div>
+                             <div class="bg-slate-900/50 p-4 rounded-xl">
+                                 <div class="flex items-center gap-2 mb-2">
+                                     <i class="fa-solid fa-briefcase text-brand-400"></i>
+                                     <span class="text-white font-medium text-sm">业务防线收益</span>
+                                 </div>
+                                 <div class="text-slate-400 text-sm leading-relaxed">大幅减少驻外或商旅员工导致的公司账号外泄事件。</div>
+                             </div>
+                         </div>
+                     </div>
+                     
+                     <!-- 展台 2: AI 换脸 -->
+                     <div id="expo-ai" class="bg-slate-800/40 backdrop-blur-xl rounded-[2rem] border border-slate-700 p-6 md:p-12 hover:border-indigo-500/50 transition-all duration-500 reveal shadow-2xl relative overflow-hidden group scroll-mt-24">
+                         <div class="absolute -right-16 -bottom-16 opacity-5 group-hover:opacity-10 transition-opacity duration-1000 pointer-events-none transform group-hover:scale-110">
+                             <i class="fa-solid fa-user-astronaut" style="font-size: 24rem;"></i>
+                         </div>
+                         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-400/20 to-indigo-600/10 flex items-center justify-center text-indigo-400 text-3xl mb-8 border border-indigo-500/30 shadow-[inset_0_0_20px_rgba(99,102,241,0.1)]">
+                             <i class="fa-solid fa-user-astronaut"></i>
+                         </div>
+                         <h3 class="text-3xl font-bold text-white mb-5 tracking-wide">AI 视频换脸防范 (Deepfake)</h3>
+                         <div class="prose prose-invert prose-lg max-w-none text-slate-300">
+                             <p class="leading-relaxed mb-6">
+                                 针对日益频发的企业高管影像克隆和财务欺骗类钓鱼攻击，我们提供互动式的破解解构体验。
+                             </p>
+                             <p class="leading-relaxed mb-8">
+                                 员工可站立于摄像头前，在监测屏上<strong>实时见证其面貌与声线在数秒内被 AI 大模型快速提取，并无缝合成转换为指定的管理层特征，甚至顺畅输出关于临时大额资金划拨的虚拟指令视频</strong>。借此真实演练从根源打破其“耳听为实、眼见为凭”的认知盲区。
+                             </p>
+                         </div>
+                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 border-t border-slate-700/60 pt-8 mt-6">
+                             <div class="bg-slate-900/50 p-4 rounded-xl">
+                                 <div class="flex items-center gap-2 mb-2">
+                                     <i class="fa-solid fa-eye-low-vision text-indigo-400"></i>
+                                     <span class="text-white font-medium text-sm">核心教育落点</span>
+                                 </div>
+                                 <div class="text-slate-400 text-sm leading-relaxed">教会员工在视频会议中寻找光影异常、不自然眨眼等破绽。</div>
+                             </div>
+                             <div class="bg-slate-900/50 p-4 rounded-xl">
+                                 <div class="flex items-center gap-2 mb-2">
+                                     <i class="fa-solid fa-comments-dollar text-indigo-400"></i>
+                                     <span class="text-white font-medium text-sm">业务防线收益</span>
+                                 </div>
+                                 <div class="text-slate-400 text-sm leading-relaxed">在财务等敏感部门建立更严谨的“遇账单必电话二次核实”的铁律。</div>
+                             </div>
+                         </div>
+                     </div>
+
+                     <!-- 展台 3: 二维码及不明终端硬件隐患 -->
+                     <div id="expo-hardware" class="bg-slate-800/40 backdrop-blur-xl rounded-[2rem] border border-slate-700 p-6 md:p-12 hover:border-amber-500/50 transition-all duration-500 reveal shadow-2xl relative overflow-hidden group scroll-mt-24">
+                         <div class="absolute -right-16 -bottom-16 opacity-5 group-hover:opacity-10 transition-opacity duration-1000 pointer-events-none transform group-hover:scale-110">
+                             <i class="fa-solid fa-qrcode" style="font-size: 24rem;"></i>
+                         </div>
+                         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400/20 to-amber-600/10 flex items-center justify-center text-amber-400 text-3xl mb-8 border border-amber-500/30 shadow-[inset_0_0_20px_rgba(251,191,36,0.1)]">
+                             <i class="fa-solid fa-qrcode"></i>
+                         </div>
+                         <h3 class="text-3xl font-bold text-white mb-5 tracking-wide">恶意二维码与硬件插口隐患</h3>
+                         <div class="prose prose-invert prose-lg max-w-none text-slate-300">
+                             <p class="leading-relaxed mb-6">
+                                 对街头张贴的未知信息码进行随意扫描，抑或是随手借用改造过的非原装充电配件，是最容易被忽视的安全缺口。
+                             </p>
+                             <p class="leading-relaxed mb-8">
+                                 演练中将现场展示“伪造挪车单违规码”的真实信息窃取全流程；并物理拆检内部嵌装了<strong>指令脚本控制器的恶性改装硬件线缆</strong>。揭示在其接驳于手机插口的瞬间，是如何越权仿冒外部操控器设备并获取终端系统深度的隐私数据，打破设备随插即用带来的盲目安全感。
+                             </p>
+                         </div>
+                         <div class="grid grid-cols-1 gap-6 border-t border-slate-700/60 pt-8 mt-6">
+                             <div class="bg-slate-900/50 p-4 rounded-xl flex items-start gap-4">
+                                 <div class="mt-1 pt-0.5"><i class="fa-solid fa-fingerprint text-amber-500 text-xl"></i></div>
+                                 <div>
+                                    <div class="text-white font-medium text-sm mb-1.5">核心教育落点</div>
+                                    <div class="text-slate-400 text-sm leading-relaxed">彻底破除对随手借来的充电线、不明二维码的侥幸心理，明白“乱插U盘或线缆”就等于让陌生人坐在你的电脑前。</div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+
+                     <!-- 展台 4: 诱饵 U盘掉落 -->
+                     <div id="expo-usb" class="bg-slate-800/40 backdrop-blur-xl rounded-[2rem] border border-slate-700 p-6 md:p-12 hover:border-rose-500/50 transition-all duration-500 reveal shadow-2xl relative overflow-hidden group scroll-mt-24">
+                         <div class="absolute -right-16 -bottom-16 opacity-5 group-hover:opacity-10 transition-opacity duration-1000 pointer-events-none transform group-hover:scale-110">
+                             <i class="fa-brands fa-usb" style="font-size: 24rem;"></i>
+                         </div>
+                         <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-rose-400/20 to-rose-600/10 flex items-center justify-center text-rose-400 text-3xl mb-8 border border-rose-500/30 shadow-[inset_0_0_20px_rgba(244,63,94,0.1)]">
+                             <i class="fa-brands fa-usb"></i>
+                         </div>
+                         <h3 class="text-3xl font-bold text-white mb-5 tracking-wide">办公区钓鱼 U 盘应对 (Bad USB)</h3>
+                         <div class="prose prose-invert prose-lg max-w-none text-slate-300">
+                             <p class="leading-relaxed mb-6">
+                                 信息安全对抗本质兼顾心理博弈。实施服务周期内，项目组将制备特殊配置的合规记录 U 盘，外观标记有<strong>《各业务线结构优化预演初稿》、《薪酬带宽阶梯核定表》</strong>等极具针对性和诱惑力的便签。
+                             </p>
+                             <p class="leading-relaxed mb-8">
+                                 这些测试介质将被定向布置于咖啡吧台、打印机外廊或人员高流转通道中。当缺乏警惕的受试者拾获并将其插上内网工作站时，探针将触发脱敏的拦截告示，以切身的教训将防范外部移动介质的准则烙印于心。
+                             </p>
+                         </div>
+                     </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!--  Deep Dive 2: 钓鱼邮件演练深度控制台           -->
+    <!-- ============================================== -->
+    <section id="detail-phishing" class="py-24 md:py-32 relative bg-slate-50 overflow-hidden border-t border-slate-200">
+        <!-- 装饰性数据网络背景 -->
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdib3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxwYXRoIGQ9Ik0zNiAzNHYtNGgtMnY0aC00djJoNGg0djJIMzZ2LTR6bS00IDh2LTRoLTJ2NGgtNHYyaDRoNHYySDMydi00em0tNCA4di00aC0ydjRoLTR2Mmg0aDR2MkgyOHYtNHptLTQgOHYtNGgtMnY0aC00djJoNGg0djJIMjR2LTR6TTM2IDEwaDR2MmgtNHYyaC0ydjRWMTRWMTBIMzZ6bS00IDRoNHYyaC00djJoLTJ2NFYxOFYxNEgzMnptLTQgNGg0djJoLTR2MmgtMnY0VjIyVjE4SDI4em0tNCA0aDR2MmgtNHYyaC0ydjRWMjZWMjJIMjR6bS00LTQwSDJWMkgyMHYyem0yMCA0MFY0NEg2MHYydjJoLTJWNDBINFYySDJWNDBoMjh2MTB6IiBmaWxsPSIjRTM1IEUyISIgb3BhY2l0eT0iLjMiPjwvcGF0aD48L2c+PC9zdmc+')] opacity-40"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- 头部 -->
+            <div class="text-center max-w-3xl mx-auto mb-20 reveal">
+                <span class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-red-50 border border-red-100 text-red-600 text-xs font-bold uppercase tracking-widest mb-6 shadow-sm">
+                    <i class="fa-solid fa-crosshairs"></i> 独立深潜区 · 钓鱼实战中枢
+                </span>
+                <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 shrink-0 text-balance">
+                    超越基础测试<br>
+                    <span class="text-red-500">全面评估企业的纵深防御体系</span>
+                </h2>
+                <p class="text-slate-600 text-lg leading-relaxed">
+                    摒弃同质化的模板测试，我们提供深度定制的演练剧本，并辅以全链路的环节数据追踪。结合“即时干预阻断”机制，将阶段考核转化为实打实的意识提升。
+                </p>
+            </div>
+
+            <!-- 大型UI容器: 类似复杂控制台界面 -->
+            <div class="bg-white rounded-[2.5rem] border border-slate-200 shadow-[0_20px_80px_-15px_rgba(239,68,68,0.1)] p-6 md:p-12 lg:p-16 reveal relative overflow-hidden">
+                <div class="absolute top-0 inset-x-0 h-4 bg-gradient-to-r from-red-500 via-orange-500 to-red-600"></div>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+                    <!-- 左侧：文字详情区 -->
+                    <div class="col-span-1 lg:col-span-6 space-y-12">
+                        
+                        <!-- 剖析 1 -->
+                        <div class="group">
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-12 h-12 bg-red-50 text-red-600 rounded-xl flex items-center justify-center text-xl font-black border border-red-100 group-hover:bg-red-600 group-hover:text-white transition-colors duration-300 shadow-sm">01</div>
+                                <h3 class="text-2xl font-bold text-slate-900">高度定制的仿真演练剧本</h3>
+                            </div>
+                            <p class="text-slate-600 leading-relaxed pl-16">
+                                结合企业当前的业务模式、供应商关系或社会热点，量身定制诸如<strong>《薪酬调整确认单》、《系统高危违规预警》</strong>等极具迷惑性的测试邮件。精准复刻内部格式，有效检验员工在真实高压场景下的防范警惕性。
+                            </p>
+                        </div>
+                        
+                        <!-- 剖析 2 -->
+                        <div class="group">
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-12 h-12 bg-orange-50 text-orange-500 rounded-xl flex items-center justify-center text-xl font-black border border-orange-100 group-hover:bg-orange-500 group-hover:text-white transition-colors duration-300 shadow-sm">02</div>
+                                <h3 class="text-2xl font-bold text-slate-900">链路漏斗式数据分析</h3>
+                            </div>
+                            <p class="text-slate-600 leading-relaxed pl-16">
+                                我们不仅统计最终的命中率，而是对 <strong class="text-slate-800">邮件触达 → 点击链接/附件打开 → 核心密码填入</strong> 等各个环节进行多维度的漏斗记录。通过精细化的过程数据，帮助企业高层精准定位哪些部门和职能环节存在致命的意识薄弱点。
+                            </p>
+                        </div>
+                        
+                        <!-- 剖析 3 -->
+                        <div class="group">
+                            <div class="flex items-center gap-4 mb-4">
+                                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl font-black border border-blue-100 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300 shadow-sm">03</div>
+                                <h3 class="text-2xl font-bold text-slate-900">及时干预：当场触发的闭环培训</h3>
+                            </div>
+                            <p class="text-slate-600 leading-relaxed pl-16">
+                                在员工发生违规操作的瞬间，系统不仅会记录行为，还会<strong>立即阻断危险链路，强制弹出并要求观看警示教育页面</strong>。在员工最具认知冲击的时刻，进行即时的安全知识巩固与拆解复盘，形成记忆闭环。
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <!-- 右侧：复合UI面板视觉插图 (纯用div堆砌的SaaS抽象感) -->
+                    <div class="col-span-1 lg:col-span-6 relative perspective-1000 hidden lg:block">
+                        <div class="w-full aspect-[4/3] bg-slate-900 rounded-2xl shadow-2xl border-4 border-slate-800 relative z-10 flex flex-col overflow-hidden transform lg:-rotate-y-12 lg:rotate-x-12 hover:rotate-0 transition-transform duration-700 ease-in-out">
+                            <!-- 模拟浏览器顶部 -->
+                            <div class="h-8 bg-slate-800 border-b border-slate-700 flex items-center px-4 gap-2 shrink-0">
+                                <div class="w-2.5 h-2.5 rounded-full bg-red-400"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-amber-400"></div>
+                                <div class="w-2.5 h-2.5 rounded-full bg-green-400"></div>
+                                <div class="mx-auto bg-slate-900 px-12 py-0.5 rounded text-[10px] text-slate-500 font-mono">dashboard.security-control.sys</div>
+                            </div>
+                            
+                            <!-- 模拟大屏内容 -->
+                            <div class="flex-1 p-6 flex flex-col gap-5 overflow-hidden relative">
+                                <div class="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent pointer-events-none"></div>
+                                
+                                <div class="flex justify-between items-end border-b border-slate-800 pb-2">
+                                    <h4 class="text-slate-300 text-sm font-bold tracking-widest"><i class="fa-solid fa-satellite-dish text-red-500 mr-2"></i>漏洞渗透实时大盘</h4>
+                                    <div class="text-[10px] bg-red-500/20 text-red-400 px-2 py-1 rounded">LIVE MONITORING ACT.</div>
+                                </div>
+                                
+                                <!-- 模拟图表 -->
+                                <div class="flex items-end gap-3 h-24 mt-2">
+                                    <div class="w-1/6 bg-slate-800 rounded-t-md h-[90%] relative"><div class="absolute top-[-20px] w-full text-center text-xs text-slate-500">送达</div></div>
+                                    <div class="w-1/6 bg-slate-700 rounded-t-md h-[75%] relative"><div class="absolute top-[-20px] w-full text-center text-xs text-slate-500">拆件</div></div>
+                                    <div class="w-1/6 bg-orange-900/50 rounded-t-md h-[45%] relative border-t-2 border-orange-500"><div class="absolute top-[-20px] w-full text-center text-xs text-orange-400">点击</div></div>
+                                    <div class="w-1/6 bg-red-900/60 rounded-t-md h-[18%] relative border-t-2 border-red-500"><div class="absolute top-[-20px] w-full text-center text-xs text-red-400 font-bold">泄密</div></div>
+                                    <div class="w-1/6 bg-red-600 rounded-t-md h-[5%] shadow-[0_0_15px_rgba(220,38,38,0.8)] relative border-t-2 border-white"><div class="absolute top-[-20px] w-full text-center text-xs text-red-500 font-black animate-pulse">沦陷</div></div>
+                                </div>
+                                
+                                <!-- 模拟告警流 -->
+                                <div class="space-y-3 mt-auto">
+                                    <div class="bg-slate-800/80 p-3 rounded flex items-center justify-between border-l-4 border-slate-600">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-6 h-6 rounded-full bg-slate-700 flex items-center justify-center text-[10px] text-slate-300"><i class="fa-regular fa-envelope"></i></div>
+                                            <div class="text-xs text-slate-400">王** (营销部) 获取财务欺诈邮件</div>
+                                        </div>
+                                        <div class="text-[10px] text-slate-500 flex gap-2"><span>10:32:14</span></div>
+                                    </div>
+                                    <div class="bg-red-900/20 p-3 rounded flex items-center justify-between border-l-4 border-red-500 relative overflow-hidden group">
+                                        <div class="absolute inset-0 bg-gradient-to-r from-red-500/20 to-transparent w-full"></div>
+                                        <div class="flex items-center gap-3 relative z-10">
+                                            <div class="w-6 h-6 rounded-full bg-red-500/20 text-red-500 flex items-center justify-center text-[10px]"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                                            <div class="text-xs text-white font-medium">李** (研发一组) 提交 OA 密码脱库！</div>
+                                        </div>
+                                        <div class="text-[10px] bg-red-500 text-white px-2 py-0.5 rounded font-bold relative z-10 animate-pulse">拦截弹窗已发配</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 后景重叠卡片：营造立体层次感 -->
+                        <div class="absolute -right-8 -bottom-8 w-64 h-48 bg-white border border-slate-200 rounded-xl shadow-2xl p-5 z-20 flex flex-col transform hover:translate-x-2 transition-transform duration-300">
+                            <div class="text-[11px] font-bold text-blue-600 bg-blue-50 w-max px-2 py-1 rounded inline-flex items-center gap-1 mb-3 shadow-sm border border-blue-100">
+                                <i class="fa-solid fa-graduation-cap"></i> 微课干预模块
+                            </div>
+                            <div class="w-full flex-1 bg-slate-100 rounded-lg flex items-center justify-center overflow-hidden relative shadow-inner">
+                                 <i class="fa-brands fa-youtube text-4xl text-slate-300"></i>
+                                 <div class="absolute bottom-2 left-2 right-2 bg-slate-900/80 backdrop-blur rounded p-2 text-[10px] text-white font-medium">
+                                     <i class="fa-solid fa-circle-play text-red-400 mr-1"></i> 您刚才被网络钓鱼拦截...
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================== -->
+    <!--  Deep Dive 3: 沉浸式宣发与文化渗透             -->
+    <!-- ============================================== -->
+    <section id="detail-materials" class="py-24 md:py-32 relative bg-[#f8fafc] overflow-hidden">
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <!-- 头部 -->
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <span class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-brand-50 border border-brand-100 text-brand-600 text-xs font-bold uppercase tracking-widest mb-6 shadow-sm">
+                    <i class="fa-solid fa-paintbrush"></i> 独立深潜区 · 全物理环境接管
+                </span>
+                <h2 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 shrink-0">
+                    潜移默化的<br>
+                    <span class="text-brand-500">安全氛围与环境营造</span>
+                </h2>
+                <p class="text-slate-600 text-lg leading-relaxed">
+                    安全合规不应仅仅停留在规章制度中，更需要融入员工的工作环境。我们提供美观、专业且高频出现的视觉物料与宣发阵地，让安全意识真正植入企业文化基因。
+                </p>
+            </div>
+
+            <!-- Bento Box Grid 瀑布流/马赛克排版组合 -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 auto-rows-min mt-16 reveal">
+                
+                <!-- 大块占据 (横跨两列+垂直跨) - 大型布景视觉 -->
+                <div class="lg:col-span-2 row-span-2 group bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-8 md:p-10 border border-slate-700 shadow-2xl overflow-hidden relative">
+                    <div class="absolute right-0 top-0 w-2/3 h-full opacity-20 pointer-events-none mix-blend-overlay" style="background-image: repeating-linear-gradient(45deg, #ffffff 25%, transparent 25%, transparent 75%, #ffffff 75%, #ffffff), repeating-linear-gradient(45deg, #ffffff 25%, transparent 25%, transparent 75%, #ffffff 75%, #ffffff); background-position: 0 0, 20px 20px; background-size: 40px 40px;"></div>
+                    <div class="relative z-10 h-full flex flex-col justify-between">
+                        <div class="w-14 h-14 rounded-2xl bg-brand-500 text-white flex items-center justify-center text-2xl mb-8 shadow-lg shadow-brand-500/40 group-hover:scale-110 transition-transform"><i class="fa-solid fa-tent"></i></div>
+                        <div>
+                            <h3 class="text-3xl lg:text-4xl font-extrabold text-white mb-4 leading-tight">提供一站式方案，打造 <br> <span class="text-brand-400">安全主题文化周</span></h3>
+                            <p class="text-slate-300 text-lg max-w-lg leading-relaxed font-light">
+                                协助企业策划具有传播周期的安全文化活动。我们提供从迎宾主视觉横幅到场地布置的全套物料支持，包含诸如<strong>游园集章摊位、安全推理卡牌台、主题合影背景墙</strong>等互动组件，将单调的安全宣导转化为全体员工积极参与的沉浸式企业文化大赏。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右侧上方块：知识月刊 -->
+                <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+                    <div class="absolute right-[-20px] top-[-20px] w-24 h-24 bg-amber-50 rounded-full blur-xl group-hover:bg-amber-100 transition-colors"></div>
+                    <div class="text-amber-500 mb-6 bg-white shrink-0 relative z-10 w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-sm border border-slate-100"><i class="fa-solid fa-newspaper"></i></div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3 relative z-10">聚焦实效的安全事件简报</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed relative z-10">
+                        定期梳理近期市场内突发的重大网安事件、合规审查及勒索案例，制作图文并茂的警示电子小报或内刊简报，供企业通过群组或高管邮箱定时分发。持续强化防线紧迫感。
+                    </p>
+                </div>
+
+                <!-- 右侧下方块：创意海报 -->
+                <div class="bg-white rounded-3xl p-8 border border-slate-200 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+                    <div class="absolute right-[-20px] top-[-20px] w-24 h-24 bg-indigo-50 rounded-full blur-xl group-hover:bg-indigo-100 transition-colors"></div>
+                    <div class="text-indigo-500 mb-6 bg-white shrink-0 relative z-10 w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-sm border border-slate-100"><i class="fa-solid fa-image"></i></div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-3 relative z-10">多维度覆盖的视觉海报矩阵</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed relative z-10">
+                        抛离传统的空泛标语，我们采用贴近特定业务场景的插画级痛点海报。围绕设备锁屏、密码保管、防范尾随等常见疏漏，广泛张贴于打印机或茶水吧等高频区域，实施视觉强化。
+                    </p>
+                </div>
+
+                <!-- 左下方块 (两列宽) -> 碎片微课与随身册体 -->
+                <div class="lg:col-span-3 bg-white rounded-3xl p-8 md:p-10 border border-slate-200 shadow-lg flex flex-col md:flex-row gap-8 items-center group overflow-hidden">
+                    <div class="w-20 h-20 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center text-4xl text-rose-500 shrink-0 shadow-inner group-hover:scale-110 transition-transform"><i class="fa-solid fa-film"></i></div>
+                    <div class="flex-1">
+                        <h3 class="text-2xl md:text-3xl font-bold text-slate-900 mb-3">碎片化学习：便携指南与微课矩阵</h3>
+                        <p class="text-slate-600 leading-relaxed text-balance">
+                            定制可与门禁工牌同持折叠的<strong>《紧急安全三底线挂牌》</strong>；此外，建立基于线上门户下发的安全微影视流，包含时长 1-2 分钟的动画短剧或情景短片。充分利用员工的碎片化休息节点，让信息安全教育轻便化、不间断落地。
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Agent Section -->
+    <section id="ai-agent" class="py-24 relative bg-white border-t border-slate-200 overflow-hidden">
+        <div class="absolute right-0 top-0 w-1/3 h-full bg-gradient-to-l from-brand-50/50 to-transparent pointer-events-none"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            
+            <div class="text-center mb-16 reveal">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50 text-brand-600 border border-brand-200 text-xs font-bold tracking-widest mb-4">
+                    <i class="fa-solid fa-microchip"></i> AI 驱动效能
+                </div>
+                <h2 class="text-3xl md:text-5xl font-bold text-slate-900 mb-6">
+                    实现从<span class="text-brand-600">“阶段培训”</span>到<span class="text-blue-600">“长效运营”</span>的跨越
+                </h2>
+                <p class="text-slate-600 max-w-3xl mx-auto text-lg leading-relaxed">基于先进 AI 技术架构的安全意识运营体系，解决团队精力有限、实战内容设计验证滞后的核心痛点。</p>
+            </div>
+
+            <!-- Workflow visualization (上升折线节点流程图图表) -->
+            <div class="relative max-w-6xl mx-auto reveal mt-12 w-full">
+                <!-- 顶部上升折线 (仅在大屏上展示) -->
+                <div class="hidden md:block absolute top-[10px] left-0 w-full h-[120px] z-0 pointer-events-none">
+                    <svg class="w-full h-full overflow-visible" viewBox="0 0 1000 120" preserveAspectRatio="none">
+                        <!-- 注意折线图轨迹中心分别落在 X 的 125(12.5%), 375(37.5%), 625(62.5%), 875(87.5%)出，完美对应四等分的正中心 -->
+                        <path d="M 125 100 L 375 70 L 625 40 L 875 10" fill="none" stroke="#e2e8f0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M 125 100 L 375 70 L 625 40 L 875 10" fill="none" stroke="url(#trendGradient)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="14 10" class="opacity-80 animate-[pulse_3s_linear_infinite]" />
+                        
+                        <defs>
+                            <linearGradient id="trendGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#10b981" />
+                                <stop offset="33%" stop-color="#3b82f6" />
+                                <stop offset="66%" stop-color="#a855f7" />
+                                <stop offset="100%" stop-color="#10b981" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+
+                <!-- 移除导致X轴坐标中心偏离的 gap ，强制等比居中 -->
+                <div class="grid grid-cols-1 md:grid-cols-4 relative z-10 w-full">
+                    <!-- Step 1 (起步：最下方) -->
+                    <div class="px-3 h-full mb-6 md:mb-0">
+                        <div class="group flex flex-col items-center h-full">
+                            <!-- 顶格占位区域 h-[140px] 提供垂直落差排布空间 -->
+                            <div class="h-[10px] md:h-[140px] w-full flex flex-col items-center relative">
+                                <!-- 绝对定位：外容器 top=10 + 线高100 = 110 中心。通过双居中修正自身宽高导致的偏移 -->
+                                <div class="hidden md:flex absolute top-[110px] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[22px] h-[22px] rounded-full bg-white border-[4.5px] border-brand-500 z-10 shadow-md transition-transform duration-300 group-hover:scale-[1.5]"></div>
+                                <!-- 垂直虚线：从 121 (节点底部) 绘至 140 (顶格区域底端), 长度19px -->
+                                <div class="hidden md:block absolute top-[121px] w-px h-[19px] border-l-2 border-dashed border-slate-200 z-0 group-hover:border-brand-300 transition-colors"></div>
+                            </div>
+                            <!-- 卡片本体 -->
+                            <div class="bg-white border border-slate-200 p-6 rounded-2xl flex flex-col items-center text-center shadow-sm w-full flex-grow group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_-10px_rgba(16,185,129,0.12)] group-hover:border-brand-300 transition-all duration-300">
+                                <div class="w-16 h-16 rounded-2xl bg-brand-50 border border-brand-100 flex items-center justify-center text-2xl text-brand-600 mb-5 shadow-sm group-hover:bg-brand-500 group-hover:text-white transition-colors duration-300">
+                                    <i class="fa-solid fa-satellite-dish"></i>
+                                </div>
+                                <h4 class="text-slate-900 font-bold mb-3 tracking-wide"><span class="text-brand-300 opacity-60 mr-1 font-black">01.</span>敏捷威胁定位</h4>
+                                <p class="text-slate-500 text-[13px] leading-relaxed flex-grow">追踪热点网络风险事件，执行定向群体弱点侦测与场景定位。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 (上升阶段 1) -->
+                    <div class="px-3 h-full mb-6 md:mb-0">
+                        <div class="group flex flex-col items-center h-full">
+                            <div class="h-[10px] md:h-[140px] w-full flex flex-col items-center relative">
+                                <!-- top: 10 + 70 = 80 -->
+                                <div class="hidden md:flex absolute top-[80px] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[22px] h-[22px] rounded-full bg-white border-[4.5px] border-blue-500 z-10 shadow-md transition-transform duration-300 group-hover:scale-[1.5]"></div>
+                                <!-- 垂直虚线: 从 91 绘至 140, 长度 49px -->
+                                <div class="hidden md:block absolute top-[91px] w-px h-[49px] border-l-2 border-dashed border-slate-200 z-0 group-hover:border-blue-300 transition-colors"></div>
+                            </div>
+                            <div class="bg-white border border-slate-200 p-6 rounded-2xl flex flex-col items-center text-center shadow-sm w-full flex-grow group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_-10px_rgba(59,130,246,0.12)] group-hover:border-blue-300 transition-all duration-300">
+                                <div class="w-16 h-16 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-2xl text-blue-600 mb-5 shadow-sm group-hover:bg-blue-500 group-hover:text-white transition-colors duration-300">
+                                    <i class="fa-solid fa-pen-nib"></i>
+                                </div>
+                                <h4 class="text-slate-900 font-bold mb-3 tracking-wide"><span class="text-blue-300 opacity-60 mr-1 font-black">02.</span>模块化内容生成</h4>
+                                <p class="text-slate-500 text-[13px] leading-relaxed flex-grow">适配高并发业务需求，快速生成标准化防护视频、多语言提示卡与素材。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 (上升阶段 2) -->
+                    <div class="px-3 h-full mb-6 md:mb-0">
+                        <div class="group flex flex-col items-center h-full">
+                            <div class="h-[10px] md:h-[140px] w-full flex flex-col items-center relative">
+                                <!-- top: 10 + 40 = 50 -->
+                                <div class="hidden md:flex absolute top-[50px] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[22px] h-[22px] rounded-full bg-white border-[4.5px] border-purple-500 z-10 shadow-md transition-transform duration-300 group-hover:scale-[1.5]"></div>
+                                <!-- 垂直虚线: 从 61 绘至 140, 长度 79px -->
+                                <div class="hidden md:block absolute top-[61px] w-px h-[79px] border-l-2 border-dashed border-slate-200 z-0 group-hover:border-purple-300 transition-colors"></div>
+                            </div>
+                            <div class="bg-white border border-slate-200 p-6 rounded-2xl flex flex-col items-center text-center shadow-sm w-full flex-grow group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_-10px_rgba(168,85,247,0.12)] group-hover:border-purple-300 transition-all duration-300">
+                                <div class="w-16 h-16 rounded-2xl bg-purple-50 border border-purple-100 flex items-center justify-center text-2xl text-purple-600 mb-5 shadow-sm group-hover:bg-purple-500 group-hover:text-white transition-colors duration-300">
+                                    <i class="fa-solid fa-paper-plane"></i>
+                                </div>
+                                <h4 class="text-slate-900 font-bold mb-3 tracking-wide"><span class="text-purple-300 opacity-60 mr-1 font-black">03.</span>自动化沙箱演练</h4>
+                                <p class="text-slate-500 text-[13px] leading-relaxed flex-grow">通过高度仿真和零风险的推送隔离环境，持续对职员进行钓鱼与诈骗免疫测试。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 4 (顶峰：最上方) -->
+                    <div class="px-3 h-full mb-6 md:mb-0">
+                        <div class="group flex flex-col items-center h-full">
+                            <div class="h-[10px] md:h-[140px] w-full flex flex-col items-center relative">
+                                <!-- top: 10 + 10 = 20 -->
+                                <div class="hidden md:flex absolute top-[20px] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[22px] h-[22px] rounded-full bg-white border-[4.5px] border-brand-500 z-10 shadow-md transition-transform duration-300 group-hover:scale-[1.5]"></div>
+                                <!-- 垂直虚线: 从 31 绘至 140, 长度 109px -->
+                                <div class="hidden md:block absolute top-[31px] w-px h-[109px] border-l-2 border-dashed border-slate-200 z-0 group-hover:border-brand-300 transition-colors"></div>
+                            </div>
+                            <div class="bg-white border border-slate-200 p-6 rounded-2xl flex flex-col items-center text-center shadow-sm w-full flex-grow group-hover:-translate-y-2 group-hover:shadow-[0_20px_40px_-10px_rgba(16,185,129,0.12)] group-hover:border-brand-400 transition-all duration-300">
+                                <div class="w-16 h-16 rounded-2xl bg-brand-50 border border-brand-100 flex items-center justify-center text-2xl text-brand-600 mb-5 shadow-sm group-hover:bg-brand-500 group-hover:text-white transition-colors duration-300">
+                                    <i class="fa-solid fa-chart-pie"></i>
+                                </div>
+                                <h4 class="text-slate-900 font-bold mb-3 tracking-wide"><span class="text-brand-300 opacity-60 mr-1 font-black">04.</span>全景数据评估</h4>
+                                <p class="text-slate-500 text-[13px] leading-relaxed flex-grow">整合测试指标与回收数据，产出量化风险基线的交互式全景安全态势大屏。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Value Props -->
+            <div class="mt-20 border border-slate-200 rounded-2xl bg-slate-50 p-8 md:p-12 mb-10 max-w-4xl mx-auto reveal delay-200">
+                <h4 class="text-lg font-bold text-slate-900 text-center mb-8">AI 赋能企业获得的核心增量价值：</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center flex-shrink-0 shadow-sm"><i class="fa-solid fa-check text-sm"></i></div>
+                        <span class="text-slate-700 font-medium">建立全天候自动运行的体系化防护机制</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center flex-shrink-0 shadow-sm"><i class="fa-solid fa-check text-sm"></i></div>
+                        <span class="text-slate-700 font-medium">释放安全团队大量重复性的内容制图工作压力</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center flex-shrink-0 shadow-sm"><i class="fa-solid fa-check text-sm"></i></div>
+                        <span class="text-slate-700 font-medium">面对新型恶意威胁实现方案的“分钟级”快速止损</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center flex-shrink-0 shadow-sm"><i class="fa-solid fa-check text-sm"></i></div>
+                        <span class="text-slate-700 font-medium">为投资人的财报呈现可视的培训和安全回报率指标</span>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- Cases Section -->
+    <section id="cases" class="py-24 relative bg-slate-50 overflow-hidden border-t border-slate-200">
+        <!-- 装饰性背景图形 -->
+        <div class="absolute top-0 right-0 -mt-20 -mr-20 w-[40rem] h-[40rem] bg-brand-50 rounded-full blur-[100px] opacity-60 pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 -mb-20 -ml-20 w-[40rem] h-[40rem] bg-blue-50 rounded-full blur-[100px] opacity-60 pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-20 reveal">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white text-slate-700 border border-slate-200 text-xs font-bold tracking-widest mb-4 shadow-sm">
+                    <i class="fa-solid fa-star text-yellow-400"></i> 成功实践
+                </div>
+                <h3 class="text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">护航各行业领军企业</h3>
+                <p class="text-slate-600 text-lg max-w-2xl mx-auto leading-relaxed">提供深度的行业定制化安全策略，覆盖核心领域与关键赛道，从根源阻断人为社会工程学隐患。</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Case 1: 医药 (蓝色系) -->
+                <div class="group relative bg-white/70 backdrop-blur-xl rounded-3xl p-8 border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_-10px_rgba(59,130,246,0.15)] hover:border-blue-200 transition-all duration-500 hover:-translate-y-2 overflow-hidden reveal">
+                    <div class="absolute -right-24 -top-24 w-64 h-64 bg-blue-400/10 rounded-full blur-3xl group-hover:bg-blue-400/20 transition-colors duration-700"></div>
+                    
+                    <div class="flex items-start justify-between relative z-10 mb-8">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 p-[1.5px] shadow-lg shadow-blue-500/20 group-hover:shadow-blue-500/40 transition-shadow">
+                            <div class="w-full h-full rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-white text-xl">
+                                 <i class="fa-solid fa-dna"></i>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1.5 rounded-full bg-slate-100 text-slate-500 text-xs font-bold tracking-wider group-hover:bg-blue-50 group-hover:text-blue-700 border border-transparent group-hover:border-blue-100 transition-colors">生物医药</span>
+                    </div>
+                    
+                    <div class="relative z-10">
+                        <h4 class="text-xl font-bold text-slate-900 mb-5 tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-600 group-hover:to-indigo-600 transition-all duration-300">知名体外诊断和实验室仪器公司</h4>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3">
+                                <div class="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px] text-slate-400 group-hover:bg-blue-500 group-hover:text-white transition-colors duration-300"><i class="fa-solid fa-check"></i></div>
+                                <span class="text-slate-600 text-sm font-medium leading-relaxed group-hover:text-slate-700">1 小时精华线下课，覆盖一线员工以应对复杂威胁</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <div class="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px] text-slate-400 group-hover:bg-blue-500 group-hover:text-white transition-colors duration-300 delay-75"><i class="fa-solid fa-check"></i></div>
+                                <span class="text-slate-600 text-sm font-medium leading-relaxed group-hover:text-slate-700">高管深度参与的应急演练与勒索病毒桌面关键推演</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <div class="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px] text-slate-400 group-hover:bg-blue-500 group-hover:text-white transition-colors duration-300 delay-150"><i class="fa-solid fa-check"></i></div>
+                                <span class="text-slate-600 text-sm font-medium leading-relaxed group-hover:text-slate-700">引入前沿的 AI 深度伪造体验：识别生物特征欺诈</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Case 2: 生命科学服务商 (紫色系) -->
+                <div class="group relative bg-white/70 backdrop-blur-xl rounded-3xl p-8 border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_-10px_rgba(168,85,247,0.15)] hover:border-purple-200 transition-all duration-500 hover:-translate-y-2 overflow-hidden reveal delay-100">
+                    <div class="absolute -right-24 -top-24 w-64 h-64 bg-purple-400/10 rounded-full blur-3xl group-hover:bg-purple-400/20 transition-colors duration-700"></div>
+                    
+                    <div class="flex items-start justify-between relative z-10 mb-8">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-fuchsia-600 p-[1.5px] shadow-lg shadow-purple-500/20 group-hover:shadow-purple-500/40 transition-shadow">
+                            <div class="w-full h-full rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-white text-xl">
+                                 <i class="fa-solid fa-microscope"></i>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1.5 rounded-full bg-slate-100 text-slate-500 text-xs font-bold tracking-wider group-hover:bg-purple-50 group-hover:text-purple-700 border border-transparent group-hover:border-purple-100 transition-colors">生命科学</span>
+                    </div>
+                    
+                    <div class="relative z-10">
+                        <h4 class="text-xl font-bold text-slate-900 mb-5 tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-fuchsia-600 transition-all duration-300">全球生命科学技术服务商</h4>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3">
+                                <div class="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px] text-slate-400 group-hover:bg-purple-500 group-hover:text-white transition-colors duration-300"><i class="fa-solid fa-check"></i></div>
+                                <span class="text-slate-600 text-sm font-medium leading-relaxed group-hover:text-slate-700">组织覆盖全员为期 1 个月的安全月活动，系统性提升素养</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <div class="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px] text-slate-400 group-hover:bg-purple-500 group-hover:text-white transition-colors duration-300 delay-75"><i class="fa-solid fa-check"></i></div>
+                                <span class="text-slate-600 text-sm font-medium leading-relaxed group-hover:text-slate-700">开展 1 小时安全意识精简连番主题宣讲，快速对齐防范认知</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <div class="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px] text-slate-400 group-hover:bg-purple-500 group-hover:text-white transition-colors duration-300 delay-150"><i class="fa-solid fa-check"></i></div>
+                                <span class="text-slate-600 text-sm font-medium leading-relaxed group-hover:text-slate-700">铺设沉浸式的黑客工具场景体验与成套宣发主题物料</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Case 3: 零售 (绿/翠绿色系) -->
+                <div class="group relative bg-white/70 backdrop-blur-xl rounded-3xl p-8 border border-slate-200/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_40px_-10px_rgba(16,185,129,0.15)] hover:border-emerald-200 transition-all duration-500 hover:-translate-y-2 overflow-hidden reveal delay-200">
+                    <div class="absolute -right-24 -top-24 w-64 h-64 bg-emerald-400/10 rounded-full blur-3xl group-hover:bg-emerald-400/20 transition-colors duration-700"></div>
+                    
+                    <div class="flex items-start justify-between relative z-10 mb-8">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-600 p-[1.5px] shadow-lg shadow-emerald-500/20 group-hover:shadow-emerald-500/40 transition-shadow">
+                            <div class="w-full h-full rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-white text-xl">
+                                 <i class="fa-solid fa-store"></i>
+                            </div>
+                        </div>
+                        <span class="px-3 py-1.5 rounded-full bg-slate-100 text-slate-500 text-xs font-bold tracking-wider group-hover:bg-emerald-50 group-hover:text-emerald-700 border border-transparent group-hover:border-emerald-100 transition-colors">连锁零售</span>
+                    </div>
+                    
+                    <div class="relative z-10">
+                        <h4 class="text-xl font-bold text-slate-900 mb-5 tracking-tight group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-emerald-600 group-hover:to-teal-600 transition-all duration-300">大型跨国连锁零售集团</h4>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3">
+                                <div class="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px] text-slate-400 group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-300"><i class="fa-solid fa-check"></i></div>
+                                <span class="text-slate-600 text-sm font-medium leading-relaxed group-hover:text-slate-700">部署全年定制化安全服务，体系性提升企业综合安全防护</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <div class="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px] text-slate-400 group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-300 delay-75"><i class="fa-solid fa-check"></i></div>
+                                <span class="text-slate-600 text-sm font-medium leading-relaxed group-hover:text-slate-700">融合覆盖人员思想、业务流程、网络信息技术的三维审查保障</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <div class="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-slate-100 flex items-center justify-center text-[10px] text-slate-400 group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-300 delay-150"><i class="fa-solid fa-check"></i></div>
+                                <span class="text-slate-600 text-sm font-medium leading-relaxed group-hover:text-slate-700">穿插互动培训学习、全真钓鱼邮件演练测试与节点漏洞扫描</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Interactive Scripts -->
+    <script>
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Navbar blur and shadow effect on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                nav.classList.add('shadow-md', 'bg-white/95');
+                nav.classList.remove('bg-white/90');
+            } else {
+                nav.classList.remove('shadow-md', 'bg-white/95');
+                nav.classList.add('bg-white/90');
+            }
+        });
+
+        // Intersection Observer for scroll animations
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            root: null,
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        });
+
+        revealElements.forEach(el => {
+            revealObserver.observe(el);
+        });
+        
+        // Trigger initial reveal for elements in viewport on load
+        setTimeout(() => {
+            revealElements.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if(rect.top < window.innerHeight) {
+                    el.classList.add('active');
+                }
+            });
+        }, 100);
+    </script>
+</body>
+</html>
